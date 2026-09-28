@@ -33,7 +33,7 @@ linear-gradient(90deg,rgba(255,255,255,.022) 1px,transparent 1px);background-siz
 .about-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:80px;align-items:start}.about-grid p{font-size:19px;color:#b7c7da;margin:0}.contact-inline{display:flex;gap:20px;flex-wrap:wrap;margin-top:30px;color:var(--muted)}.contact-inline a{color:var(--cyan)}
 .timeline{display:grid;gap:18px}.timeline-item{display:grid;grid-template-columns:170px 1fr;gap:40px;padding:28px;border:1px solid var(--line);border-radius:20px;background:rgba(255,255,255,.018)}
 .timeline-period{font:700 16px "Space Grotesk";color:var(--cyan)}.timeline-item h4{font:700 22px "Space Grotesk";margin:0 0 6px}.timeline-item .role{color:#cbd9e8;font-weight:600}.timeline-item p{color:var(--muted);margin:8px 0 0}
-.portfolio-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}.project-card{min-height:370px;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;background:linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.012));transition:.28s transform,.28s border}
+.portfolio-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:22px;align-items:stretch}.project-card{min-height:370px;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;background:linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.012));transition:.28s transform,.28s border}
 .project-card:hover{transform:translateY(-6px);border-color:rgba(87,231,255,.42)}.project-visual{height:150px;position:relative;background:linear-gradient(135deg,#10284a,#0a1728);overflow:hidden}
 .project-visual:before,.project-visual:after{content:"";position:absolute;border:1px solid rgba(87,231,255,.35);border-radius:50%}.project-visual:before{width:190px;height:190px;right:-35px;top:-85px}.project-visual:after{width:90px;height:90px;right:45px;top:24px}
 .project-visual img{width:100%;height:100%;object-fit:cover;position:relative;z-index:2}.project-index{position:absolute;left:20px;bottom:16px;font:700 12px "Space Grotesk";letter-spacing:.18em;color:var(--cyan);z-index:3}
@@ -224,4 +224,17 @@ body.is-smart-scrolling #scroll-section-name{
 @media(max-height:680px) and (min-width:901px){
   .scroll-hint{display:none}
   main > section[id]{min-height:auto}
+}
+
+
+/* LONG PORTFOLIO FIX */
+#portfolio{
+  height:auto;
+  max-height:none;
+}
+#portfolio .portfolio-grid{
+  overflow:visible;
+}
+#portfolio .project-card{
+  height:100%;
 }

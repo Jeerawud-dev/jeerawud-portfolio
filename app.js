@@ -207,6 +207,25 @@ function initSmartScroll(){
     return index;
   }
 
+  // Long sections such as Portfolio can be taller than one screen.
+  // Keep normal scrolling inside them and smart-snap only at their edges.
+  function shouldUseNativeScroll(section, direction){
+    if(!section) return false;
+
+    const rect = section.getBoundingClientRect();
+    const headerOffset = 76;
+    const edgeTolerance = 28;
+    const usableViewport = window.innerHeight - headerOffset;
+
+    if(rect.height <= usableViewport + 80) return false;
+
+    if(direction > 0){
+      return rect.bottom > window.innerHeight + edgeTolerance;
+    }
+
+    return rect.top < headerOffset - edgeTolerance;
+  }
+
   function smartWheel(event){
     if(window.innerWidth < 901 || reducedMotion) return;
     if(event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
@@ -215,6 +234,15 @@ function initSmartScroll(){
     // Trackpads usually emit many small delta values; don't hijack them.
     const delta = event.deltaY;
     if(Math.abs(delta) < 18) return;
+
+    const current = currentSectionIndex();
+    const direction = delta > 0 ? 1 : -1;
+
+    // Let tall sections scroll normally until their final content is reached.
+    if(shouldUseNativeScroll(sections[current], direction)){
+      wheelSum = 0;
+      return;
+    }
 
     wheelSum += delta;
     window.clearTimeout(wheelResetTimer);
@@ -225,8 +253,6 @@ function initSmartScroll(){
       return;
     }
 
-    const current = currentSectionIndex();
-    const direction = wheelSum > 0 ? 1 : -1;
     const next = Math.max(0, Math.min(sections.length - 1, current + direction));
     wheelSum = 0;
 
@@ -252,6 +278,9 @@ function initSmartScroll(){
     if(!["PageDown","PageUp"].includes(event.key)) return;
     const current = currentSectionIndex();
     const direction = event.key === "PageDown" ? 1 : -1;
+
+    if(shouldUseNativeScroll(sections[current], direction)) return;
+
     const next = Math.max(0, Math.min(sections.length - 1, current + direction));
     if(next !== current){
       event.preventDefault();
