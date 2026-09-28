@@ -70,4 +70,4 @@ Upload ไฟล์ทั้งหมดในโฟลเดอร์เว็�
 - มี Scroll indicator ใต้ Hero
 - Mobile จะกลับไปใช้ native scrolling เพื่อให้ใช้งานง่าย
 
-ถ้า Browser หรือ OS เปิด Reduce Motion ระบบจะลด animation อัตโนมัติ
+ถ้า Browser หรือ OS เปิด Reduce Motion ระบบจะลด animation อัตโนมัติ 
