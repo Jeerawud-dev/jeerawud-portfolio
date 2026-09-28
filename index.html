@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Jeerawud Jongjit — Software Engineer specializing in automation, machine design and .NET C#">
+  <title>Jeerawud Jongjit | Software Engineer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="grid-glow"></div>
+  <header class="nav-shell">
+    <nav class="nav container">
+      <a href="#home" class="brand">JJ<span>.</span></a>
+      <div class="nav-links">
+        <a href="#about">About</a>
+        <a href="#experience">Experience</a>
+        <a href="#portfolio">Portfolio</a>
+        <a href="#skills">Skills</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <a class="btn btn-small btn-ghost" href="Resume_Jeerawud.pdf" target="_blank" rel="noopener">Resume PDF</a>
+    </nav>
+  </header>
+
+  <aside id="smart-scroll-nav" class="smart-scroll-nav" aria-label="Page sections">
+    <div class="scroll-progress-track"><span id="scroll-progress-fill"></span></div>
+    <div id="scroll-dots" class="scroll-dots"></div>
+    <div id="scroll-section-name" class="scroll-section-name">HOME</div>
+  </aside>
+
+  <main>
+    <section id="home" data-title="HOME" class="hero container">
+      <div class="hero-copy reveal">
+        <div class="eyebrow">SOFTWARE ENGINEER · AUTOMATION</div>
+        <h1 id="hero-name">Jeerawud Jongjit</h1>
+        <h2 id="hero-headline">Automation • Machine Design • .NET C#</h2>
+        <p id="hero-summary"></p>
+        <div class="hero-actions">
+          <a id="primary-cta" class="btn btn-primary" href="#portfolio">View Portfolio</a>
+          <a class="btn btn-ghost" href="#contact">Contact Me</a>
+        </div>
+        <div class="hero-stats">
+          <div><strong>8+</strong><span>Years Experience</span></div>
+          <div><strong>.NET</strong><span>C# / WPF</span></div>
+          <div><strong>PLC</strong><span>HMI / Robotics</span></div>
+        </div>
+      </div>
+      <div class="portrait-wrap reveal">
+        <div class="portrait-frame">
+          <div class="ring ring-1"></div>
+          <div class="ring ring-2"></div>
+          <img src="profile.png" alt="Portrait of Jeerawud Jongjit">
+        </div>
+      </div>
+      <a class="scroll-hint" href="#about" aria-label="Scroll to About section">
+        <span class="mouse-icon"><span></span></span>
+        <span>SCROLL TO EXPLORE</span>
+      </a>
+    </section>
+
+    <section id="about" data-title="ABOUT" class="section container">
+      <div class="section-label">01 / ABOUT</div>
+      <div class="about-grid">
+        <div>
+          <h3>Engineering software for real machines.</h3>
+        </div>
+        <div>
+          <p id="about-summary"></p>
+          <div class="contact-inline">
+            <span id="about-location"></span>
+            <a id="about-email" href="#"></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="experience" data-title="EXPERIENCE" class="section section-panel">
+      <div class="container">
+        <div class="section-heading">
+          <div class="section-label">02 / EXPERIENCE</div>
+          <h3>Professional journey</h3>
+        </div>
+        <div id="experience-list" class="timeline"></div>
+      </div>
+    </section>
+
+    <section id="portfolio" data-title="PORTFOLIO" class="section container">
+      <div class="section-heading split">
+        <div>
+          <div class="section-label">03 / PORTFOLIO</div>
+          <h3>Selected engineering work</h3>
+        </div>
+        <p class="section-note">Portfolio cards are driven by the Portfolio tab in Google Sheets. Add project images and links there to update this site.</p>
+      </div>
+      <div id="portfolio-grid" class="portfolio-grid"></div>
+    </section>
+
+    <section id="skills" data-title="SKILLS" class="section section-panel">
+      <div class="container">
+        <div class="section-heading">
+          <div class="section-label">04 / SKILLS</div>
+          <h3>Technology stack</h3>
+        </div>
+        <div id="skills-grid" class="skills-grid"></div>
+
+        <div class="cert-wrap">
+          <div class="section-label">CERTIFICATES & TRAINING</div>
+          <div id="cert-grid" class="cert-grid"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="education" data-title="EDUCATION" class="section container">
+      <div class="section-heading">
+        <div class="section-label">05 / EDUCATION</div>
+        <h3>Education</h3>
+      </div>
+      <div id="education-list" class="education-list"></div>
+    </section>
+
+    <section id="contact" data-title="CONTACT" class="section contact-section">
+      <div class="container contact-card">
+        <div>
+          <div class="section-label">06 / CONTACT</div>
+          <h3>Let’s build better automation.</h3>
+          <p>Available for software engineering, automation and machine-development conversations.</p>
+        </div>
+        <div class="contact-actions">
+          <a id="contact-email" class="btn btn-primary" href="#">Email Me</a>
+          <a id="contact-phone" class="btn btn-ghost" href="#"></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer container">
+    <span>© <span id="year"></span> Jeerawud Jongjit</span>
+    <span id="data-status">Resume data</span>
+  </footer>
+
+  <script src="config.js"></script>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
