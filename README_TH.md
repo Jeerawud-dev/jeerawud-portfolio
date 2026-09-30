@@ -71,3 +71,7 @@ Upload ไฟล์ทั้งหมดในโฟลเดอร์เว็�
 - Mobile จะกลับไปใช้ native scrolling เพื่อให้ใช้งานง่าย
 
 ถ้า Browser หรือ OS เปิด Reduce Motion ระบบจะลด animation อัตโนมัติ
+
+
+**need to add more picture gellary as machine, interface, flowchart
+
