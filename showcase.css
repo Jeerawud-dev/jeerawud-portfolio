@@ -15,13 +15,11 @@ button{font:inherit}
 .hero h1{font-size:clamp(56px,7.7vw,108px);max-width:850px;letter-spacing:-.075em}
 .hero h1::first-line{color:#fff}
 .hero-eyebrow{display:inline-flex;align-items:center;gap:12px;color:#a4e9e0;letter-spacing:.155em}
-.live-mark,.hero-floating-label i{display:inline-block;width:8px;height:8px;flex:none;border-radius:50%;background:var(--accent);box-shadow:0 0 0 6px rgba(140,245,205,.09),0 0 24px rgba(140,245,205,.5)}
+.live-mark{display:inline-block;width:8px;height:8px;flex:none;border-radius:50%;background:var(--accent);box-shadow:0 0 0 6px rgba(140,245,205,.09),0 0 24px rgba(140,245,205,.5)}
 .hero-stats{gap:36px}.hero-stats strong{font-size:clamp(20px,2vw,27px)}
 .portrait-wrap{position:relative;isolation:isolate}
 .portrait-wrap:after{content:"";position:absolute;width:72%;height:23%;left:14%;bottom:-5%;z-index:-1;border-radius:50%;background:rgba(72,152,227,.14);filter:blur(52px)}
 .ring-1{animation:orbit 35s linear infinite}.ring-2{animation:orbit 50s linear infinite reverse}
-.hero-floating-label{position:absolute;left:0;bottom:1%;z-index:4;display:flex;align-items:center;gap:12px;padding:13px 18px;background:rgba(10,24,44,.89);border:1px solid rgba(140,245,205,.35);border-radius:12px;box-shadow:0 14px 40px rgba(0,0,0,.25);font:700 10px 'Space Grotesk',sans-serif;letter-spacing:.14em;color:#e6fff7;transform:rotate(-3deg)}
-.hero-floating-label i{width:6px;height:6px}
 @keyframes orbit{to{transform:rotate(360deg)}}
 
 /* Editorial portfolio header */
@@ -146,7 +144,6 @@ button{font:inherit}
   .portfolio-intro{grid-template-columns:1fr;gap:27px;margin-bottom:46px;padding-bottom:45px}
   .portfolio-intro-aside{max-width:450px}
   .portfolio-intro h3{font-size:clamp(42px,8vw,65px)}
-  .hero-floating-label{left:3%;bottom:-8%}
 }
 @media(max-width:700px){
   #portfolio{overflow:hidden}
@@ -245,4 +242,61 @@ button{font:inherit}
 }
 @media (max-width: 620px) {
   .experience-highlights li { font-size: 13px; }
+}
+
+/* Two illuminated satellite dots following circular paths around the portrait.
+   Built on the portrait frame so resizing never changes the orbit centre. */
+.portrait-frame { isolation: isolate; }
+.portrait-orbit {
+  position: absolute;
+  inset: -20px;
+  border-radius: 50%;
+  z-index: 4;
+  pointer-events: none;
+  transform-origin: center;
+  will-change: transform;
+}
+.portrait-orbit::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 9px;
+  height: 9px;
+  border: 1px solid rgba(233, 255, 255, .95);
+  border-radius: 50%;
+  background: #67ddff;
+  box-shadow:
+    0 0 0 5px rgba(103, 221, 255, .12),
+    0 0 14px 3px rgba(93, 219, 255, .85),
+    0 0 30px 5px rgba(93, 219, 255, .26);
+}
+.portrait-orbit--cyan {
+  animation: orbit-cyan 12s linear infinite;
+}
+.portrait-orbit--mint {
+  inset: -31px;
+  animation: orbit-mint 18s linear infinite;
+}
+.portrait-orbit--mint::before {
+  width: 7px;
+  height: 7px;
+  background: #8cf5cd;
+  box-shadow:
+    0 0 0 5px rgba(140, 245, 205, .10),
+    0 0 14px 3px rgba(140, 245, 205, .80),
+    0 0 30px 4px rgba(140, 245, 205, .22);
+}
+@keyframes orbit-cyan {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes orbit-mint {
+  from { transform: rotate(160deg); }
+  to   { transform: rotate(-200deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .portrait-orbit--cyan, .portrait-orbit--mint { animation: none; }
+  .portrait-orbit--mint { transform: rotate(160deg); }
 }
