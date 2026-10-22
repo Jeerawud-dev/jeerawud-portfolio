@@ -234,7 +234,10 @@
   }
 
   grid.addEventListener("click", e => {
-    const button = e.target.closest("[data-project]");
+    // Any part of a project card opens its details. Visual and action buttons
+    // remain independently keyboard-accessible.
+    const button = e.target.closest("[data-project]") ||
+      e.target.closest(".case-card")?.querySelector("[data-project]");
     if(button) openProject(Number(button.dataset.project));
   });
   el("project-dialog-content").addEventListener("click", e => {
