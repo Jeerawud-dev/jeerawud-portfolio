@@ -1,52 +1,54 @@
-/* Smooth, accessible PCB reveal. Coordinates are viewport-relative (fixed overlay). */
+/* Precision PCB reveal. Automatically fades when users read or interact. */
 (() => {
   "use strict";
-  const precisePointer = window.matchMedia("(hover: hover) and (pointer: fine)");
-  if (!precisePointer.matches || document.getElementById("pcb-cursor-reveal")) return;
+  const pointer = window.matchMedia("(hover: hover) and (pointer: fine)");
+  if (!pointer.matches || document.getElementById("pcb-cursor-reveal")) return;
 
   const overlay = document.createElement("div");
   overlay.id = "pcb-cursor-reveal";
   overlay.setAttribute("aria-hidden", "true");
-
-  const sweep = document.createElement("span");
-  sweep.className = "pcb-sweep";
-  sweep.setAttribute("aria-hidden", "true");
-  overlay.appendChild(sweep);
+  const reticle = document.createElement("span");
+  reticle.className = "pcb-reticle";
+  overlay.appendChild(reticle);
   document.body.insertBefore(overlay, document.body.firstChild);
 
-  let frame = 0;
-  let x = -1000;
-  let y = -1000;
+  const readingSelectors = [
+    "h1","h2","h3","h4","h5","h6","p","a","button","input","textarea","label","select",
+    ".hero-copy",".about-grid",".section-heading",".section-note",
+    ".timeline-item",".skill-card",".cert",".education",".contact-card",
+    ".feature-card",".case-card",".project-card",".portfolio-intro",
+    ".showcase-browse-heading",".showcase-toolbar",".result-line",
+    ".dialog-shell",".nav-shell",".footer"
+  ].join(",");
 
-  function showAtPointer() {
+  let frame = 0, x = -600, y = -600, reading = false;
+  function paint() {
     frame = 0;
     overlay.style.setProperty("--pcb-x", x + "px");
     overlay.style.setProperty("--pcb-y", y + "px");
+    overlay.classList.toggle("is-reading", reading);
     overlay.classList.add("is-visible");
   }
-  function handleMove(event) {
-    if (!precisePointer.matches || event.pointerType === "touch") return;
-    x = event.clientX;
-    y = event.clientY;
-    if (!frame) frame = window.requestAnimationFrame(showAtPointer);
+  function move(event) {
+    if (!pointer.matches || event.pointerType === "touch") return;
+    x = event.clientX; y = event.clientY;
+    reading = event.target instanceof Element && !!event.target.closest(readingSelectors);
+    if (!frame) frame = window.requestAnimationFrame(paint);
   }
   function hide() {
     if (frame) window.cancelAnimationFrame(frame);
     frame = 0;
-    overlay.classList.remove("is-visible");
+    overlay.classList.remove("is-visible","is-reading");
   }
-
-  document.addEventListener("pointermove", handleMove, { passive: true });
+  document.addEventListener("pointermove", move, {passive:true});
   document.addEventListener("pointerout", event => {
     if (!event.relatedTarget) hide();
-  }, { passive: true });
-  window.addEventListener("blur", hide);
+  }, {passive:true});
   document.addEventListener("visibilitychange", () => {
     if (document.hidden) hide();
   });
-  if (typeof precisePointer.addEventListener === "function") {
-    precisePointer.addEventListener("change", () => { if (!precisePointer.matches) hide(); });
-  } else if (typeof precisePointer.addListener === "function") {
-    precisePointer.addListener(() => { if (!precisePointer.matches) hide(); });
+  window.addEventListener("blur", hide);
+  if (typeof pointer.addEventListener === "function") {
+    pointer.addEventListener("change", () => { if (!pointer.matches) hide(); });
   }
 })();

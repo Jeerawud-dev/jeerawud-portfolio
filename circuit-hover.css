@@ -1,90 +1,43 @@
-/* PCB V2: detailed circuit traces revealed by a refined cyan/mint proximity spotlight.
-   Transparent and pointer-safe, placed behind all interactive page content. */
+/* Micro PCB cursor reveal: small, discreet, legible and pointer-transparent. */
 #pcb-cursor-reveal {
-  --pcb-x: -1000px;
-  --pcb-y: -1000px;
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  overflow: hidden;
-  pointer-events: none;
-  user-select: none;
-  opacity: 0;
-  isolation: isolate;
-  contain: layout paint;
-  transition: opacity 320ms ease;
+  --pcb-x:-600px; --pcb-y:-600px;
+  position:fixed; inset:0; z-index:0; overflow:hidden;
+  pointer-events:none; user-select:none; opacity:0;
+  contain:layout paint; transition:opacity 180ms ease;
 }
-#pcb-cursor-reveal.is-visible { opacity: 1; }
-#pcb-cursor-reveal::before,
-#pcb-cursor-reveal::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
+#pcb-cursor-reveal.is-visible { opacity:.76; }
+/* Suppress circuit details when the cursor approaches readable content. */
+#pcb-cursor-reveal.is-reading { opacity:.09; }
+#pcb-cursor-reveal::before,#pcb-cursor-reveal::after {
+  content:"";position:absolute;inset:0;pointer-events:none;
 }
 #pcb-cursor-reveal::before {
-  background: url("./circuit-board.svg") repeat 0 0 / 480px 480px;
-  opacity: .97;
-  -webkit-mask-image: radial-gradient(circle 460px at var(--pcb-x) var(--pcb-y),
-    #000 0%, #000 20%, rgba(0, 0, 0, .92) 36%,
-    rgba(0, 0, 0, .62) 56%, rgba(0, 0, 0, .24) 78%, transparent 100%);
-  mask-image: radial-gradient(circle 460px at var(--pcb-x) var(--pcb-y),
-    #000 0%, #000 20%, rgba(0, 0, 0, .92) 36%,
-    rgba(0, 0, 0, .62) 56%, rgba(0, 0, 0, .24) 78%, transparent 100%);
+  background:url("./circuit-board.svg") repeat 0 0 / 320px 320px;
+  opacity:.56;
+  -webkit-mask-image:radial-gradient(circle 215px at var(--pcb-x) var(--pcb-y),
+   #000 0%,rgba(0,0,0,.92) 23%,rgba(0,0,0,.62) 50%,
+   rgba(0,0,0,.17) 80%,transparent 100%);
+  mask-image:radial-gradient(circle 215px at var(--pcb-x) var(--pcb-y),
+   #000 0%,rgba(0,0,0,.92) 23%,rgba(0,0,0,.62) 50%,
+   rgba(0,0,0,.17) 80%,transparent 100%);
 }
 #pcb-cursor-reveal::after {
-  background:
-    radial-gradient(circle 135px at var(--pcb-x) var(--pcb-y),
-      rgba(52, 226, 236, .15), transparent 88%),
-    radial-gradient(circle 455px at var(--pcb-x) var(--pcb-y),
-      rgba(7, 127, 191, .15), rgba(13, 120, 180, .06) 45%, transparent 77%);
-  mix-blend-mode: screen;
+  background:radial-gradient(circle 115px at var(--pcb-x) var(--pcb-y),
+   rgba(30,162,189,.065) 0%,rgba(27,142,175,.025) 55%,transparent 100%);
 }
-/* Delicate instrument-like scan ring, aligned with the pointer. */
-#pcb-cursor-reveal .pcb-sweep {
-  position: absolute;
-  left: var(--pcb-x);
-  top: var(--pcb-y);
-  width: 790px;
-  height: 790px;
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-  pointer-events: none;
+/* Tiny engineering targeting detail replaces the oversized rotating radar. */
+#pcb-cursor-reveal .pcb-reticle {
+  position:absolute;top:var(--pcb-y);left:var(--pcb-x);
+  width:32px;height:32px;transform:translate(-50%,-50%);
+  border:1px dashed rgba(107,225,217,.27);
+  border-radius:50%;pointer-events:none;
 }
-#pcb-cursor-reveal .pcb-sweep::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  background:
-    radial-gradient(circle, transparent 33%, rgba(103, 243, 232, .09) 33.1%,
-      transparent 33.5%, transparent 69%, rgba(86, 226, 244, .16) 69.1%,
-      transparent 69.4%);
-  opacity: .7;
+#pcb-cursor-reveal .pcb-reticle::before {
+  content:"";position:absolute;top:50%;left:50%;
+  width:2px;height:2px;transform:translate(-50%,-50%);
+  background:#8cf5cd;border-radius:50%;
+  box-shadow:0 0 9px 1px rgba(140,245,205,.45);
 }
-#pcb-cursor-reveal .pcb-sweep::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  background: conic-gradient(from 0deg,
-    transparent 0deg, transparent 289deg,
-    rgba(80, 221, 245, .04) 310deg,
-    rgba(103, 255, 224, .4) 351deg, transparent 359deg);
-  -webkit-mask-image: radial-gradient(circle, transparent 0 68.3%,
-    #000 69.1%, transparent 69.7%);
-  mask-image: radial-gradient(circle, transparent 0 68.3%,
-    #000 69.1%, transparent 69.7%);
-  animation: pcb-sweep-rotate 13s linear infinite;
-}
-@keyframes pcb-sweep-rotate { to { transform: rotate(360deg); } }
-
-/* The background should never sit in front of copy, cards or controls. */
-main, .footer { position: relative; z-index: 1; }
-@media (hover: none), (pointer: coarse) {
-  #pcb-cursor-reveal { display: none; }
-}
-@media (prefers-reduced-motion: reduce) {
-  #pcb-cursor-reveal { transition: none; }
-  #pcb-cursor-reveal .pcb-sweep::after { animation: none; }
-}
+main,.footer { position:relative;z-index:1; }
+@media (hover:none),(pointer:coarse) { #pcb-cursor-reveal { display:none; } }
+@media (prefers-reduced-motion:reduce) { #pcb-cursor-reveal { transition:none; } }
