@@ -124,3 +124,296 @@ html[data-theme="light"] #pcb-cursor-reveal::after{opacity:.08}
 html[data-theme="dark"] #pcb-cursor-reveal.is-visible{opacity:.36}
 html[data-theme="dark"] #pcb-cursor-reveal.is-reading{opacity:.026}
 html[data-theme="dark"] #pcb-cursor-reveal::before{opacity:.63;filter:brightness(1.0) saturate(.85)}
+
+
+/* Radial System Infographic V2 — inspired by circular process diagrams.
+   Genuine system descriptions remain supplied by project-cases.js. */
+.cs-radial-section {overflow:visible}
+.cs-orbit-layout {
+  display:grid;
+  grid-template-columns:minmax(0,1.8fr) minmax(260px,.95fr);
+  align-items:center;
+  gap:clamp(14px,2.4vw,30px);
+  min-width:0;
+}
+.cs-orbit-stage {
+  position:relative;
+  width:min(100%,620px);
+  aspect-ratio:1;
+  margin-inline:auto;
+  isolation:isolate;
+  min-width:0;
+  overflow:visible;
+}
+.cs-orbit-graphic {
+  display:block;
+  position:absolute;
+  z-index:0;
+  inset:0;
+  width:100%;
+  height:100%;
+  overflow:visible;
+  pointer-events:none;
+}
+.cs-orbit-background-ring {
+  stroke:rgba(77,166,184,.21);
+  stroke-width:1.4;
+  fill:none;
+}
+.cs-orbit-guide-ring {
+  stroke:rgba(75,163,181,.21);
+  stroke-width:1;
+  fill:none;
+}
+.cs-orbit-inner-detail {
+  stroke:rgba(71,171,185,.27);
+  stroke-width:1;
+  stroke-dasharray:3 9;
+  fill:none;
+}
+.cs-orbit-dashed-ring {
+  fill:none;
+  stroke:rgba(79,163,178,.35);
+  stroke-width:1.6;
+  stroke-dasharray:2 11;
+  transform-origin:320px 320px;
+  animation:cs-wheel-outline-spin 95s linear infinite;
+}
+@keyframes cs-wheel-outline-spin { to {transform:rotate(360deg)} }
+.cs-tone-cyan {--cs-flow:#17aeb6;--cs-flow-light:rgba(23,174,182,.12)}
+.cs-tone-amber {--cs-flow:#e7a83e;--cs-flow-light:rgba(231,168,62,.13)}
+.cs-tone-blue {--cs-flow:#457ed3;--cs-flow-light:rgba(69,126,211,.12)}
+.cs-tone-mint {--cs-flow:#27a98a;--cs-flow-light:rgba(39,169,138,.12)}
+.cs-tone-violet {--cs-flow:#9879c9;--cs-flow-light:rgba(152,121,201,.12)}
+.cs-tone-coral {--cs-flow:#ca806e;--cs-flow-light:rgba(202,128,110,.12)}
+.cs-wheel-arrow {
+  fill:var(--cs-flow);
+  stroke:rgba(255,255,255,.56);
+  stroke-width:1.2;
+  fill-opacity:.74;
+  opacity:.87;
+  transition:fill-opacity .25s,opacity .25s,filter .25s;
+}
+.cs-wheel-arrow.is-active {
+  fill-opacity:1;
+  opacity:1;
+  filter:drop-shadow(0 4px 8px rgba(17,107,141,.24));
+}
+.cs-orbit-node {
+  --cs-flow:#18a9b5;
+  appearance:none;
+  position:absolute;
+  z-index:3;
+  width:21%;
+  max-width:130px;
+  min-width:0;
+  aspect-ratio:1;
+  padding:8px 9px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  gap:4px;
+  text-align:center;
+  color:var(--cs-flow);
+  background:linear-gradient(160deg,#122d43,#0b2235);
+  border:1px solid rgba(155,205,225,.4);
+  border-radius:50%;
+  box-shadow:0 10px 26px rgba(2,15,31,.13),inset 0 0 0 5px rgba(95,159,183,.06);
+  transform:translate(-50%,-50%);
+  cursor:pointer;
+  transition:background .2s,box-shadow .2s,border-color .2s,scale .2s;
+}
+.cs-orbit-node::before {
+  content:"";
+  position:absolute;
+  inset:5px;
+  border-radius:50%;
+  border:1px solid color-mix(in srgb,var(--cs-flow) 44%,transparent);
+  pointer-events:none;
+}
+.cs-orbit-node:hover,.cs-orbit-node.is-active {
+  border-color:var(--cs-flow);
+  background:linear-gradient(160deg,#173b50,#0c293c);
+  box-shadow:0 12px 27px rgba(2,17,29,.22),0 0 0 5px var(--cs-flow-light);
+  scale:1.028;
+}
+.cs-orbit-node:focus-visible {outline:3px solid var(--cs-flow);outline-offset:4px}
+.cs-orbit-node-icon {display:grid;place-items:center;flex:none}
+.cs-orbit-node-icon svg {
+  display:block;
+  width:26px;
+  height:26px;
+  stroke-width:1.5;
+}
+.cs-orbit-node-number {
+  font:800 9px/1 "Space Grotesk",Inter,sans-serif;
+  color:var(--cs-flow);
+  letter-spacing:.07em;
+}
+.cs-orbit-node-label {
+  max-width:100%;
+  font:700 clamp(9px,1.2vw,12px)/1.28 "Space Grotesk",Inter,sans-serif;
+  color:#e9f8ff;
+  letter-spacing:-.012em;
+  overflow-wrap:anywhere;
+}
+.cs-orbit-core {
+  position:absolute;
+  top:50%;left:50%;
+  z-index:2;
+  transform:translate(-50%,-50%);
+  width:36%;
+  aspect-ratio:1;
+  padding:14px;
+  border:1px solid rgba(72,163,183,.35);
+  border-radius:50%;
+  background:radial-gradient(circle at 50% 35%,#183e53,#0d293d 80%);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  gap:7px;
+  text-align:center;
+  box-shadow:0 0 0 9px rgba(56,131,169,.06),0 11px 36px rgba(4,22,36,.16);
+}
+.cs-orbit-core-glyph {
+  color:#65d6d0;
+  font-size:clamp(18px,2.3vw,30px);
+  line-height:1;
+}
+.cs-orbit-core-kicker {
+  color:#78c3ce;
+  font:800 clamp(6px,.75vw,9px)/1.2 "Space Grotesk",Inter,sans-serif;
+  letter-spacing:.15em;
+}
+.cs-orbit-core-title {
+  color:#f0fbff;
+  font:700 clamp(12px,1.6vw,21px)/1.23 "Space Grotesk",Inter,sans-serif;
+  letter-spacing:-.03em;
+  max-width:95%;
+  overflow-wrap:anywhere;
+}
+.cs-orbit-core-detail {
+  color:#a6ccdb;
+  font:500 clamp(8px,.83vw,10px)/1.5 Inter,sans-serif;
+  max-width:95%;
+  overflow-wrap:anywhere;
+}
+.cs-orbit-info {
+  min-width:0;
+  padding:clamp(19px,2.3vw,29px);
+  border:1px solid var(--line);
+  border-radius:19px;
+  background:linear-gradient(148deg,rgba(63,143,177,.08),rgba(37,93,126,.025));
+  box-shadow:0 14px 40px rgba(2,27,49,.04);
+  align-self:center;
+}
+.cs-orbit-info-top {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+}
+.cs-orbit-info-kicker,.cs-orbit-info-label {
+  display:block;
+  font:800 10px/1.4 "Space Grotesk",Inter,sans-serif;
+  color:var(--cyan);
+  letter-spacing:.14em;
+}
+.cs-orbit-info-mark {font-size:25px;color:var(--muted);line-height:1}
+.cs-orbit-selected-index {
+  display:block;
+  font:700 clamp(45px,5vw,61px)/1 "Space Grotesk",sans-serif;
+  letter-spacing:-.065em;
+  color:var(--text);
+  margin:33px 0 24px;
+}
+.cs-orbit-selected-index span {font-size:18px;letter-spacing:0;color:var(--muted)}
+.cs-orbit-selected-title {
+  margin:10px 0 8px;
+  font:700 clamp(21px,2vw,27px)/1.22 "Space Grotesk",sans-serif;
+  color:var(--text);
+  overflow-wrap:anywhere;
+}
+.cs-orbit-selected-detail {color:var(--muted);font-size:13px;line-height:1.7;min-height:43px;margin:0}
+.cs-orbit-info-divider {height:1px;background:var(--line);margin:24px 0}
+.cs-orbit-mini-steps {display:flex;gap:8px;flex-wrap:wrap;margin:16px 0 19px}
+.cs-orbit-mini-step {
+  height:30px;
+  min-width:30px;
+  display:grid;
+  place-items:center;
+  border:1px solid var(--line);
+  border-radius:8px;
+  color:var(--muted);
+  font:700 10px "Space Grotesk",sans-serif;
+  background:var(--panel);
+}
+.cs-orbit-mini-step.is-active {
+  color:var(--cs-flow);
+  border-color:var(--cs-flow);
+  background:var(--cs-flow-light);
+}
+.cs-orbit-instruction {font-size:11px;color:var(--muted);line-height:1.66;margin:0}
+html[data-theme="light"] .cs-orbit-node {
+  background:linear-gradient(145deg,#fff,#f4f9fc);
+  border:1px solid rgba(69,126,158,.22);
+  box-shadow:0 10px 32px rgba(21,64,96,.085),inset 0 0 0 5px rgba(240,250,253,.5);
+}
+html[data-theme="light"] .cs-orbit-node:hover,
+html[data-theme="light"] .cs-orbit-node.is-active {
+  border-color:var(--cs-flow);
+  background:linear-gradient(145deg,#fff,#f1f9fc);
+  box-shadow:0 11px 25px rgba(41,91,128,.13),0 0 0 4px var(--cs-flow-light);
+}
+html[data-theme="light"] .cs-orbit-node-label {color:#19374b}
+html[data-theme="light"] .cs-orbit-core {
+  background:radial-gradient(circle at 45% 27%,#ffffff,#eaf4f9 90%);
+  border-color:#bcdae5;
+  box-shadow:0 0 0 8px rgba(58,140,165,.06),0 12px 38px rgba(25,78,115,.09);
+}
+html[data-theme="light"] .cs-orbit-core-title {color:#173f55}
+html[data-theme="light"] .cs-orbit-core-kicker {color:#2d91a0}
+html[data-theme="light"] .cs-orbit-core-detail {color:#5a798c}
+html[data-theme="light"] .cs-orbit-core-glyph {color:#1c98a0}
+html[data-theme="light"] .cs-orbit-info {
+  background:linear-gradient(140deg,#f5fafc,#fff);
+  border-color:rgba(38,111,141,.16);
+}
+html[data-theme="light"] .cs-orbit-info-kicker,
+html[data-theme="light"] .cs-orbit-info-label {color:#147d90}
+html[data-theme="light"] .cs-orbit-mini-step {background:#fff}
+@media(max-width:1020px){
+  .cs-orbit-layout {grid-template-columns:1fr;gap:9px}
+  .cs-orbit-stage {width:min(100%,590px)}
+  .cs-orbit-info {width:min(100%,690px);margin-inline:auto}
+  .cs-orbit-selected-index {margin:17px 0}
+  .cs-orbit-info-divider {margin:16px 0}
+  .cs-orbit-info {padding:22px}
+  .cs-orbit-selected-detail{min-height:0}
+}
+@media(max-width:650px){
+  .cs-orbit-stage {width:min(100%,440px)}
+  .cs-orbit-node {gap:2px;padding:6px 3px}
+  .cs-orbit-node::before{inset:3px}
+  .cs-orbit-node-icon svg {width:clamp(15px,4vw,21px);height:clamp(15px,4vw,21px)}
+  .cs-orbit-node-number {font-size:clamp(7px,1.75vw,9px)}
+  .cs-orbit-node-label {font-size:clamp(7px,1.85vw,9.5px);line-height:1.14}
+  .cs-orbit-core {padding:6px;gap:3px}
+  .cs-orbit-core-glyph{font-size:clamp(16px,4vw,24px)}
+  .cs-orbit-core-kicker{font-size:7px;letter-spacing:.08em}
+  .cs-orbit-core-title{font-size:clamp(11px,2.7vw,15px);line-height:1.16}
+  .cs-orbit-core-detail{display:none}
+  .cs-orbit-selected-title{font-size:22px}
+  .cs-orbit-info{padding:20px}
+}
+@media(max-width:375px){
+  .cs-orbit-core-glyph{display:none}
+  .cs-orbit-node-icon svg {width:15px;height:15px}
+  .cs-orbit-node-label{font-size:7px}
+}
+@media(prefers-reduced-motion:reduce){
+  .cs-orbit-dashed-ring{animation:none}
+  .cs-orbit-node,.cs-wheel-arrow {transition:none}
+}
