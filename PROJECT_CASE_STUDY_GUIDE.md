@@ -1,64 +1,44 @@
-# Project Case Study — Content & Image Guide
+# Inline Project Diagram — editing guide
 
-Click any project image or **View details** under `03 / PROJECTS` to open
-a full-width case-study panel that supports both Light/Dark themes.
+## Current user experience
 
-The panel includes:
-- Title, category, short project summary, period and company (the existing Google Sheets feed).
-- Scope and role fields (editable in `project-cases.js`).
-- Interactive circular infographic with flowing arrows, icons, selectable components, and a details panel (system/technology concept; not actual wiring).
-- Technology tags from the main Portfolio sheet.
-- Work areas and project highlights.
-- **Machine / process photos** and **software UI screenshots** (image galleries).
-- Optional external project link when provided.
+On **03 / PROJECTS**, click anywhere on a project card (or its **View diagram**
+button). The selected project's **interactive circular system diagram** expands
+directly **below that project's row**, without a modal, new tab or page.
 
-## Where to edit each field
+The compact panel contains:
+- Project title and one short description/scope.
+- Circular 4–6-stage system / technology diagram with direction arrows.
+- One small area showing the title and details of the selected diagram stage.
+- **Close** button. Clicking the same project card again also closes the panel.
+- Opening another project switches to its diagram. Filtering/searching closes it.
 
-| Content | Source |
+This presentation is conceptual — it is NOT an exact electrical or motion
+control wiring diagram.
+
+The site has removed the earlier **full Project Case Study dialog**: no large
+hero, extra technology table, lengthy work-area list or image gallery is shown.
+
+## Where the data comes from
+
+| Field | Source |
 | --- | --- |
-| Project title / category / description | Google Sheets → `Portfolio` |
-| Period / company / tech / image URL / external link | Google Sheets → `Portfolio` |
-| System diagram labels, scope, role and highlights | GitHub → `project-cases.js` |
-| Machine gallery and UI screenshots | GitHub → `project-cases.js` |
+| Project cards, title, description, dates, context, technologies, image | Google Sheets → Portfolio |
+| Diagram steps, brief scope | GitHub → `project-cases.js` |
+| Interactive chart | `showcase.js` |
+| Responsive inline layout | `project-inline.css` and `project-case.css` |
 
-The current live Google Apps Script endpoint is not confirmed to export an
-independent ProjectDetails tab. Therefore these extra case-study fields
-are stored in `project-cases.js` and **work immediately without deploying
-another backend**. Do not assume editing a new Sheet tab alone would update
-these extra fields. A future Apps Script update can serve a `projectDetails`
-map and the frontend already accepts it as an override.
+Case study details are matched to a project by **exact project title**, ignoring
+capitalization and extra surrounding spaces. Keep the local keys in
+`project-cases.js` consistent with Google Sheets project titles.
 
-## Add an actual machine photo
+The existing Google Apps Script feed currently serves the Portfolio card data.
+If it later provides a `projectDetails` object, the website can use those
+fields as optional overrides for the local case-study definitions.
 
-1. Upload the photo to your GitHub repository, for example `image/Coatingmachine-02.jpg`.
-2. Edit `project-cases.js`.
-3. Find the entry with the **exact** project title used in Google Sheets.
-4. Add the image URL and caption to its `machineImages` array:
+## Edit a diagram
 
-```js
-"Automated Coating Machine": {
-  // Keep the existing scope, role, diagram and highlights.
-  machineImages: [
-    { url: "image/Coatingmachine-02.jpg", caption: "Machine overview" }
-  ],
-  uiImages: [
-    { url: "image/coating-recipe-screen.png", caption: "Recipe setup" },
-    { url: "image/coating-motion-editor.png", caption: "Motion path editor" }
-  ]
-}
-```
-
-The gallery only displays images that have valid file URLs. Invalid/missing
-images are not presented as actual machine screenshots. The primary image
-from the Portfolio sheet `Project Image URL` column is also automatically
-included in the machine gallery.
-
-For images that do not yet exist, leave the array empty:
-`uiImages: []`. The case-study panel shows a clearly labeled empty slot.
-
-## Edit the system diagram
-
-Each project has a `diagram` array with stages:
+Find the project entry in `project-cases.js`, then update its diagram array:
 
 ```js
 diagram: [
@@ -69,45 +49,20 @@ diagram: [
 ]
 ```
 
-Only describe hardware, signal flow, process parameters or UI features
-that your project actually used. This is a **simplified conceptual diagram**,
-not a control wiring diagram.
+There should be **up to 6** stages. Clicking a circle updates the selected
+component name and its brief description without leaving the page.
 
-## Image recommendations
+## Image data
 
-- Machine: 16:9 or 3:2 JPEG/WebP, ideally 1200–1800px wide.
-- UI screenshots: clear PNG/WebP captured from your real software.
-- Use descriptive captions; 1–4 images per category usually looks balanced.
-- Remove employee, customer, production, company or security information
-  that is confidential or not approved for public posting.
-- Files must be pushed to GitHub to become visible on the portfolio.
+The existing `machineImages` and `uiImages` arrays are retained for future
+use, but **are not currently shown** in the simplified inline UI.
+The primary project image can still be shown on the main project card via the
+Google Sheets Portfolio tab.
 
-## Design and behavior
+## Accessibility
 
-- Clicking either the project image or **View details** opens the panel.
-- **Close (X)**, **Escape**, outside dialog click and **Back to projects** close it.
-- The panel is scrollable on desktop and mobile.
-- The system map shows up to 6 components around a circular arrow flow. Click or keyboard-activate each component to highlight its flow segment and read details. Nodes automatically resize for mobile viewing; the information panel appears below the circle on smaller screens.
-- No invented performance figures, throughput, costs or ROI are displayed.
-- PCB light-theme cursor opacity is intentionally **0.20** (reading: **0.012**)
-  in the final-loaded `project-case.css`, overriding older more intense rules.
-
-If you later change the existing Google Apps Script to provide
-`data.projectDetails` as a title-keyed object, the frontend can merge it over
-local `project-cases.js` data without changing the detail panel.
-
-## Radial infographic interaction (reference-inspired)
-
-The System Overview panel now follows a circular infographic layout:
-- Color-coded directional flow arrows form a ring.
-- Engineering icons label each connected stage.
-- A central status disc shows the selected system component.
-- A neighboring details card reveals the stage's description and sequence.
-- Clicking/tapping or using keyboard Tab/Enter/Space on a stage updates both displays.
-- On mobile the circle remains visible and the details panel moves below it.
-
-The visualization is generated from each project entry's `diagram` list
-in `project-cases.js`. Add or reorder up to **6** entries to change the circular
-sequence. The diagram is conceptual and should only include components used
-in the actual project. No performance values or unverified control architecture
-are inferred.
+- All chart stages are real buttons (keyboard Tab, Enter, Space).
+- The expanded card controls expose `aria-expanded`.
+- The inline diagram is a labeled region; the selected step details announce changes.
+- Responsive: on smaller screens the diagram stacks above the detail summary.
+- Reduced-motion preferences are honored.

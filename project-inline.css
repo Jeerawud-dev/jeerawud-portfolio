@@ -1,0 +1,165 @@
+/* Inline Project Diagram: selected card expands a compact circular flow
+   directly in the Projects section. No overlay, page change or modal. */
+#portfolio .showcase-grid > .project-inline {
+  grid-column:1 / -1;
+  position:relative;
+  min-width:0;
+  overflow:visible;
+  padding:clamp(19px,2.4vw,29px) clamp(18px,2.8vw,34px);
+  border:1px solid rgba(43,146,170,.3);
+  border-radius:19px;
+  background:linear-gradient(135deg,#102b41,#0b2135);
+  box-shadow:0 18px 40px rgba(3,19,32,.16);
+  animation:project-inline-enter .26s ease-out both;
+}
+@keyframes project-inline-enter {
+  from {opacity:0;transform:translateY(-9px)}
+  to {opacity:1;transform:translateY(0)}
+}
+#portfolio .case-card.is-selected {
+  border-color:rgba(61,185,191,.6);
+  box-shadow:0 0 0 2px rgba(38,176,181,.14);
+}
+#portfolio .case-card.is-selected .case-open {color:var(--cyan)}
+#portfolio .project-inline-head {
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:18px;
+  padding-bottom:10px;
+  border-bottom:1px solid rgba(123,199,216,.15);
+}
+#portfolio .project-inline-heading {min-width:0}
+#portfolio .project-inline-heading h4 {
+  font:700 clamp(21px,2.4vw,29px)/1.2 "Space Grotesk",Inter,sans-serif;
+  letter-spacing:-.044em;
+  color:#ecfbff;
+  margin:7px 0 6px;
+}
+#portfolio .project-inline-heading p {
+  margin:0;
+  color:#adc8d9;
+  font-size:12.5px;
+  line-height:1.55;
+  max-width:660px;
+}
+#portfolio .project-inline-heading .cs-eyebrow {font-size:9px;color:#7ed4d2}
+#portfolio .project-inline-close {
+  appearance:none;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+  flex:none;
+  border:1px solid rgba(140,200,218,.25);
+  border-radius:999px;
+  background:rgba(255,255,255,.035);
+  color:#e2f5fa;
+  padding:10px 13px;
+  min-width:82px;
+  font:700 11px Inter,sans-serif;
+  cursor:pointer;
+}
+#portfolio .project-inline-close:hover {border-color:#80d7d5;background:rgba(64,178,190,.1)}
+#portfolio .project-inline-close:focus-visible {outline:3px solid #63ced3;outline-offset:3px}
+#portfolio .project-inline-diagram {max-width:800px;margin:0 auto}
+#portfolio .project-inline .cs-orbit-layout {
+  display:grid;
+  grid-template-columns:minmax(0,460px) minmax(200px,1fr);
+  gap:clamp(15px,3.2vw,39px);
+  align-items:center;
+}
+#portfolio .project-inline .cs-orbit-stage {
+  width:min(100%,430px);
+  max-width:430px;
+  margin-inline:auto;
+}
+#portfolio .project-inline .cs-orbit-node {
+  width:22%;
+  max-width:102px;
+  padding:6px;
+  gap:2px;
+}
+#portfolio .project-inline .cs-orbit-node-icon svg {width:22px;height:22px}
+#portfolio .project-inline .cs-orbit-node-label {font-size:clamp(8px,1.05vw,10px)}
+#portfolio .project-inline .cs-orbit-node-number {font-size:8px}
+#portfolio .project-inline .cs-orbit-core {
+  width:36%;
+  padding:10px;
+  gap:5px;
+}
+#portfolio .project-inline .cs-orbit-core-title {font-size:clamp(12px,1.55vw,18px)}
+#portfolio .project-inline .cs-orbit-core-detail {font-size:9px}
+#portfolio .project-inline .cs-orbit-info {
+  align-self:center;
+  min-width:0;
+  padding:18px 19px;
+  border-radius:13px;
+  box-shadow:none;
+  background:rgba(92,162,179,.055);
+}
+#portfolio .project-inline .cs-orbit-selected-index {
+  font:800 11px/1.4 "Space Grotesk",sans-serif;
+  letter-spacing:.08em;
+  margin:13px 0 9px;
+  color:#77cdd1;
+}
+#portfolio .project-inline .cs-orbit-selected-title {
+  font-size:clamp(16px,1.8vw,22px);
+  line-height:1.25;
+  margin:0 0 6px;
+}
+#portfolio .project-inline .cs-orbit-selected-detail {
+  font-size:12px;
+  line-height:1.62;
+  margin:0;
+  min-height:0;
+}
+#portfolio .project-inline .cs-orbit-instruction {
+  margin:14px 0 0;
+  font-size:10px;
+}
+html[data-theme="light"] #portfolio .showcase-grid > .project-inline {
+  background:linear-gradient(143deg,#fafdff,#e9f3f8);
+  border-color:#c5dfea;
+  box-shadow:0 12px 30px rgba(29,71,111,.07);
+}
+html[data-theme="light"] #portfolio .project-inline-heading h4 {color:#172f46}
+html[data-theme="light"] #portfolio .project-inline-heading p {color:#526b80}
+html[data-theme="light"] #portfolio .project-inline-heading .cs-eyebrow {color:#137d90}
+html[data-theme="light"] #portfolio .project-inline-close {
+  color:#28516c;
+  background:#fff;
+  border-color:#c9dce8;
+}
+html[data-theme="light"] #portfolio .project-inline-head {border-bottom-color:#d2e3ec}
+html[data-theme="light"] #portfolio .project-inline .cs-orbit-info {
+  background:rgba(255,255,255,.74);
+  border-color:#d5e4eb;
+}
+html[data-theme="light"] #portfolio .project-inline .cs-orbit-selected-index {color:#147f95}
+@media(max-width:800px) {
+  #portfolio .project-inline .cs-orbit-layout {grid-template-columns:1fr;gap:0}
+  #portfolio .project-inline .cs-orbit-stage {width:min(100%,390px)}
+  #portfolio .project-inline .cs-orbit-info {
+    width:min(100%,410px);
+    margin:-5px auto 10px;
+    padding:16px 18px;
+  }
+  #portfolio .project-inline .cs-orbit-core-title {font-size:clamp(12px,2vw,16px)}
+  #portfolio .project-inline .cs-orbit-node-label {font-size:clamp(8px,1.45vw,10px)}
+}
+@media(max-width:500px) {
+  #portfolio .showcase-grid > .project-inline {padding:18px 13px 15px}
+  #portfolio .project-inline-head {gap:11px}
+  #portfolio .project-inline-close {padding:9px;min-width:35px;width:37px;height:37px}
+  #portfolio .project-inline-close span {display:none}
+  #portfolio .project-inline-heading h4 {font-size:20px}
+  #portfolio .project-inline-heading p {font-size:11.5px}
+  #portfolio .project-inline .cs-orbit-stage {width:min(100%,338px)}
+  #portfolio .project-inline .cs-orbit-node-label {font-size:clamp(7px,2.1vw,9px)}
+  #portfolio .project-inline .cs-orbit-node-icon svg {width:19px;height:19px}
+}
+@media(prefers-reduced-motion:reduce) {
+  #portfolio .showcase-grid > .project-inline {animation:none}
+}

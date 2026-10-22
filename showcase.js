@@ -23,10 +23,9 @@
     } catch { return ""; }
   };
 
-  const state = {projects: [], category: "all", query: "", visible: 9};
+  const state = {projects: [], category: "all", query: "", visible: 9, activeProject: null};
   const grid = el("showcase-grid");
-  const modal = el("project-dialog");
-  if (!grid || !modal) return;
+  if (!grid) return;
 
   // Small-screen navigation stays independent of the project renderer.
   const menu = el("nav-menu-toggle"), links = el("primary-links");
@@ -47,7 +46,7 @@
     const tone = visualTone(project.category);
     const src = validUrl(project.imageUrl);
     const element = modalView ? "div" : "button";
-    const action = modalView ? "" : ` type="button" data-project="${index}" aria-label="View details for ${escape(project.title || "Project")}"`;
+    const action = modalView ? "" : ` type="button" data-project="${index}" aria-label="Show diagram for ${escape(project.title || "Project")}" aria-expanded="false" aria-controls="project-quickview"`;
     return `<${element}${action} class="${modalView ? "dialog-visual" : "case-visual case-visual-trigger"}">
       <div class="visual-art art-${tone}" aria-hidden="true"><span class="visual-ring"></span><span class="visual-node"></span></div>
       ${src ? `<img class="project-photo" src="${escape(src)}" alt="${escape(project.title || "Project photo")}" loading="lazy" decoding="async">` : ""}
@@ -69,7 +68,7 @@
         ${techMarkup(project)}
         <div class="case-bottom">
           <span class="case-context" title="${escape(project.context || "")}">${escape(project.context || "")}</span>
-          <button type="button" class="case-open" data-project="${index}" aria-label="View ${escape(project.title || "project")} details">View details <span aria-hidden="true">↗</span></button>
+          <button type="button" class="case-open" data-project="${index}" aria-label="Show diagram for ${escape(project.title || "project")}" aria-expanded="false" aria-controls="project-quickview">View diagram <span aria-hidden="true">↓</span></button>
         </div>
       </div>
     </article>`;
@@ -112,6 +111,7 @@
     });
     const visible = matches.slice(0,state.visible);
     if(observer) observer.disconnect();
+    state.activeProject = null;
     grid.innerHTML = visible.map(({project,index})=>card(project,index)).join("");
     handleImages(grid);
     for(const c of grid.querySelectorAll(".case-card")){
@@ -143,7 +143,6 @@
       nodes.push(...stack.map(tech => ({title:tech,detail:"Listed technology"})));
     }
     const count = nodes.length;
-    const colors = ["cyan","amber","blue","mint","violet","coral"];
     const angleStep = 360/count;
     const polar = (radius,deg) => {
       const radians=deg*Math.PI/180;
@@ -187,166 +186,159 @@
       </button>`;
     }).join("");
     const active=nodes[0];
-    return `<section class="cs-section cs-diagram-section cs-radial-section">
-      <div class="cs-section-top"><div><span class="cs-eyebrow">SYSTEM OVERVIEW</span>
-        <h4>System workflow</h4></div><span class="cs-context-note">Select a stage to view its details</span></div>
-      <div class="cs-orbit-layout">
-        <div class="cs-orbit-stage" role="group" aria-label="Interactive circular system component map">
-          <svg class="cs-orbit-graphic" viewBox="0 0 640 640" focusable="false" aria-hidden="true">
-            <circle class="cs-orbit-background-ring" cx="320" cy="320" r="218"/>
-            <circle class="cs-orbit-guide-ring" cx="320" cy="320" r="148"/>
-            <circle class="cs-orbit-dashed-ring" cx="320" cy="320" r="225"/>
-            ${arrows}
-            <circle class="cs-orbit-inner-detail" cx="320" cy="320" r="140"/>
-          </svg>
-          <div class="cs-orbit-core" aria-hidden="true">
-            <span class="cs-orbit-core-glyph">⌘</span>
-            <span class="cs-orbit-core-kicker">SYSTEM MAP</span>
-            <strong class="cs-orbit-core-title">${escape(active.title || "Component")}</strong>
-            <span class="cs-orbit-core-detail">${escape(active.detail || "")}</span>
-          </div>
-          ${radialButtons}
+    return `<div class="cs-orbit-layout">
+      <div class="cs-orbit-stage" role="group" aria-label="Interactive circular system diagram">
+        <svg class="cs-orbit-graphic" viewBox="0 0 640 640" focusable="false" aria-hidden="true">
+          <circle class="cs-orbit-background-ring" cx="320" cy="320" r="218"/>
+          <circle class="cs-orbit-guide-ring" cx="320" cy="320" r="148"/>
+          <circle class="cs-orbit-dashed-ring" cx="320" cy="320" r="225"/>
+          ${arrows}
+          <circle class="cs-orbit-inner-detail" cx="320" cy="320" r="140"/>
+        </svg>
+        <div class="cs-orbit-core" aria-hidden="true">
+          <span class="cs-orbit-core-glyph">⌘</span>
+          <span class="cs-orbit-core-kicker">SYSTEM MAP</span>
+          <strong class="cs-orbit-core-title">${escape(active.title || "Component")}</strong>
+          <span class="cs-orbit-core-detail">${escape(active.detail || "")}</span>
         </div>
-        <aside class="cs-orbit-info">
-          <div class="cs-orbit-info-top"><span class="cs-orbit-info-kicker">SYSTEM / ${String(count).padStart(2,"0")} STAGES</span>
-          <span class="cs-orbit-info-mark" aria-hidden="true">↻</span></div>
-          <span class="cs-orbit-selected-index">01 <span>/ ${String(count).padStart(2,"0")}</span></span>
-          <span class="cs-orbit-info-label">SELECTED STAGE</span>
-          <h5 class="cs-orbit-selected-title" aria-live="polite">${escape(active.title || "Component")}</h5>
-          <p class="cs-orbit-selected-detail" aria-live="polite">${escape(active.detail || "Select any stage in the circle to see its role.")}</p>
-          <div class="cs-orbit-info-divider"></div>
-          <span class="cs-orbit-info-label">SEQUENCE</span>
-          <div class="cs-orbit-mini-steps" aria-hidden="true">${nodes.map((n,i)=>`<span class="cs-orbit-mini-step cs-tone-${i%6} ${i===0?"is-active":""}" data-orbit-mini="${i}">${String(i+1).padStart(2,"0")}</span>`).join("")}</div>
-          <p class="cs-orbit-instruction">The arrows show a simplified system flow. Select any component for details.</p>
-        </aside>
+        ${radialButtons}
       </div>
-      <p class="cs-diagram-footnote">Conceptual overview based on the published project description and technologies; not an electrical schematic.</p>
-    </section>`;
-  }
-
-  function caseHighlights(detail) {
-    const highlights = Array.isArray(detail.highlights) ? detail.highlights.map(clean).filter(Boolean).slice(0,8) : [];
-    if (!highlights.length) return "";
-    return `<section class="cs-section cs-scope">
-      <span class="cs-eyebrow">WORK AREAS</span><h4>What the project involved</h4>
-      <ul class="cs-highlights">${highlights.map(x => `<li>${escape(x)}</li>`).join("")}</ul>
-    </section>`;
-  }
-  function mediaBlock(group, sourceImages) {
-    const images = (Array.isArray(sourceImages) ? sourceImages : []).filter(x => validUrl(x?.url)).slice(0,8);
-    const name = group === "machine" ? "Machine & process photos" : "Software UI screenshots";
-    const desc = group === "machine" ? "MACHINE / HARDWARE" : "CONTROL UI / APPLICATION";
-    if (!images.length) {
-      return `<div class="cs-media-panel cs-media-panel--empty">
-        <div class="cs-media-placeholder" aria-hidden="true"><span>${group === "machine" ? "▱" : "▤"}</span><i></i><i></i><i></i></div>
-        <div class="cs-media-info"><span class="cs-eyebrow">${desc}</span>
-        <h5>${name}</h5><p>No images added for this project yet.</p></div>
-      </div>`;
-    }
-    return `<div class="cs-media-panel"><div class="cs-media-label">
-      <span class="cs-eyebrow">${desc}</span><h5>${name}</h5></div>
-      <div class="cs-media-grid">${images.map((img,i) => `<figure class="cs-media-item">
-        <a href="${escape(validUrl(img.url))}" target="_blank" rel="noopener noreferrer" aria-label="Open ${escape(img.caption || name)} image">
-          <img loading="lazy" decoding="async" src="${escape(validUrl(img.url))}" alt="${escape(img.alt || img.caption || name)}">
-          <span class="cs-image-expand" aria-hidden="true">↗</span>
-        </a><figcaption>${escape(img.caption || `Image ${i+1}`)}</figcaption>
-      </figure>`).join("")}</div></div>`;
-  }
-
-  function openProject(index){
-    const p = state.projects[index];
-    if(!p) return;
-    const detail = lookupCase(p.title);
-    const machineImages = [...(Array.isArray(detail.machineImages) ? detail.machineImages : [])];
-    if (validUrl(p.imageUrl) && !machineImages.some(x=>validUrl(x.url)===validUrl(p.imageUrl))) {
-      machineImages.unshift({url:p.imageUrl,caption:p.title});
-    }
-    const link = validUrl(p.projectLink);
-    const title = escape(p.title || "Project");
-    const content = el("project-dialog-content");
-    content.innerHTML = `<div class="cs-case-study">
-      <div class="cs-hero">
-        <div class="cs-hero-copy">
-          <span class="cs-eyebrow">SELECTED PROJECT / ${pad(index + 1)}</span>
-          <h3 id="project-dialog-title">${title}</h3>
-          <p class="cs-intro">${escape(detail.overview || p.description || "")}</p>
-          <div class="cs-summary-strip">
-            <div><span>YEAR / PERIOD</span><strong>${escape(p.period || "Not specified")}</strong></div>
-            <div><span>COMPANY / CONTEXT</span><strong>${escape(p.context || "Not specified")}</strong></div>
-          </div>
-        </div>
-        <div class="cs-hero-graphic">${visual(p,index,true)}</div>
-      </div>
-      <div class="cs-body">
-        ${(clean(detail.scope) || clean(detail.role)) ? `<div class="cs-overview">
-          ${clean(detail.scope) ? `<div><span class="cs-eyebrow">PROJECT SCOPE</span><p>${escape(detail.scope)}</p></div>` : ""}
-          ${clean(detail.role) ? `<div><span class="cs-eyebrow">MY WORK</span><p>${escape(detail.role)}</p></div>` : ""}
-        </div>` : ""}
-        ${diagramMarkup(p,detail)}
-        <div class="cs-specs">
-          <section class="cs-section cs-technologies"><span class="cs-eyebrow">TECHNOLOGY</span>
-            <h4>Stack & interfaces</h4>${techMarkup(p,20) || "<p>No technologies specified.</p>"}
-          </section>
-          ${caseHighlights(detail)}
-        </div>
-        <section class="cs-section cs-gallery">
-          <div class="cs-section-top"><div><span class="cs-eyebrow">PROJECT GALLERY</span>
-          <h4>Machine & software interface</h4></div><span class="cs-context-note">Images can be added per project</span></div>
-          <div class="cs-media-layout">${mediaBlock("machine",machineImages)}${mediaBlock("ui",detail.uiImages)}</div>
-        </section>
-        <div class="cs-end">${link ? `<a class="btn btn-primary" target="_blank" rel="noopener noreferrer" href="${escape(link)}">Open project link ↗</a>` : ""}
-          <button class="cs-back" type="button" data-close-project>← Back to projects</button>
-        </div>
+      <div class="cs-orbit-info" aria-label="Selected diagram component">
+        <span class="cs-orbit-info-label">SELECTED STAGE</span>
+        <span class="cs-orbit-selected-index">01 / ${String(count).padStart(2,"0")}</span>
+        <h5 class="cs-orbit-selected-title" aria-live="polite">${escape(active.title || "Component")}</h5>
+        <p class="cs-orbit-selected-detail" aria-live="polite">${escape(active.detail || "")}</p>
+        <p class="cs-orbit-instruction">Click a circle to see another step.</p>
       </div>
     </div>`;
-    handleImages(content);
-    if(!modal.open) modal.showModal();
-    else modal.scrollTop = 0;
-    el("project-dialog-close").focus();
   }
 
-  grid.addEventListener("click", e => {
-    // Any part of a project card opens its details. Visual and action buttons
-    // remain independently keyboard-accessible.
-    const button = e.target.closest("[data-project]") ||
-      e.target.closest(".case-card")?.querySelector("[data-project]");
-    if(button) openProject(Number(button.dataset.project));
-  });
-  el("project-dialog-content").addEventListener("click", e => {
-    const node=e.target.closest("[data-orbit-step]");
-    if(node) {
-      const panel=node.closest(".cs-orbit-layout");
-      if(!panel) return;
-      const index=Number(node.dataset.orbitStep);
-      if(!Number.isInteger(index)) return;
-      for(const item of panel.querySelectorAll(".cs-orbit-node")) {
-        const active=item===node;
-        item.classList.toggle("is-active",active);
-        item.setAttribute("aria-pressed", String(active));
-      }
-      for(const arc of panel.querySelectorAll("[data-orbit-segment]")) {
-        arc.classList.toggle("is-active",Number(arc.dataset.orbitSegment)===index);
-      }
-      for(const chip of panel.querySelectorAll("[data-orbit-mini]")) {
-        chip.classList.toggle("is-active",Number(chip.dataset.orbitMini)===index);
-      }
-      const title=node.querySelector(".cs-orbit-node-label")?.textContent || "Component";
-      const detail=node.querySelector(".cs-orbit-node-description")?.textContent || "";
-      const total=panel.querySelectorAll(".cs-orbit-node").length;
-      const selected=panel.querySelector(".cs-orbit-selected-index");
-      const h=panel.querySelector(".cs-orbit-selected-title");
-      const p=panel.querySelector(".cs-orbit-selected-detail");
-      const coreTitle=panel.querySelector(".cs-orbit-core-title");
-      const coreDetail=panel.querySelector(".cs-orbit-core-detail");
-      if(selected) selected.textContent=String(index+1).padStart(2,"0") + " / " + String(total).padStart(2,"0");
-      if(h) h.textContent=title;
-      if(p) p.textContent=detail || "Component in this project's system flow.";
-      if(coreTitle) coreTitle.textContent=title;
-      if(coreDetail) coreDetail.textContent=detail;
+  function syncOpenControls() {
+    grid.querySelectorAll(".case-card").forEach(card => {
+      const button=card.querySelector("[data-project]");
+      const index=button ? Number(button.dataset.project) : -1;
+      const open=index===state.activeProject;
+      card.classList.toggle("is-selected",open);
+      card.querySelectorAll("[data-project]").forEach(control => {
+        control.setAttribute("aria-expanded",String(open));
+        control.setAttribute("aria-label",(open?"Hide":"Show")+" system diagram for "+(state.projects[index]?.title || "project"));
+        if (control.classList.contains("case-open")) {
+          control.innerHTML = open ? 'Close diagram <span aria-hidden="true">↑</span>' :
+            'View diagram <span aria-hidden="true">↓</span>';
+        }
+      });
+    });
+  }
+
+  // Insert a single panel directly below the selected card's ROW.
+  // OffsetTop follows actual responsive grid columns (3, 2, or 1).
+  function placeAfterCardRow(panel, index) {
+    const cards=Array.from(grid.querySelectorAll(".case-card"));
+    const selected=cards.find(card => Number(card.querySelector("[data-project]")?.dataset.project)===index);
+    if(!selected) return;
+    const top=selected.offsetTop;
+    let last=selected;
+    for(let i=cards.indexOf(selected)+1;i<cards.length;i++) {
+      if(Math.abs(cards[i].offsetTop-top)>4) break;
+      last=cards[i];
+    }
+    last.after(panel);
+  }
+
+  function closeInline(restoreFocus=false) {
+    const index=state.activeProject;
+    const panel=el("project-quickview");
+    if(panel) panel.remove();
+    state.activeProject=null;
+    syncOpenControls();
+    if(restoreFocus&&index!==null) {
+      grid.querySelector(`[data-project="${index}"]`)?.focus();
+    }
+  }
+
+  function toggleInline(index) {
+    const p=state.projects[index];
+    if(!p) return;
+    if(state.activeProject===index) {
+      closeInline(true);
       return;
     }
-    if(e.target.closest("[data-close-project]") && modal.open) modal.close();
+    closeInline(false);
+    const detail=lookupCase(p.title);
+    const panel=document.createElement("section");
+    panel.id="project-quickview";
+    panel.className="project-inline";
+    panel.setAttribute("role","region");
+    panel.setAttribute("aria-label", "System diagram for "+clean(p.title || "Project"));
+    // The regular card holds project imagery and the full description.
+    // Inline section deliberately shows just a title, a short scope and the chart.
+    const brief=clean(detail.scope || p.description || "");
+    const shortBrief=brief.length>185 ? brief.slice(0,182).replace(/\s+\S*$/,"")+"…" : brief;
+    panel.innerHTML=`<header class="project-inline-head">
+       <div class="project-inline-heading">
+         <span class="cs-eyebrow">PROJECT DIAGRAM / ${pad(index+1)}</span>
+         <h4>${escape(p.title || "Project")}</h4>
+         ${shortBrief ? `<p>${escape(shortBrief)}</p>` : ""}
+       </div>
+       <button type="button" class="project-inline-close" data-close-inline aria-label="Close system diagram">✕ <span>Close</span></button>
+     </header>
+     <div class="project-inline-diagram">${diagramMarkup(p,detail)}</div>`;
+    state.activeProject=index;
+    placeAfterCardRow(panel,index);
+    syncOpenControls();
+    // Keep the current Projects section and scroll only enough to reveal the diagram.
+    if (typeof panel.scrollIntoView === "function") {
+      panel.scrollIntoView({behavior:lessMotion?"auto":"smooth",block:"nearest"});
+    }
+  }
+
+  function selectOrbit(node) {
+    const panel=node.closest(".cs-orbit-layout");
+    if(!panel) return;
+    const index=Number(node.dataset.orbitStep);
+    if(!Number.isInteger(index)) return;
+    for(const item of panel.querySelectorAll(".cs-orbit-node")) {
+      const active=item===node;
+      item.classList.toggle("is-active",active);
+      item.setAttribute("aria-pressed",String(active));
+    }
+    for(const arc of panel.querySelectorAll("[data-orbit-segment]"))
+      arc.classList.toggle("is-active",Number(arc.dataset.orbitSegment)===index);
+    const title=node.querySelector(".cs-orbit-node-label")?.textContent || "Component";
+    const detail=node.querySelector(".cs-orbit-node-description")?.textContent || "";
+    const total=panel.querySelectorAll(".cs-orbit-node").length;
+    const indexText=panel.querySelector(".cs-orbit-selected-index");
+    if(indexText) indexText.textContent=pad(index+1)+" / "+pad(total);
+    const heading=panel.querySelector(".cs-orbit-selected-title");
+    const description=panel.querySelector(".cs-orbit-selected-detail");
+    const centreTitle=panel.querySelector(".cs-orbit-core-title");
+    const centreDetail=panel.querySelector(".cs-orbit-core-detail");
+    if(heading) heading.textContent=title;
+    if(description) description.textContent=detail;
+    if(centreTitle) centreTitle.textContent=title;
+    if(centreDetail) centreDetail.textContent=detail;
+  }
+
+  grid.addEventListener("click", event => {
+    const orbitButton=event.target.closest("[data-orbit-step]");
+    if(orbitButton) { selectOrbit(orbitButton); return; }
+    if(event.target.closest("[data-close-inline]")) { closeInline(true); return; }
+    const button=event.target.closest("[data-project]") ||
+      event.target.closest(".case-card")?.querySelector("[data-project]");
+    if(button) toggleInline(Number(button.dataset.project));
   });
+
+  // Reposition only on breakpoints/resize, never reopen a dialog.
+  let reflowFrame=0;
+  window.addEventListener("resize", () => {
+    if(state.activeProject===null || reflowFrame) return;
+    reflowFrame=window.requestAnimationFrame(() => {
+      reflowFrame=0;
+      const panel=el("project-quickview");
+      if(panel && state.activeProject!==null) placeAfterCardRow(panel,state.activeProject);
+    });
+  });
+
   el("showcase-filters").addEventListener("click", e => {
     const button = e.target.closest("[data-filter]");
     if(!button) return;
@@ -371,19 +363,6 @@
   el("showcase-more").addEventListener("click", () => {
     state.visible += 9;render();
   });
-  el("project-dialog-close").addEventListener("click", () => {
-    if(modal.open) modal.close();
-  });
-  modal.addEventListener("click", e => {
-    if(e.target !== modal) return;
-    const r = modal.getBoundingClientRect();
-    if(e.clientX<r.left || e.clientX>r.right || e.clientY<r.top || e.clientY>r.bottom) modal.close();
-  });
-  modal.addEventListener("wheel", e => e.stopPropagation(),{passive:true});
-  window.addEventListener("keydown", e => {
-    if(modal.open && ["PageDown","PageUp"].includes(e.key)) e.stopImmediatePropagation();
-  },{capture:true});
-
   async function start(){
     try{
       const data = typeof window.loadData === "function" ? await window.loadData() : window.FALLBACK_DATA;
