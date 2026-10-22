@@ -27,8 +27,12 @@ async function loadPortfolioData(){
         profile: resume.profile,
         experience: resume.experience,
         education: resume.education,
-        skills: resume.skills,
-        certificates: resume.certificates,
+        // Live Sheets content wins; when older APIs omit it, use the latest
+        // synchronized Sheet snapshot instead of stale resume values.
+        skills: Array.isArray(live.skills) ? live.skills :
+          (Array.isArray(window.PORTFOLIO_SHEET_CONTENT?.skills) ? window.PORTFOLIO_SHEET_CONTENT.skills : resume.skills),
+        certificates: Array.isArray(live.certificates) ? live.certificates :
+          (Array.isArray(window.PORTFOLIO_SHEET_CONTENT?.certificates) ? window.PORTFOLIO_SHEET_CONTENT.certificates : resume.certificates),
         // Keep project rows maintained through Google Sheets; use local examples if empty.
         portfolio: Array.isArray(live.portfolio) && live.portfolio.length
           ? live.portfolio : (resume.portfolio || []),
@@ -43,12 +47,69 @@ async function loadPortfolioData(){
     }
   }
   if(status) status.textContent = "Resume-based profile · Local portfolio";
-  return resume;
+  return {
+    ...resume,
+    skills: Array.isArray(window.PORTFOLIO_SHEET_CONTENT?.skills) ? window.PORTFOLIO_SHEET_CONTENT.skills : resume.skills,
+    certificates: Array.isArray(window.PORTFOLIO_SHEET_CONTENT?.certificates) ? window.PORTFOLIO_SHEET_CONTENT.certificates : resume.certificates
+  };
 }
 
 function splitTech(s){
   return String(s||"").split(",").map(x=>x.trim()).filter(Boolean);
 }
+
+
+function safePortfolioAssetUrl(value){
+  const v=String(value||"").trim();
+  if(!v || /^javascript:|^data:|^file:|^vbscript:/i.test(v)) return "";
+  try{
+    const parsed=new URL(v, document.baseURI);
+    return /^https?:$/.test(parsed.protocol) ? parsed.href : "";
+  }catch{return ""}
+}
+
+// Skills and certificates can update independently after the live Gallery API
+// returns data, without replacing project cards or restarting scroll navigation.
+function renderSkillsCertificates(data){
+  const skills=Array.isArray(data.skills) ? data.skills : [];
+  const certificates=Array.isArray(data.certificates) ? data.certificates : [];
+  const grid=$("#skills-grid"),certGrid=$("#cert-grid");
+  if(grid) grid.innerHTML=skills.map(x=>`
+    <article class="skill-card">
+      <h4>${esc(x.category)}</h4>
+      ${x.level ? `<div class="skill-level">${esc(x.level)}</div>` : ""}
+      <p>${esc(x.technologies)}</p>
+    </article>`).join("");
+  if(certGrid) certGrid.innerHTML=certificates.map(x=>{
+    const photo=safePortfolioAssetUrl(x.imageUrl || x.image || "");
+    const credential=safePortfolioAssetUrl(x.credentialUrl || "");
+    return `<article class="cert ${photo ? "cert-with-image" : ""}">
+      ${photo ? `<a class="cert-picture" href="${esc(photo)}" target="_blank" rel="noopener noreferrer" aria-label="View ${esc(x.name)} certificate image">
+        <img src="${esc(photo)}" alt="${esc(x.name || "Certificate")} certificate" loading="lazy" decoding="async">
+      </a>` : `<span class="cert-picture cert-picture-placeholder" aria-hidden="true">▧</span>`}
+      <div class="cert-content">
+        <strong>${esc(x.name)}</strong>
+        <span>${esc(x.provider)}</span>
+        ${x.notes ? `<small class="cert-notes">${esc(x.notes)}</small>` : ""}
+        ${credential ? `<a class="cert-credential" href="${esc(credential)}" target="_blank" rel="noopener noreferrer">View credential ↗</a>` : ""}
+      </div>
+      <span class="cert-year">${esc(x.year)}</span>
+    </article>`;
+  }).join("");
+  // Images may be blank, invalid, removed or unreachable. Don't show broken icons.
+  certGrid?.querySelectorAll(".cert-picture img").forEach(img=>{
+    img.addEventListener("error",()=>{const parent=img.closest(".cert-picture");if(parent){parent.replaceWith(document.createTextNode(""));}});
+  });
+}
+window.applyLivePortfolioExtras=function(payload){
+  if(!payload || typeof payload!=="object")return;
+  if(!Array.isArray(payload.skills)&&!Array.isArray(payload.certificates))return;
+  const base=window.PORTFOLIO_SHEET_CONTENT || window.FALLBACK_DATA || {};
+  renderSkillsCertificates({
+    skills:Array.isArray(payload.skills)?payload.skills:base.skills,
+    certificates:Array.isArray(payload.certificates)?payload.certificates:base.certificates
+  });
+};
 
 function render(data){
   const p = data.profile || {};
@@ -94,18 +155,7 @@ function render(data){
     </article>`;
   }).join("");
 
-  $("#skills-grid").innerHTML = (data.skills || []).map(x => `
-    <article class="skill-card">
-      <h4>${esc(x.category)}</h4>
-      <div class="skill-level">${esc(x.level || "ENGINEERING STACK")}</div>
-      <p>${esc(x.technologies)}</p>
-    </article>`).join("");
-
-  $("#cert-grid").innerHTML = (data.certificates || []).map(x => `
-    <div class="cert">
-      <div><strong>${esc(x.name)}</strong><span>${esc(x.provider)}</span></div>
-      <div class="cert-year">${esc(x.year)}</div>
-    </div>`).join("");
+  renderSkillsCertificates(data);
 
   $("#education-list").innerHTML = (data.education || []).map(x => `
     <article class="education">
