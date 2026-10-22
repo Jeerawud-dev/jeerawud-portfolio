@@ -158,6 +158,12 @@
   // Ring arrows are a visual presentation of the published conceptual workflow,
   // not a machine's electrical wiring diagram.
   function diagramMarkup(p, detail) {
+    if(state.galleryError) {
+      return `<div class="cs-gallery-empty" role="status">
+        <strong>Gallery temporarily unavailable</strong>
+        <p>Unable to refresh project photos and headings. Try reloading the page.</p>
+      </div>`;
+    }
     const galleryNodes=galleryForProject(p.title);
     // Once ProjectGallery is configured, its row count is authoritative.
     // Never replace deleted gallery rows with the four old system-diagram nodes.
@@ -420,25 +426,84 @@
   el("showcase-more").addEventListener("click", () => {
     state.visible += 9;render();
   });
+
+  // Read-only JSONP feed: Google Apps Script ContentService redirects to a
+  // Google-owned content domain and does not grant arbitrary CORS headers.
+  // A tightly scoped callback lets a static GitHub Pages site read the data
+  // without OAuth credentials or making the entire spreadsheet public.
+  let liveGalleryRequestCounter=0;
+  function fetchLiveGallery(url){
+    return new Promise((resolve,reject)=>{
+      const endpoint=String(url||"").trim();
+      if(!/^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(endpoint)){
+        reject(new Error("Invalid ProjectGallery API URL"));return;
+      }
+      const callback="__jjGalleryCb_"+Date.now()+"_"+(++liveGalleryRequestCounter);
+      const script=document.createElement("script");
+      const src=new URL(endpoint);
+      src.searchParams.set("action","gallery");
+      src.searchParams.set("callback",callback);
+      src.searchParams.set("_",String(Date.now()));
+      let settled=false;
+      let timer;
+      const cleanup=()=>{
+        clearTimeout(timer);
+        script.remove();
+        try{delete window[callback]}catch(_){window[callback]=undefined}
+      };
+      const finish=(err,rows)=>{
+        if(settled)return;
+        settled=true;
+        cleanup();
+        if(err)reject(err);
+        else resolve(rows);
+      };
+      window[callback]=payload=>{
+        if(payload?.ok!==true || !Array.isArray(payload.projectGallery)){
+          finish(new Error("Invalid live Gallery response"));return;
+        }
+        // [] is authoritative; never replace it with the stale snapshot.
+        finish(null,payload.projectGallery.slice(0,2000));
+      };
+      script.onerror=()=>finish(new Error("Could not reach the live Gallery endpoint"));
+      script.src=src.toString();
+      timer=setTimeout(()=>finish(new Error("Live Gallery request timed out")),9000);
+      document.head.appendChild(script);
+    });
+  }
+
   async function start(){
+    let mainFeedHasGallery=false;
     try{
       const data = typeof window.loadData === "function" ? await window.loadData() : window.FALLBACK_DATA;
       state.projects = (Array.isArray(data?.portfolio) ? data.portfolio : window.FALLBACK_DATA?.portfolio || [])
         .filter(p => p && typeof p === "object");
-      // An empty live array means the user deleted every gallery item.
-      // Do not substitute stale snapshot records if the backend returned [].
-      state.gallery = Array.isArray(data?.projectGallery) ? data.projectGallery :
+      mainFeedHasGallery=Array.isArray(data?.projectGallery);
+      // When either live backend returns [], treat it as an intentional deletion.
+      state.gallery = mainFeedHasGallery ? data.projectGallery :
         (Array.isArray(window.PORTFOLIO_PROJECT_GALLERY) ? window.PORTFOLIO_PROJECT_GALLERY : null);
-      // Optional future compatibility if the existing Google Sheets feed returns projectDetails.
       if(data?.projectDetails && !Array.isArray(data.projectDetails) && typeof data.projectDetails === "object"){
         state.caseStudies = data.projectDetails;
       }
     }catch(err){
-      console.warn("Could not load live projects; using local list.",err);
+      console.warn("Could not load main portfolio feed; using local projects.",err);
       state.projects = window.FALLBACK_DATA?.portfolio || [];
       state.gallery = Array.isArray(window.PORTFOLIO_PROJECT_GALLERY) ? window.PORTFOLIO_PROJECT_GALLERY : null;
     }
-    // Search and category filters become useful only when the gallery grows.
+    const galleryUrl=String(window.PORTFOLIO_CONFIG?.PROJECT_GALLERY_API_URL || "").trim();
+    if(galleryUrl){
+      try{
+        state.gallery=await fetchLiveGallery(galleryUrl);
+        state.galleryError=false;
+        console.info("ProjectGallery: live rows",state.gallery.length);
+      }catch(err){
+        console.warn("Live ProjectGallery could not be read.",err);
+        // Never resurrect removed items from an old snapshot after live
+        // service failure. The main feed is usable only if it has live rows.
+        state.gallery=mainFeedHasGallery ? state.gallery : [];
+        state.galleryError=!mainFeedHasGallery;
+      }
+    }
     el("showcase-toolbar").hidden = state.projects.length <= 9;
     renderFilters();
     render();
