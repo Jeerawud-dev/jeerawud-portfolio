@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320" width="320" height="320" fill="none">
+  <!-- Repeating, transparent engineering PCB artwork. -->
+  <g stroke="#67dcf0" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" opacity=".72">
+    <path d="M0 35H33L54 56H92V84H118"/>
+    <path d="M0 96H25L49 120H86V149H115"/>
+    <path d="M0 217H44L66 195H104V167H125"/>
+    <path d="M0 277H35L60 252H95L111 236H137"/>
+    <path d="M320 35H285L266 54H227V78H194"/>
+    <path d="M320 109H287L264 132H232V161H204"/>
+    <path d="M320 225H284L263 246H228V269H197"/>
+    <path d="M320 293H286L274 281H250L234 265"/>
+    <path d="M159 0V27L180 48V77"/>
+    <path d="M235 0V21L216 40V76"/>
+    <path d="M76 320V294L96 274H145V250"/>
+    <path d="M182 320V290L164 272V237"/>
+  </g>
+  <g stroke="#2c97c6" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" opacity=".67">
+    <path d="M0 57H20L46 83H76V99"/>
+    <path d="M0 173H26L45 192H70"/>
+    <path d="M0 239H33L56 216H86"/>
+    <path d="M320 77H294L270 101H248"/>
+    <path d="M320 184H298L274 208H247V229"/>
+    <path d="M320 252H293L276 269H270"/>
+    <path d="M109 0V20L127 38V74"/>
+    <path d="M285 0V18L255 48V69"/>
+    <path d="M38 320V296L49 285"/>
+    <path d="M226 320V294L241 279"/>
+    <path d="M153 141V169L176 192H217"/>
+    <path d="M145 99V73L159 59"/>
+  </g>
+  <g stroke="#8aeed6" stroke-width="1.2" opacity=".68">
+    <rect x="120" y="98" width="50" height="42" rx="4"/>
+    <rect x="124" y="102" width="42" height="34" rx="2" opacity=".58"/>
+    <path d="M120 106H112M120 115H110M120 124H111M120 133H113M170 106H180M170 115H184M170 124H181M170 133H184"/>
+    <rect x="207" y="168" width="34" height="31" rx="2"/>
+    <path d="M207 176H199M207 185H197M241 177H249M241 188H253"/>
+    <rect x="131" y="204" width="31" height="26" rx="3" opacity=".72"/>
+    <path d="M131 212H124M131 221H122M162 212H169M162 221H171"/>
+  </g>
+  <g fill="#6ee7f4" opacity=".79">
+    <circle cx="118" cy="84" r="3.2"/><circle cx="115" cy="149" r="3.2"/>
+    <circle cx="125" cy="167" r="3.2"/><circle cx="137" cy="236" r="3.2"/>
+    <circle cx="194" cy="78" r="3.2"/><circle cx="204" cy="161" r="3.2"/>
+    <circle cx="197" cy="269" r="3.2"/><circle cx="180" cy="77" r="3.2"/>
+    <circle cx="216" cy="76" r="3.2"/><circle cx="145" cy="250" r="3.2"/>
+    <circle cx="164" cy="237" r="3.2"/>
+  </g>
+  <g fill="#07111f" stroke="#7ce6fa" stroke-width="1.5" opacity=".9">
+    <circle cx="33" cy="35" r="4"/><circle cx="25" cy="96" r="4"/>
+    <circle cx="44" cy="217" r="4"/><circle cx="285" cy="35" r="4"/>
+    <circle cx="287" cy="109" r="4"/><circle cx="284" cy="225" r="4"/>
+    <circle cx="217" cy="192" r="4"/><circle cx="76" cy="99" r="4"/>
+    <circle cx="86" cy="216" r="4"/><circle cx="248" cy="101" r="4"/>
+  </g>
+  <g stroke="#80f0dd" opacity=".5">
+    <path d="M132 111h26m-26 8h18m-18 8h23"/>
+    <path d="M215 178h18m-18 7h12"/>
+    <path d="M140 211h12m-12 7h8"/>
+  </g>
+</svg>
