@@ -46,12 +46,14 @@
   function visual(project, index, modalView = false){
     const tone = visualTone(project.category);
     const src = validUrl(project.imageUrl);
-    return `<div class="${modalView ? "dialog-visual" : "case-visual"}">
+    const element = modalView ? "div" : "button";
+    const action = modalView ? "" : ` type="button" data-project="${index}" aria-label="View details for ${escape(project.title || "Project")}"`;
+    return `<${element}${action} class="${modalView ? "dialog-visual" : "case-visual case-visual-trigger"}">
       <div class="visual-art art-${tone}" aria-hidden="true"><span class="visual-ring"></span><span class="visual-node"></span></div>
       ${src ? `<img class="project-photo" src="${escape(src)}" alt="${escape(project.title || "Project photo")}" loading="lazy" decoding="async">` : ""}
       <span class="visual-code">${escape(project.category || "Engineering")}</span>
       <span class="case-number">${pad(index+1)}</span>
-    </div>`;
+    </${element}>`;
   }
   function techMarkup(project, max = 4){
     const items = tags(project.technologies).slice(0, max);
@@ -121,32 +123,125 @@
       ? `${state.projects.length} projects`
       : `Showing ${visible.length} of ${matches.length} projects`;
   }
+  const lookupCase = (title) => {
+    const key = clean(title).toLowerCase();
+    const local = window.PORTFOLIO_CASE_STUDIES || {};
+    const override = state.caseStudies || {};
+    const find = source => Object.entries(source).find(([k]) => clean(k).toLowerCase() === key)?.[1] || {};
+    return {...find(local), ...find(override)};
+  };
+
+  function diagramMarkup(p, detail) {
+    const nodes = (Array.isArray(detail.diagram) ? detail.diagram : []).slice(0, 6);
+    if (!nodes.length) {
+      const stack = tags(p.technologies).slice(0, 4);
+      if (!stack.length) return "";
+      nodes.push(...stack.map(tech => ({title:tech, detail:"Listed technology"})));
+    }
+    return `<section class="cs-section cs-diagram-section">
+      <div class="cs-section-top"><div><span class="cs-eyebrow">SYSTEM OVERVIEW</span>
+        <h4>How the pieces connect</h4></div><span class="cs-context-note">Simplified technology map</span></div>
+      <div class="cs-diagram" role="list" aria-label="Conceptual system component map">
+        ${nodes.map((n,i) => `<div class="cs-diagram-node" role="listitem">
+          <span class="cs-step">${String(i+1).padStart(2,"0")}</span>
+          <span class="cs-node-icon" aria-hidden="true">${["◇","▤","⌘","⇆","⟲","◈"][i] || "◈"}</span>
+          <strong>${escape(n.title || "Component")}</strong>
+          <small>${escape(n.detail || "")}</small>
+        </div>`).join("")}
+      </div>
+      <p class="cs-diagram-footnote">Overview based on the published project description and technology stack. It is not an electrical schematic.</p>
+    </section>`;
+  }
+  function caseHighlights(detail) {
+    const highlights = Array.isArray(detail.highlights) ? detail.highlights.map(clean).filter(Boolean).slice(0,8) : [];
+    if (!highlights.length) return "";
+    return `<section class="cs-section cs-scope">
+      <span class="cs-eyebrow">WORK AREAS</span><h4>What the project involved</h4>
+      <ul class="cs-highlights">${highlights.map(x => `<li>${escape(x)}</li>`).join("")}</ul>
+    </section>`;
+  }
+  function mediaBlock(group, sourceImages) {
+    const images = (Array.isArray(sourceImages) ? sourceImages : []).filter(x => validUrl(x?.url)).slice(0,8);
+    const name = group === "machine" ? "Machine & process photos" : "Software UI screenshots";
+    const desc = group === "machine" ? "MACHINE / HARDWARE" : "CONTROL UI / APPLICATION";
+    if (!images.length) {
+      return `<div class="cs-media-panel cs-media-panel--empty">
+        <div class="cs-media-placeholder" aria-hidden="true"><span>${group === "machine" ? "▱" : "▤"}</span><i></i><i></i><i></i></div>
+        <div class="cs-media-info"><span class="cs-eyebrow">${desc}</span>
+        <h5>${name}</h5><p>No images added for this project yet.</p></div>
+      </div>`;
+    }
+    return `<div class="cs-media-panel"><div class="cs-media-label">
+      <span class="cs-eyebrow">${desc}</span><h5>${name}</h5></div>
+      <div class="cs-media-grid">${images.map((img,i) => `<figure class="cs-media-item">
+        <a href="${escape(validUrl(img.url))}" target="_blank" rel="noopener noreferrer" aria-label="Open ${escape(img.caption || name)} image">
+          <img loading="lazy" decoding="async" src="${escape(validUrl(img.url))}" alt="${escape(img.alt || img.caption || name)}">
+          <span class="cs-image-expand" aria-hidden="true">↗</span>
+        </a><figcaption>${escape(img.caption || `Image ${i+1}`)}</figcaption>
+      </figure>`).join("")}</div></div>`;
+  }
+
   function openProject(index){
     const p = state.projects[index];
     if(!p) return;
+    const detail = lookupCase(p.title);
+    const machineImages = [...(Array.isArray(detail.machineImages) ? detail.machineImages : [])];
+    if (validUrl(p.imageUrl) && !machineImages.some(x=>validUrl(x.url)===validUrl(p.imageUrl))) {
+      machineImages.unshift({url:p.imageUrl,caption:p.title});
+    }
     const link = validUrl(p.projectLink);
+    const title = escape(p.title || "Project");
     const content = el("project-dialog-content");
-    content.innerHTML = `${visual(p,index,true)}
-      <div class="dialog-content">
-        <span class="micro-label">${escape(p.category || "Engineering")}</span>
-        <h3 id="project-dialog-title">${escape(p.title || "Project")}</h3>
-        <p>${escape(p.description || "")}</p>
-        <div class="dialog-information">
-          <div><span class="micro-label">Period</span><strong>${escape(p.period || "—")}</strong></div>
-          <div><span class="micro-label">Company</span><strong>${escape(p.context || "—")}</strong></div>
+    content.innerHTML = `<div class="cs-case-study">
+      <div class="cs-hero">
+        <div class="cs-hero-copy">
+          <span class="cs-eyebrow">SELECTED PROJECT / ${pad(index + 1)}</span>
+          <h3 id="project-dialog-title">${title}</h3>
+          <p class="cs-intro">${escape(detail.overview || p.description || "")}</p>
+          <div class="cs-summary-strip">
+            <div><span>YEAR / PERIOD</span><strong>${escape(p.period || "Not specified")}</strong></div>
+            <div><span>COMPANY / CONTEXT</span><strong>${escape(p.context || "Not specified")}</strong></div>
+          </div>
         </div>
-        <span class="micro-label">Technology</span>
-        ${techMarkup(p,8)}
-        ${link ? `<a class="btn btn-primary dialog-link" target="_blank" rel="noopener noreferrer" href="${escape(link)}">Open project ↗</a>` : ""}
-      </div>`;
+        <div class="cs-hero-graphic">${visual(p,index,true)}</div>
+      </div>
+      <div class="cs-body">
+        ${(clean(detail.scope) || clean(detail.role)) ? `<div class="cs-overview">
+          ${clean(detail.scope) ? `<div><span class="cs-eyebrow">PROJECT SCOPE</span><p>${escape(detail.scope)}</p></div>` : ""}
+          ${clean(detail.role) ? `<div><span class="cs-eyebrow">MY WORK</span><p>${escape(detail.role)}</p></div>` : ""}
+        </div>` : ""}
+        ${diagramMarkup(p,detail)}
+        <div class="cs-specs">
+          <section class="cs-section cs-technologies"><span class="cs-eyebrow">TECHNOLOGY</span>
+            <h4>Stack & interfaces</h4>${techMarkup(p,20) || "<p>No technologies specified.</p>"}
+          </section>
+          ${caseHighlights(detail)}
+        </div>
+        <section class="cs-section cs-gallery">
+          <div class="cs-section-top"><div><span class="cs-eyebrow">PROJECT GALLERY</span>
+          <h4>Machine & software interface</h4></div><span class="cs-context-note">Images can be added per project</span></div>
+          <div class="cs-media-layout">${mediaBlock("machine",machineImages)}${mediaBlock("ui",detail.uiImages)}</div>
+        </section>
+        <div class="cs-end">${link ? `<a class="btn btn-primary" target="_blank" rel="noopener noreferrer" href="${escape(link)}">Open project link ↗</a>` : ""}
+          <button class="cs-back" type="button" data-close-project>← Back to projects</button>
+        </div>
+      </div>
+    </div>`;
     handleImages(content);
     if(!modal.open) modal.showModal();
+    else modal.scrollTop = 0;
     el("project-dialog-close").focus();
   }
 
   grid.addEventListener("click", e => {
-    const button = e.target.closest("[data-project]");
+    // Any part of a project card opens its details. Visual and action buttons
+    // remain independently keyboard-accessible.
+    const button = e.target.closest("[data-project]") ||
+      e.target.closest(".case-card")?.querySelector("[data-project]");
     if(button) openProject(Number(button.dataset.project));
+  });
+  el("project-dialog-content").addEventListener("click", e => {
+    if(e.target.closest("[data-close-project]") && modal.open) modal.close();
   });
   el("showcase-filters").addEventListener("click", e => {
     const button = e.target.closest("[data-filter]");
@@ -190,6 +285,10 @@
       const data = typeof window.loadData === "function" ? await window.loadData() : window.FALLBACK_DATA;
       state.projects = (Array.isArray(data?.portfolio) ? data.portfolio : window.FALLBACK_DATA?.portfolio || [])
         .filter(p => p && typeof p === "object");
+      // Optional future compatibility if the existing Google Sheets feed returns projectDetails.
+      if(data?.projectDetails && !Array.isArray(data.projectDetails) && typeof data.projectDetails === "object"){
+        state.caseStudies = data.projectDetails;
+      }
     }catch(err){
       console.warn("Could not load live projects; using local list.",err);
       state.projects = window.FALLBACK_DATA?.portfolio || [];
