@@ -255,7 +255,11 @@
         </div>
         ${radialButtons}
       </div>
-      <div class="cs-orbit-info" aria-label="Selected diagram component">
+      <div class="cs-orbit-info" aria-label="Selected gallery item">
+        <div class="cs-gallery-preview">
+          <img class="cs-gallery-preview-img" ${validUrl(active.imageUrl) ? `src="${escape(validUrl(active.imageUrl))}"` : "hidden"} alt="${escape(active.title || "Project gallery image")}">
+          <span class="cs-gallery-preview-empty" ${validUrl(active.imageUrl) ? "hidden" : ""} aria-hidden="true">▧</span>
+        </div>
         <span class="cs-orbit-info-label">GALLERY ITEM</span>
         <span class="cs-orbit-selected-index">01 / ${String(count).padStart(2,"0")}</span>
         <h5 class="cs-orbit-selected-title" aria-live="polite">${escape(active.title || "Component")}</h5>
@@ -322,6 +326,12 @@
     if(centreDetail) centreDetail.textContent=detail;
     const core=panel.querySelector(".cs-orbit-core");
     setGalleryImage(core?.querySelector(".cs-orbit-core-gallery-photo"),node.dataset.orbitImage,core);
+    const preview=panel.querySelector(".cs-gallery-preview");
+    const img=preview?.querySelector(".cs-gallery-preview-img");
+    setGalleryImage(img,node.dataset.orbitImage,preview);
+    if(img) img.alt=title+" image";
+    const fallback=preview?.querySelector(".cs-gallery-preview-empty");
+    if(fallback)fallback.hidden=!!validUrl(node.dataset.orbitImage);
   }
 
   function toggleFloating(index) {
@@ -380,13 +390,19 @@
       }
     });
     // Image loading errors do not leave broken picture icons.
-    layer.querySelectorAll(".cs-orbit-gallery-image, .cs-orbit-core-gallery-photo, .cs-single-gallery-photo").forEach(img => {
+    layer.querySelectorAll(".cs-orbit-gallery-image, .cs-orbit-core-gallery-photo, .cs-single-gallery-photo, .cs-gallery-preview-img").forEach(img => {
       img.addEventListener("error", () => {
         img.hidden=true;
         if(img.classList.contains("cs-orbit-core-gallery-photo"))
           img.closest(".cs-orbit-core")?.classList.remove("has-gallery-image");
         if(img.classList.contains("cs-single-gallery-photo"))
           img.closest(".cs-single-gallery-circle")?.classList.remove("has-gallery-image");
+        if(img.classList.contains("cs-gallery-preview-img")) {
+          const preview=img.closest(".cs-gallery-preview");
+          preview?.classList.remove("has-gallery-image");
+          const fallback=preview?.querySelector(".cs-gallery-preview-empty");
+          if(fallback) fallback.hidden=false;
+        }
       });
     });
     // The floating layer sits above the current page and never changes grid rows.
@@ -463,7 +479,11 @@
           finish(new Error("Invalid live Gallery response"));return;
         }
         // [] is authoritative; never replace it with the stale snapshot.
-        finish(null,payload.projectGallery.slice(0,2000));
+        finish(null,{
+          projectGallery:payload.projectGallery.slice(0,2000),
+          skills:Array.isArray(payload.skills) ? payload.skills : undefined,
+          certificates:Array.isArray(payload.certificates) ? payload.certificates : undefined
+        });
       };
       script.onerror=()=>finish(new Error("Could not reach the live Gallery endpoint"));
       script.src=src.toString();
@@ -493,7 +513,10 @@
     const galleryUrl=String(window.PORTFOLIO_CONFIG?.PROJECT_GALLERY_API_URL || "").trim();
     if(galleryUrl){
       try{
-        state.gallery=await fetchLiveGallery(galleryUrl);
+        const liveGallery=await fetchLiveGallery(galleryUrl);
+        state.gallery=liveGallery.projectGallery;
+        if(typeof window.applyLivePortfolioExtras==="function")
+          window.applyLivePortfolioExtras(liveGallery);
         state.galleryError=false;
         console.info("ProjectGallery: live rows",state.gallery.length);
       }catch(err){
