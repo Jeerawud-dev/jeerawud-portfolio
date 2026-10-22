@@ -1,36 +1,38 @@
 /* Design polish: realistic portrait framing, simpler project gallery,
    and stronger but still legible PCB detail in the Light theme. */
 
-/* Integrate the original portrait with its circular backdrop; keep orbit rings outside. */
+/* Portrait framing V2: show more of the shoulders without cutting the bottom off.
+   The source photograph remains unchanged; only its placement in the circle changes. */
 .portrait-frame { isolation:isolate; }
 .portrait-photo {
   position:absolute;
   z-index:2;
-  inset:4%;
+  inset:3.2%;
   overflow:hidden;
   border-radius:50%;
-  background:radial-gradient(circle at 50% 36%, #1d3a56 0%, #10243b 72%, #0c1b30 100%);
+  background:radial-gradient(circle at 50% 35%,#1c3b57 0%,#132942 69%,#0c1c31 100%);
   box-shadow:inset 0 0 0 1px rgba(136,203,227,.14);
 }
 .portrait-photo img {
   position:absolute;
   z-index:1;
-  top:-2%;
-  left:-2%;
-  width:104%;
-  height:110%;
+  top:3%;
+  left:50%;
+  transform:translateX(-50%);
+  width:89%;
+  height:95%;
   max-width:none;
   object-fit:contain;
   object-position:center bottom;
-  filter:drop-shadow(0 14px 28px rgba(0,0,0,.15));
-  -webkit-mask-image:linear-gradient(to bottom, #000 0%,#000 73%,rgba(0,0,0,.85) 83%,transparent 100%);
-  mask-image:linear-gradient(to bottom, #000 0%,#000 73%,rgba(0,0,0,.85) 83%,transparent 100%);
+  filter:drop-shadow(0 10px 23px rgba(0,0,0,.11));
+  /* Only soften the very bottom; keep jacket/shoulders visible. */
+  -webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 90%,rgba(0,0,0,.93) 95%,transparent 100%);
+  mask-image:linear-gradient(to bottom,#000 0%,#000 90%,rgba(0,0,0,.93) 95%,transparent 100%);
 }
 html[data-theme="light"] .portrait-photo {
-  background:radial-gradient(circle at 50% 29%,#eaf5fc 0%,#d7e6f2 74%,#cfdfec 100%);
+  background:radial-gradient(circle at 50% 29%,#edf6fb 0%,#dceaf4 75%,#cddfeb 100%);
   box-shadow:inset 0 0 0 1px rgba(85,138,175,.12);
 }
-/* Give the outer ring room, without exposing rectangular photo edges. */
 .portrait-orbit {z-index:4;}
 
 /* Six projects do not need an oversized carousel, separate archive or multiple headings. */
@@ -133,7 +135,7 @@ html[data-theme="dark"] #portfolio .case-desc {color:#afc3d7}
   #portfolio .project-result-line {margin:16px 0 20px}
   #portfolio .case-visual {height:185px;min-height:185px}
   #portfolio .portfolio-intro--simple {padding-bottom:16px}
-  .portrait-photo {inset:4.8%}
+  .portrait-photo {inset:3.2%}
 }
 @media(prefers-reduced-motion:reduce) {
   #portfolio .case-card {transition:none}
