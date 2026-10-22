@@ -12,7 +12,8 @@ window.FALLBACK_DATA = {
     "phone": "064-1273597",
     "linkedin": "",
     "github": "",
-    "heroIntro": "I build control software for industrial machines using C#/.NET, WPF and PLCs. My work covers motion control, machine integration and production data."
+    "heroIntro": "I build control software for industrial machines using C#/.NET, WPF and PLCs. My work covers motion control, machine integration and production data.",
+    "age": 30
   },
   "experience": [
     {
