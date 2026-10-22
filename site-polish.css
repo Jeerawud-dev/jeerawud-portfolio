@@ -270,3 +270,19 @@ html[data-theme="dark"] #pcb-cursor-reveal::before {
 @media (prefers-reduced-motion:reduce) {
   .hero-education .education.smart-reveal { transition:none; }
 }
+
+
+/* Quiet cursor PCB retained after removing guestbook. */
+html[data-theme="light"] #pcb-cursor-reveal.is-visible { opacity:.43; }
+html[data-theme="light"] #pcb-cursor-reveal.is-reading { opacity:.035; }
+html[data-theme="light"] #pcb-cursor-reveal::before {
+  opacity:.72;
+  filter:contrast(1.08) saturate(1.12) brightness(.88);
+}
+html[data-theme="light"] #pcb-cursor-reveal::after { opacity:.10; }
+html[data-theme="dark"] #pcb-cursor-reveal.is-visible { opacity:.54; }
+html[data-theme="dark"] #pcb-cursor-reveal.is-reading { opacity:.05; }
+html[data-theme="dark"] #pcb-cursor-reveal::before {
+  opacity:.77;
+  filter:brightness(1.15) saturate(1);
+}
