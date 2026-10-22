@@ -1,0 +1,221 @@
+/* Transparent floating project diagram.
+   Not inserted into the project grid: the underlying portfolio remains visible. */
+.project-float-layer {
+  position:fixed;
+  inset:0;
+  z-index:1000;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  padding:max(20px,env(safe-area-inset-top)) 20px max(20px,env(safe-area-inset-bottom));
+  isolation:isolate;
+}
+.project-float-veil {
+  position:fixed;
+  inset:0;
+  background:rgba(4,18,32,.20);
+  cursor:default;
+  z-index:0;
+}
+.project-float-frame {
+  --float-foreground:#edfaff;
+  --float-muted:#b8d0dd;
+  --float-line:rgba(175,226,235,.23);
+  position:relative;
+  z-index:1;
+  width:min(820px,100%);
+  max-width:820px;
+  margin:auto;
+  padding:20px clamp(13px,2.4vw,27px) 8px;
+  border:0;
+  border-radius:0;
+  background:transparent;
+  color:var(--float-foreground);
+  box-shadow:none;
+  animation:diagram-float-in 220ms cubic-bezier(.2,.85,.18,1) both;
+}
+.project-float-frame::before {
+  content:"";
+  position:absolute;
+  z-index:-1;
+  inset:3% -1%;
+  pointer-events:none;
+  background:radial-gradient(ellipse at 49% 48%,rgba(9,34,56,.65),rgba(9,30,51,.32) 46%,transparent 76%);
+  filter:blur(19px);
+}
+.project-float-header {
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:16px;
+  padding:0 14px;
+  min-width:0;
+}
+.project-float-heading {max-width:680px;min-width:0}
+.project-float-heading .cs-eyebrow {
+  color:#80e1d7;
+  font-size:9px;
+  letter-spacing:.15em;
+}
+.project-float-heading h4 {
+  color:var(--float-foreground);
+  font:700 clamp(22px,2.7vw,32px)/1.17 "Space Grotesk",Inter,system-ui,sans-serif;
+  margin:8px 0;
+  letter-spacing:-.046em;
+  text-shadow:0 3px 14px rgba(0,14,32,.13);
+}
+.project-float-heading p {
+  max-width:610px;
+  color:var(--float-muted);
+  font:500 12px/1.55 Inter,system-ui,sans-serif;
+  margin:0;
+}
+.project-float-close {
+  appearance:none;
+  display:grid;
+  place-items:center;
+  flex:none;
+  width:38px;
+  height:38px;
+  border:1px solid var(--float-line);
+  border-radius:50%;
+  color:var(--float-foreground);
+  background:rgba(18,49,69,.55);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  cursor:pointer;
+}
+.project-float-close:hover {border-color:#72d8d4;background:rgba(27,89,102,.64)}
+.project-float-close:focus-visible {outline:3px solid #6adbd3;outline-offset:4px}
+.project-float-visual {
+  position:relative;
+  width:100%;
+  margin:0 auto;
+  min-width:0;
+}
+.project-float-visual .cs-orbit-layout {
+  display:grid;
+  grid-template-columns:minmax(0,1.65fr) minmax(175px,.80fr);
+  gap:clamp(13px,2.1vw,27px);
+  align-items:center;
+  justify-items:stretch;
+}
+.project-float-visual .cs-orbit-stage {
+  width:min(100%,465px);
+  max-width:465px;
+  min-width:0;
+  margin-inline:auto;
+}
+.project-float-visual .cs-orbit-node {
+  width:20%;
+  max-width:110px;
+  padding:6px 5px;
+  gap:3px;
+}
+.project-float-visual .cs-orbit-node-icon svg {width:22px;height:22px}
+.project-float-visual .cs-orbit-node-label {font-size:clamp(8px,1.07vw,11px);line-height:1.2}
+.project-float-visual .cs-orbit-node-number {font-size:8px}
+.project-float-visual .cs-orbit-core {
+  padding:10px;
+  gap:4px;
+}
+.project-float-visual .cs-orbit-core-title {font-size:clamp(12px,1.5vw,17px)}
+.project-float-visual .cs-orbit-core-detail {font-size:9px;line-height:1.4}
+.project-float-visual .cs-orbit-info {
+  min-width:0;
+  align-self:center;
+  background:rgba(13,39,59,.56);
+  border:1px solid rgba(112,185,212,.22);
+  border-radius:14px;
+  padding:18px 17px;
+  backdrop-filter:blur(9px);
+  -webkit-backdrop-filter:blur(9px);
+  box-shadow:0 9px 25px rgba(4,16,32,.09);
+}
+.project-float-visual .cs-orbit-info-label {
+  color:#8bdbdb;
+  letter-spacing:.09em;
+  font-size:9px;
+}
+.project-float-visual .cs-orbit-selected-index {
+  color:#9be8d8;
+  font:700 11px/1.3 "Space Grotesk",sans-serif;
+  margin:12px 0 9px;
+  letter-spacing:.05em;
+}
+.project-float-visual .cs-orbit-selected-title {
+  color:var(--float-foreground);
+  margin:0 0 8px;
+  font:700 clamp(16px,1.8vw,21px)/1.2 "Space Grotesk",sans-serif;
+}
+.project-float-visual .cs-orbit-selected-detail {
+  color:var(--float-muted);
+  font-size:12px;
+  line-height:1.6;
+  margin:0;
+  min-height:0;
+}
+.project-float-visual .cs-orbit-instruction {
+  color:var(--float-muted);
+  opacity:.75;
+  font-size:10px;
+  margin:13px 0 0;
+}
+html[data-theme="light"] .project-float-veil {
+  background:rgba(230,242,250,.32);
+}
+html[data-theme="light"] .project-float-frame {
+  --float-foreground:#19354a;
+  --float-muted:#476a7d;
+  --float-line:rgba(45,115,149,.24);
+}
+html[data-theme="light"] .project-float-frame::before {
+  background:radial-gradient(ellipse at 50% 49%,rgba(247,251,255,.85),rgba(238,249,253,.57) 48%,transparent 77%);
+  filter:blur(22px);
+}
+html[data-theme="light"] .project-float-heading .cs-eyebrow {color:#167d91}
+html[data-theme="light"] .project-float-heading h4 {text-shadow:none}
+html[data-theme="light"] .project-float-close {
+  background:rgba(255,255,255,.83);
+  color:#235875;
+}
+html[data-theme="light"] .project-float-close:hover {background:#f2f9ff}
+html[data-theme="light"] .project-float-visual .cs-orbit-info {
+  background:rgba(255,255,255,.76);
+  border-color:rgba(64,135,167,.2);
+  box-shadow:0 12px 31px rgba(30,82,119,.09);
+}
+html[data-theme="light"] .project-float-visual .cs-orbit-info-label {color:#197b8c}
+html[data-theme="light"] .project-float-visual .cs-orbit-selected-index {color:#218f90}
+@keyframes diagram-float-in {
+  from {opacity:0;transform:translateY(11px) scale(.983)}
+  to {opacity:1;transform:translateY(0) scale(1)}
+}
+@media(max-width:760px) {
+  .project-float-layer {align-items:flex-start;padding:25px 14px}
+  .project-float-frame {padding:5px 2px 15px}
+  .project-float-visual .cs-orbit-layout {grid-template-columns:1fr;gap:0}
+  .project-float-visual .cs-orbit-stage {width:min(100%,390px);max-width:390px}
+  .project-float-visual .cs-orbit-info {
+    width:min(100%,400px);
+    margin:-3px auto 10px;
+    padding:15px 17px;
+  }
+  .project-float-visual .cs-orbit-core-title {font-size:clamp(12px,2.8vw,16px)}
+  .project-float-visual .cs-orbit-node-label {font-size:clamp(8px,1.9vw,10px)}
+}
+@media(max-width:450px) {
+  .project-float-layer {padding:15px 10px}
+  .project-float-header {padding:0 9px}
+  .project-float-heading h4 {font-size:21px}
+  .project-float-heading p {font-size:11px}
+  .project-float-visual .cs-orbit-stage {width:min(100%,345px)}
+  .project-float-visual .cs-orbit-node-icon svg {width:19px;height:19px}
+  .project-float-visual .cs-orbit-node-label {font-size:clamp(7px,2vw,9px)}
+  .project-float-visual .cs-orbit-info {margin:0 auto}
+}
+@media(prefers-reduced-motion:reduce) {
+  .project-float-frame {animation:none}
+}
