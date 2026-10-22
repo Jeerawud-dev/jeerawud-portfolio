@@ -288,7 +288,7 @@
     syncOpenControls();
     // Keep the current Projects section and scroll only enough to reveal the diagram.
     if (typeof panel.scrollIntoView === "function") {
-      panel.scrollIntoView({behavior:lessMotion?"instant":"smooth",block:"nearest"});
+      panel.scrollIntoView({behavior:lessMotion?"auto":"smooth",block:"nearest"});
     }
   }
 
