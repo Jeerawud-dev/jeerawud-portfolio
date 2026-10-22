@@ -1,64 +1,104 @@
-# Floating System Diagram — Portfolio project interaction
+# Project Gallery → Large Circular Visualization
 
-## Visitor experience
+When someone clicks **View diagram** in **03 / PROJECTS**, a **larger,
+translucent floating circular visualization** opens over the current page.
+The website remains visible behind a frosted-glass layer (no new page or
+new project-card row). Close by pressing **X**, **Esc**, or clicking outside.
 
-Under **03 / PROJECTS**, select a project card or its **View diagram** action.
-A **compact circular system diagram floats over the current Portfolio page**.
-The original project cards stay in the same positions — selecting a project
-does not insert a new row, expand the grid, navigate to a new page, or open a
-large case-study panel.
+## Source of diagram pictures and captions
 
-The floating chart has:
-- Project title and one brief, existing project description/scope.
-- Circular 4–6-stage system / technology flow with clickable icon buttons.
-- Small selected-stage label and description beside the wheel (below on mobile).
-- A transparent surrounding surface so the Portfolio remains visible beneath.
+**Google Sheets → ProjectGallery** is the intended source:
 
-Close with the **X**, by clicking the surrounding backdrop, or by pressing
-**Escape**. Keyboard focus returns to the original project control.
+https://docs.google.com/spreadsheets/d/1wM6Im1jnWEq8fujHW48mb-kTH_tvv5cQXkiNBGRSjKM/edit
 
-## Data sources and editing
+| Column | Name | Meaning |
+|---|---|---|
+| A | Project Title | **Must match** the Portfolio project title |
+| B | Gallery Heading | The name displayed beside each circular thumbnail |
+| C | Image URL | GitHub Pages relative image path or public HTTPS photo URL |
+| D | Short Detail | Short selected-image explanation |
+| E | Display Order | Number controlling placement around the circle |
+| F | Visible | Yes / No |
 
-| Content | Source |
-| --- | --- |
-| Card images, project title, category, description, dates, technologies | Google Sheets → `Portfolio` |
-| Simplified conceptual diagram stages, short scope | GitHub → `project-cases.js` |
-| Diagram HTML and interaction | GitHub → `showcase.js` |
-| Floating transparent UI | GitHub → `project-float.css` |
-| Base circle styles | GitHub → `project-case.css` |
+The Sheet has been seeded with **25 headings** grouped into the six current
+projects, based on the *already-published* system components, so existing
+work is not lost. **Only one genuine image exists in the current Portfolio
+data:** `image/Coatingmachine.jpg` for **Automated Coating Machine**.
+All other items have blank Image URL cells; they show a clean engineering
+icon, not invented or AI-generated machine photos.
 
-The reference-inspired circular diagram is a conceptual overview, not a
-verified electrical, EtherCAT, mechanical, or software design schematic.
+An image placed in column C becomes a circular image thumbnail; selecting
+it also shows a larger crop in the center with its heading and short detail.
+The outer ring follows the item order, up to **six gallery items per project**.
+If a project has no gallery records, its previous conceptual technology map
+remains the fallback.
 
-Example edit in `project-cases.js`:
+## Important: live sync versus current deployed Apps Script
 
-```js
-diagram: [
-  { title: "Machine signals", detail: "Industrial I/O" },
-  { title: "Motion control", detail: "Taught paths" },
-  { title: "PC application", detail: "C# · WPF" },
-  { title: "Factory links", detail: "MES · PQM · CFX+" }
-]
+Your existing Google Apps Script endpoint supplies the main `Portfolio`
+rows, but has **not been verified to return ProjectGallery** yet. To make the
+new UI work immediately, the 25 source rows from ProjectGallery were copied
+into `project-gallery.js` on GitHub as a **verified snapshot**.
+
+The browser reads:
+1. `data.projectGallery` when the deployed portfolio Google Apps Script
+   includes this array, otherwise
+2. `window.PORTFOLIO_PROJECT_GALLERY` in `project-gallery.js`.
+
+**Editing ProjectGallery alone will not refresh the published diagram until
+the deployed Apps Script includes it or project-gallery.js is synced again.**
+The source-of-truth tab, field names and precedence are ready for this
+future live connection.
+
+If you maintain the existing Apps Script, you can add a helper like:
+
+```javascript
+// Add to your EXISTING portfolio Apps Script project.
+// Call this helper while assembling its current doGet JSON response:
+//   response.projectGallery = getProjectGallery_();
+function getProjectGallery_() {
+  const sh = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("ProjectGallery");
+  if (!sh || sh.getLastRow() < 2) return [];
+  const values = sh.getRange(2, 1, sh.getLastRow() - 1, 6).getDisplayValues();
+  return values.filter(row => row[0] && row[1] && row[5] !== "No").map(row => ({
+    project: row[0],
+    title: row[1],
+    imageUrl: row[2],
+    detail: row[3],
+    order: Number(row[4]) || 0,
+    visible: true
+  }));
+}
 ```
 
-Use up to **six stages**. Only show components truly used in the project.
-A different entry with the same title in Google Sheets receives that entry's
-diagram automatically (project matching ignores casing and extra spaces).
+Do not replace the existing `doGet` function: merge the additional array
+into its existing JSON response, then **deploy a new Web App version**.
+If the Apps Script is standalone (not bound to the Sheet), use
+`SpreadsheetApp.openById("1wM6Im1jnWEq8fujHW48mb-kTH_tvv5cQXkiNBGRSjKM")`
+instead of `getActiveSpreadsheet()`. This snippet is provided as a guide;
+the existing deployment has **not** been changed in this update.
 
-## What is intentionally hidden
+## Add real project images
 
-The former full case study modal (hero panel, long bullet list, technology
-table and screenshot gallery) is no longer shown. The floating system wheel
-is designed for quickly seeing the workflow without reading a long report.
+1. Upload the approved image into the GitHub repo (e.g. `image/coating-editor.png`).
+2. Add a `ProjectGallery` row using the *exact* project title in column A.
+3. Fill Gallery Heading, Image URL, Short Detail and Display Order.
+4. Set Visible to Yes.
+5. Until live Apps Script gallery support is deployed, also sync the new row
+   into GitHub `project-gallery.js`.
 
-`machineImages` and `uiImages` remain stored in `project-cases.js` for
-potential future use; they are not rendered in this floating view.
+Use real screenshots of your WPF interface for software Gallery items,
+and actual equipment/process photos for hardware Gallery items. Remove
+sensitive customer, MES, serial number, internal IP, employee, or
+proprietary data before publishing.
 
-## Accessibility and responsive design
+## Design
 
-- Uses labeled floating overlay, keyboard-friendly icon buttons and close.
-- `Escape`, backdrop click and Close all return to the Portfolio.
-- Light Theme: transparent pale overlay with subtle frosted stage details.
-- Dark Theme: translucent dark overlay with the same chart.
-- On smaller screens the detail panel moves below the wheel.
-- Motion respects the user's reduced-animation preference.
+- Large ring with thumbnail + heading for each Gallery item.
+- Center shows a larger photo if that item has an image.
+- Small translucent panel on the right shows the selected Gallery Heading
+  and Short Detail.
+- Fallback icon appears when a Gallery Image URL is blank or broken.
+- Up to six items to keep the circular layout readable.
+- Light is still the default; Dark remains available.
+- The floating layer respects reduced-motion preferences and keyboard use.
