@@ -21,7 +21,12 @@ function doGet(e) {
     if (params.action && params.action !== "gallery") {
       response = {ok:false,error:"Unknown action"};
     } else {
-      response = {ok:true,projectGallery:readProjectGallery_()};
+      response = {
+        ok:true,
+        projectGallery:readProjectGallery_(),
+        skills:readPortfolioSkills_(),
+        certificates:readPortfolioCertificates_()
+      };
     }
   } catch (err) {
     console.error("ProjectGallery read failed",err);
@@ -56,6 +61,41 @@ function readProjectGallery_() {
     order: Number(row[4]) || 0,
     visible: !/^(no|false|0)$/i.test(String(row[5] || "").trim())
   })).filter(row => row.project && row.title && row.visible);
+}
+
+
+/** Read current Skills records, ordered by Website Display Order. */
+function readPortfolioSkills_(){
+  const sheet=SpreadsheetApp.openById(GALLERY_SPREADSHEET_ID).getSheetByName("Skills");
+  if(!sheet) throw new Error("Skills tab missing");
+  const count=Math.max(0,sheet.getLastRow()-3);
+  if(count>500)throw new Error("Too many Skills rows");
+  if(!count)return [];
+  return sheet.getRange(4,1,count,4).getDisplayValues().filter(r=>String(r[0]).trim())
+    .map(r=>({
+      category:String(r[0]).trim().slice(0,140),
+      level:String(r[1]).trim().slice(0,140),
+      technologies:String(r[2]).trim().slice(0,1000),
+      order:Number(r[3])||0
+    })).sort((a,b)=>a.order-b.order);
+}
+
+/** Certificates can include images in column F: Image URL. */
+function readPortfolioCertificates_(){
+  const sheet=SpreadsheetApp.openById(GALLERY_SPREADSHEET_ID).getSheetByName("Certificates");
+  if(!sheet)throw new Error("Certificates tab missing");
+  const count=Math.max(0,sheet.getLastRow()-3);
+  if(count>500)throw new Error("Too many Certificates rows");
+  if(!count)return [];
+  return sheet.getRange(4,1,count,6).getDisplayValues().filter(r=>String(r[0]).trim())
+    .map(r=>({
+      name:String(r[0]).trim().slice(0,200),
+      provider:String(r[1]).trim().slice(0,160),
+      year:String(r[2]).trim().slice(0,50),
+      credentialUrl:String(r[3]).trim().slice(0,1200),
+      notes:String(r[4]).trim().slice(0,600),
+      imageUrl:String(r[5]).trim().slice(0,1200)
+    }));
 }
 
 function galleryResponse_(value,callback) {
