@@ -3,26 +3,31 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Jeerawud Jongjit — Software Engineer specializing in automation, machine design and .NET C#">
+  <meta name="theme-color" content="#07111f">
+  <meta name="description" content="Jeerawud Jongjit — Software Engineer building industrial automation, robotics and intelligent machine software.">
   <title>Jeerawud Jongjit | Software Engineer</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="showcase.css">
 </head>
 <body>
-  <div class="grid-glow"></div>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <div class="grid-glow" aria-hidden="true"></div>
   <header class="nav-shell">
-    <nav class="nav container">
-      <a href="#home" class="brand">JJ<span>.</span></a>
-      <div class="nav-links">
+    <nav class="nav container" aria-label="Primary navigation">
+      <a href="#home" class="brand" aria-label="Jeerawud Jongjit — home">JJ<span>.</span></a>
+      <div class="nav-links" id="primary-links">
         <a href="#about">About</a>
         <a href="#experience">Experience</a>
         <a href="#portfolio">Portfolio</a>
         <a href="#skills">Skills</a>
         <a href="#contact">Contact</a>
+        <a href="Resume_Jeerawud.pdf" class="nav-mobile-resume" target="_blank" rel="noopener noreferrer">Download resume ↗</a>
       </div>
-      <a class="btn btn-small btn-ghost" href="Resume_Jeerawud.pdf" target="_blank" rel="noopener">Resume PDF</a>
+      <button class="nav-menu-toggle" id="nav-menu-toggle" type="button" aria-controls="primary-links" aria-expanded="false" aria-label="Open navigation menu"><span></span><span></span><span></span></button>
+      <a class="btn btn-small btn-ghost" href="Resume_Jeerawud.pdf" target="_blank" rel="noopener noreferrer">Resume PDF <span aria-hidden="true">↗</span></a>
     </nav>
   </header>
 
@@ -32,21 +37,21 @@
     <div id="scroll-section-name" class="scroll-section-name">HOME</div>
   </aside>
 
-  <main>
+  <main id="main-content">
     <section id="home" data-title="HOME" class="hero container">
       <div class="hero-copy reveal">
-        <div class="eyebrow">SOFTWARE ENGINEER · AUTOMATION</div>
+        <div class="eyebrow hero-eyebrow"><span class="live-mark" aria-hidden="true"></span> SOFTWARE ENGINEERING · INDUSTRIAL AUTOMATION</div>
         <h1 id="hero-name">Jeerawud Jongjit</h1>
         <h2 id="hero-headline">Automation • Machine Design • .NET C#</h2>
         <p id="hero-summary"></p>
         <div class="hero-actions">
-          <a id="primary-cta" class="btn btn-primary" href="#portfolio">View Portfolio</a>
-          <a class="btn btn-ghost" href="#contact">Contact Me</a>
+          <a id="primary-cta" class="btn btn-primary" href="#portfolio">Explore selected work <span aria-hidden="true">↗</span></a>
+          <a class="btn btn-ghost" href="#contact">Let's connect <span aria-hidden="true">↗</span></a>
         </div>
-        <div class="hero-stats">
-          <div><strong>8+</strong><span>Years Experience</span></div>
-          <div><strong>.NET</strong><span>C# / WPF</span></div>
-          <div><strong>PLC</strong><span>HMI / Robotics</span></div>
+        <div class="hero-stats" aria-label="Engineering highlights">
+          <div><strong>8+</strong><span>Years in engineering</span></div>
+          <div><strong>200+</strong><span>Automation projects</span></div>
+          <div><strong>C# · PLC</strong><span>Software &amp; controls</span></div>
         </div>
       </div>
       <div class="portrait-wrap reveal">
@@ -55,6 +60,7 @@
           <div class="ring ring-2"></div>
           <img src="profile.png" alt="Portrait of Jeerawud Jongjit">
         </div>
+        <span class="hero-floating-label" aria-hidden="true"><i></i> ENGINEERING IN MOTION</span>
       </div>
       <a class="scroll-hint" href="#about" aria-label="Scroll to About section">
         <span class="mouse-icon"><span></span></span>
@@ -65,85 +71,90 @@
     <section id="about" data-title="ABOUT" class="section container">
       <div class="section-label">01 / ABOUT</div>
       <div class="about-grid">
-        <div>
-          <h3>Engineering software for real machines.</h3>
-        </div>
+        <div><h3>Engineering software for real machines.</h3></div>
         <div>
           <p id="about-summary"></p>
-          <div class="contact-inline">
-            <span id="about-location"></span>
-            <a id="about-email" href="#"></a>
-          </div>
+          <div class="contact-inline"><span id="about-location"></span><a id="about-email" href="#"></a></div>
         </div>
       </div>
     </section>
 
     <section id="experience" data-title="EXPERIENCE" class="section section-panel">
       <div class="container">
-        <div class="section-heading">
-          <div class="section-label">02 / EXPERIENCE</div>
-          <h3>Professional journey</h3>
-        </div>
+        <div class="section-heading"><div class="section-label">02 / EXPERIENCE</div><h3>Professional journey</h3></div>
         <div id="experience-list" class="timeline"></div>
       </div>
     </section>
 
-    <section id="portfolio" data-title="PORTFOLIO" class="section container">
-      <div class="section-heading split">
+    <section id="portfolio" data-title="PORTFOLIO" class="section container portfolio-section">
+      <div class="portfolio-intro">
         <div>
-          <div class="section-label">03 / PORTFOLIO</div>
-          <h3>Selected engineering work</h3>
+          <div class="section-label">03 / SELECTED WORK</div>
+          <h3>Engineering solutions.<br><em>Built for the real world.</em></h3>
+          <p class="portfolio-lede">From intelligent machine control to factory connectivity — a closer look at the engineering behind the systems.</p>
         </div>
-        <p class="section-note">Portfolio cards are driven by the Portfolio tab in Google Sheets. Add project images and links there to update this site.</p>
+        <div class="portfolio-intro-aside"><span class="micro-label">THE WORK</span><strong>CODE × CONTROL × INNOVATION</strong><span>Explore the systems, tools and thinking behind each project.</span><span class="intro-arrow" aria-hidden="true">↘</span></div>
       </div>
-      <div id="portfolio-grid" class="portfolio-grid"></div>
+
+      <div class="showcase-kicker">
+        <div><span class="micro-label">01 / SPOTLIGHT</span><h4>Featured projects <span class="kicker-mark" aria-hidden="true">✳</span></h4></div>
+        <div class="rail-actions">
+          <span class="rail-index" id="showcase-rail-index" aria-live="polite">01 / 01</span>
+          <button class="circle-action" id="showcase-prev" type="button" aria-label="Previous featured project">←</button>
+          <button class="circle-action" id="showcase-next" type="button" aria-label="Next featured project">→</button>
+        </div>
+      </div>
+      <div id="showcase-featured" class="showcase-featured" aria-label="Featured projects"></div>
+
+      <div class="showcase-browse-heading">
+        <div><span class="micro-label">02 / THE ARCHIVE</span><h4>Explore all projects <span id="showcase-total" class="total-count">00</span></h4></div>
+        <p>Filter by discipline, discover the stack, and open any project for a closer look.</p>
+      </div>
+      <div class="showcase-toolbar">
+        <div class="filter-scroll" id="showcase-filters" role="group" aria-label="Filter projects by discipline"></div>
+        <label class="showcase-search"><span aria-hidden="true">⌕</span><span class="sr-only">Search projects</span><input id="showcase-query" type="search" placeholder="Search projects or tech…" autocomplete="off" spellcheck="false"></label>
+      </div>
+      <div class="result-line"><span id="showcase-count" role="status" aria-live="polite">Loading projects…</span><span class="result-line-end">PORTFOLIO / INDEX</span></div>
+      <div id="showcase-grid" class="showcase-grid"></div>
+      <div id="showcase-empty" class="showcase-empty" hidden><span aria-hidden="true">⌕</span><h5>No matching projects</h5><p>Try a different keyword or select another category.</p><button class="btn btn-ghost" id="showcase-reset" type="button">Clear filters</button></div>
+      <div class="showcase-footer"><button id="showcase-more" class="btn btn-ghost show-more" type="button" hidden>Show more projects <span aria-hidden="true">↓</span></button><span class="showcase-footer-note">DESIGNED TO BUILD WHAT'S NEXT <span aria-hidden="true">↗</span></span></div>
+      <!-- Retained for compatibility with the existing Google Sheets renderer. -->
+      <div id="portfolio-grid" class="portfolio-grid" hidden aria-hidden="true"></div>
     </section>
 
     <section id="skills" data-title="SKILLS" class="section section-panel">
       <div class="container">
-        <div class="section-heading">
-          <div class="section-label">04 / SKILLS</div>
-          <h3>Technology stack</h3>
-        </div>
+        <div class="section-heading"><div class="section-label">04 / SKILLS</div><h3>Technology stack</h3></div>
         <div id="skills-grid" class="skills-grid"></div>
-
-        <div class="cert-wrap">
-          <div class="section-label">CERTIFICATES & TRAINING</div>
-          <div id="cert-grid" class="cert-grid"></div>
-        </div>
+        <div class="cert-wrap"><div class="section-label">CERTIFICATES &amp; TRAINING</div><div id="cert-grid" class="cert-grid"></div></div>
       </div>
     </section>
 
     <section id="education" data-title="EDUCATION" class="section container">
-      <div class="section-heading">
-        <div class="section-label">05 / EDUCATION</div>
-        <h3>Education</h3>
-      </div>
+      <div class="section-heading"><div class="section-label">05 / EDUCATION</div><h3>Education</h3></div>
       <div id="education-list" class="education-list"></div>
     </section>
 
     <section id="contact" data-title="CONTACT" class="section contact-section">
       <div class="container contact-card">
-        <div>
-          <div class="section-label">06 / CONTACT</div>
-          <h3>Let’s build better automation.</h3>
-          <p>Available for software engineering, automation and machine-development conversations.</p>
-        </div>
-        <div class="contact-actions">
-          <a id="contact-email" class="btn btn-primary" href="#">Email Me</a>
-          <a id="contact-phone" class="btn btn-ghost" href="#"></a>
-        </div>
+        <div><div class="section-label">06 / CONTACT</div><h3>Let’s build better automation.</h3><p>Available for software engineering, automation and machine-development conversations.</p></div>
+        <div class="contact-actions"><a id="contact-email" class="btn btn-primary" href="#">Email Me</a><a id="contact-phone" class="btn btn-ghost" href="#"></a></div>
       </div>
     </section>
   </main>
 
-  <footer class="footer container">
-    <span>© <span id="year"></span> Jeerawud Jongjit</span>
-    <span id="data-status">Resume data</span>
-  </footer>
+  <dialog id="project-dialog" class="project-dialog" aria-labelledby="project-dialog-title">
+    <div class="dialog-shell">
+      <button type="button" class="dialog-close circle-action" id="project-dialog-close" aria-label="Close project details">✕</button>
+      <div id="project-dialog-content"></div>
+    </div>
+  </dialog>
+
+  <footer class="footer container"><span>© <span id="year"></span> Jeerawud Jongjit</span><span id="data-status">Resume data</span></footer>
 
   <script src="config.js"></script>
   <script src="data.js"></script>
   <script src="app.js"></script>
+  <script src="showcase.js"></script>
 </body>
 </html>
