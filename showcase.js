@@ -46,7 +46,7 @@
     const tone = visualTone(project.category);
     const src = validUrl(project.imageUrl);
     const element = modalView ? "div" : "button";
-    const action = modalView ? "" : ` type="button" data-project="${index}" aria-label="Show diagram for ${escape(project.title || "Project")}" aria-expanded="false" aria-controls="project-quickview"`;
+    const action = modalView ? "" : ` type="button" data-project="${index}" aria-label="Show diagram for ${escape(project.title || "Project")}" aria-expanded="false" aria-controls="project-floating-layer"`;
     return `<${element}${action} class="${modalView ? "dialog-visual" : "case-visual case-visual-trigger"}">
       <div class="visual-art art-${tone}" aria-hidden="true"><span class="visual-ring"></span><span class="visual-node"></span></div>
       ${src ? `<img class="project-photo" src="${escape(src)}" alt="${escape(project.title || "Project photo")}" loading="lazy" decoding="async">` : ""}
@@ -68,7 +68,7 @@
         ${techMarkup(project)}
         <div class="case-bottom">
           <span class="case-context" title="${escape(project.context || "")}">${escape(project.context || "")}</span>
-          <button type="button" class="case-open" data-project="${index}" aria-label="Show diagram for ${escape(project.title || "project")}" aria-expanded="false" aria-controls="project-quickview">View diagram <span aria-hidden="true">↓</span></button>
+          <button type="button" class="case-open" data-project="${index}" aria-label="Show diagram for ${escape(project.title || "project")}" aria-expanded="false" aria-controls="project-floating-layer">View diagram <span aria-hidden="true">↓</span></button>
         </div>
       </div>
     </article>`;
@@ -111,7 +111,7 @@
     });
     const visible = matches.slice(0,state.visible);
     if(observer) observer.disconnect();
-    state.activeProject = null;
+    closeFloating(false);
     grid.innerHTML = visible.map(({project,index})=>card(project,index)).join("");
     handleImages(grid);
     for(const c of grid.querySelectorAll(".case-card")){
@@ -222,73 +222,23 @@
       card.querySelectorAll("[data-project]").forEach(control => {
         control.setAttribute("aria-expanded",String(open));
         control.setAttribute("aria-label",(open?"Hide":"Show")+" system diagram for "+(state.projects[index]?.title || "project"));
-        if (control.classList.contains("case-open")) {
-          control.innerHTML = open ? 'Close diagram <span aria-hidden="true">↑</span>' :
-            'View diagram <span aria-hidden="true">↓</span>';
+        if(control.classList.contains("case-open")) {
+          control.innerHTML=open ?
+            'Close diagram <span aria-hidden="true">↑</span>' :
+            'View diagram <span aria-hidden="true">↗</span>';
         }
       });
     });
   }
 
-  // Insert a single panel directly below the selected card's ROW.
-  // OffsetTop follows actual responsive grid columns (3, 2, or 1).
-  function placeAfterCardRow(panel, index) {
-    const cards=Array.from(grid.querySelectorAll(".case-card"));
-    const selected=cards.find(card => Number(card.querySelector("[data-project]")?.dataset.project)===index);
-    if(!selected) return;
-    const top=selected.offsetTop;
-    let last=selected;
-    for(let i=cards.indexOf(selected)+1;i<cards.length;i++) {
-      if(Math.abs(cards[i].offsetTop-top)>4) break;
-      last=cards[i];
-    }
-    last.after(panel);
-  }
-
-  function closeInline(restoreFocus=false) {
+  function closeFloating(restoreFocus=false) {
     const index=state.activeProject;
-    const panel=el("project-quickview");
-    if(panel) panel.remove();
+    const layer=document.getElementById("project-floating-layer");
+    if(layer) layer.remove();
     state.activeProject=null;
     syncOpenControls();
-    if(restoreFocus&&index!==null) {
+    if(restoreFocus && index!==null) {
       grid.querySelector(`[data-project="${index}"]`)?.focus();
-    }
-  }
-
-  function toggleInline(index) {
-    const p=state.projects[index];
-    if(!p) return;
-    if(state.activeProject===index) {
-      closeInline(true);
-      return;
-    }
-    closeInline(false);
-    const detail=lookupCase(p.title);
-    const panel=document.createElement("section");
-    panel.id="project-quickview";
-    panel.className="project-inline";
-    panel.setAttribute("role","region");
-    panel.setAttribute("aria-label", "System diagram for "+clean(p.title || "Project"));
-    // The regular card holds project imagery and the full description.
-    // Inline section deliberately shows just a title, a short scope and the chart.
-    const brief=clean(detail.scope || p.description || "");
-    const shortBrief=brief.length>185 ? brief.slice(0,182).replace(/\s+\S*$/,"")+"…" : brief;
-    panel.innerHTML=`<header class="project-inline-head">
-       <div class="project-inline-heading">
-         <span class="cs-eyebrow">PROJECT DIAGRAM / ${pad(index+1)}</span>
-         <h4>${escape(p.title || "Project")}</h4>
-         ${shortBrief ? `<p>${escape(shortBrief)}</p>` : ""}
-       </div>
-       <button type="button" class="project-inline-close" data-close-inline aria-label="Close system diagram">✕ <span>Close</span></button>
-     </header>
-     <div class="project-inline-diagram">${diagramMarkup(p,detail)}</div>`;
-    state.activeProject=index;
-    placeAfterCardRow(panel,index);
-    syncOpenControls();
-    // Keep the current Projects section and scroll only enough to reveal the diagram.
-    if (typeof panel.scrollIntoView === "function") {
-      panel.scrollIntoView({behavior:lessMotion?"auto":"smooth",block:"nearest"});
     }
   }
 
@@ -302,41 +252,90 @@
       item.classList.toggle("is-active",active);
       item.setAttribute("aria-pressed",String(active));
     }
-    for(const arc of panel.querySelectorAll("[data-orbit-segment]"))
+    for(const arc of panel.querySelectorAll("[data-orbit-segment]")) {
       arc.classList.toggle("is-active",Number(arc.dataset.orbitSegment)===index);
+    }
     const title=node.querySelector(".cs-orbit-node-label")?.textContent || "Component";
     const detail=node.querySelector(".cs-orbit-node-description")?.textContent || "";
     const total=panel.querySelectorAll(".cs-orbit-node").length;
-    const indexText=panel.querySelector(".cs-orbit-selected-index");
-    if(indexText) indexText.textContent=pad(index+1)+" / "+pad(total);
+    const selected=panel.querySelector(".cs-orbit-selected-index");
     const heading=panel.querySelector(".cs-orbit-selected-title");
     const description=panel.querySelector(".cs-orbit-selected-detail");
     const centreTitle=panel.querySelector(".cs-orbit-core-title");
     const centreDetail=panel.querySelector(".cs-orbit-core-detail");
+    if(selected) selected.textContent=pad(index+1)+" / "+pad(total);
     if(heading) heading.textContent=title;
     if(description) description.textContent=detail;
     if(centreTitle) centreTitle.textContent=title;
     if(centreDetail) centreDetail.textContent=detail;
   }
 
+  function toggleFloating(index) {
+    const p=state.projects[index];
+    if(!p) return;
+    if(state.activeProject===index) {
+      closeFloating(true);
+      return;
+    }
+    closeFloating(false);
+    const detail=lookupCase(p.title);
+    const layer=document.createElement("div");
+    layer.id="project-floating-layer";
+    layer.className="project-float-layer";
+    layer.setAttribute("role","dialog");
+    layer.setAttribute("aria-modal","true");
+    layer.setAttribute("aria-labelledby","project-floating-title");
+    const summary=clean(detail.scope || p.description || "");
+    const brief=summary.length>145 ? summary.slice(0,142).replace(/\s+\S*$/,"")+"…" : summary;
+    layer.innerHTML=`
+      <div class="project-float-veil" data-close-floating aria-hidden="true"></div>
+      <div class="project-float-frame">
+        <header class="project-float-header">
+          <div class="project-float-heading">
+            <span class="cs-eyebrow">SYSTEM DIAGRAM</span>
+            <h4 id="project-floating-title">${escape(p.title || "Project")}</h4>
+            ${brief ? `<p>${escape(brief)}</p>` : ""}
+          </div>
+          <button type="button" class="project-float-close" data-close-floating aria-label="Close system diagram">
+            <span aria-hidden="true">✕</span>
+          </button>
+        </header>
+        <div class="project-float-visual">${diagramMarkup(p,detail)}</div>
+      </div>`;
+
+    layer.addEventListener("click", event => {
+      const node=event.target.closest("[data-orbit-step]");
+      if(node) {selectOrbit(node);return;}
+      if(event.target.closest("[data-close-floating]")) closeFloating(true);
+    });
+
+    layer.addEventListener("keydown", event => {
+      if(event.key==="Escape") {
+        event.preventDefault();
+        closeFloating(true);
+      } else if(event.key==="Tab") {
+        // Keep keyboard focus on visible buttons while the overlay is open.
+        const buttons=Array.from(layer.querySelectorAll("button:not([disabled])"));
+        if(!buttons.length) return;
+        const first=buttons[0],last=buttons[buttons.length-1];
+        if(event.shiftKey && document.activeElement===first) {
+          event.preventDefault();last.focus();
+        } else if(!event.shiftKey && document.activeElement===last) {
+          event.preventDefault();first.focus();
+        }
+      }
+    });
+    // The floating layer sits above the current page and never changes grid rows.
+    document.body.appendChild(layer);
+    state.activeProject=index;
+    syncOpenControls();
+    layer.querySelector(".project-float-close")?.focus();
+  }
+
   grid.addEventListener("click", event => {
-    const orbitButton=event.target.closest("[data-orbit-step]");
-    if(orbitButton) { selectOrbit(orbitButton); return; }
-    if(event.target.closest("[data-close-inline]")) { closeInline(true); return; }
     const button=event.target.closest("[data-project]") ||
       event.target.closest(".case-card")?.querySelector("[data-project]");
-    if(button) toggleInline(Number(button.dataset.project));
-  });
-
-  // Reposition only on breakpoints/resize, never reopen a dialog.
-  let reflowFrame=0;
-  window.addEventListener("resize", () => {
-    if(state.activeProject===null || reflowFrame) return;
-    reflowFrame=window.requestAnimationFrame(() => {
-      reflowFrame=0;
-      const panel=el("project-quickview");
-      if(panel && state.activeProject!==null) placeAfterCardRow(panel,state.activeProject);
-    });
+    if(button) toggleFloating(Number(button.dataset.project));
   });
 
   el("showcase-filters").addEventListener("click", e => {
