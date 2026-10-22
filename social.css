@@ -1,0 +1,69 @@
+/* Visitor feedback: calm, readable and native to both portfolio themes. */
+.social-section{padding-top:78px;padding-bottom:115px}
+.social-header{max-width:760px;margin-bottom:28px}
+.social-header h3{font:700 clamp(35px,4.3vw,54px)/1.08 "Space Grotesk",sans-serif;letter-spacing:-.055em;margin:12px 0 12px}
+.social-header p{color:var(--muted);font-size:15px;line-height:1.7;margin:0}
+.social-layout{display:grid;grid-template-columns:minmax(220px,.76fr) minmax(0,1.6fr);gap:18px;align-items:start}
+.social-side{display:grid;gap:18px}
+.social-card{border:1px solid var(--line);border-radius:20px;background:var(--panel);padding:26px;box-shadow:0 12px 30px rgba(0,0,0,.035)}
+.social-card h4{font:700 20px/1.2 "Space Grotesk",sans-serif;letter-spacing:-.025em;margin:0 0 9px;color:var(--text)}
+.social-card p{color:var(--muted);font-size:13px;line-height:1.7;margin:0}
+.social-reaction-actions{display:flex;gap:10px;margin:22px 0 14px;flex-wrap:wrap}
+.social-reaction-btn{min-width:125px;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;padding:11px 13px;border:1px solid var(--line);border-radius:13px;background:var(--panel2);color:var(--text);font:700 13px Inter, sans-serif;transition:background .2s,border-color .2s,transform .2s}
+.social-reaction-btn strong{font-size:13px;font-variant-numeric:tabular-nums;color:var(--muted)}
+.social-reaction-btn .reaction-icon{font-size:18px;line-height:1.1;color:var(--cyan)}
+.social-reaction-btn.social-heart .reaction-icon{color:#d65e7a;font-size:23px}
+.social-reaction-btn[aria-pressed="true"]{border-color:var(--cyan);background:rgba(64,174,203,.14)}
+.social-reaction-btn.social-heart[aria-pressed="true"]{border-color:#d96b92;background:rgba(214,94,122,.09)}
+.social-reaction-btn:not(:disabled):hover{transform:translateY(-2px);border-color:var(--cyan)}
+.social-reaction-btn:disabled{cursor:not-allowed;opacity:.55}
+.social-side-note{font-size:11px!important}
+.social-speech-icon{font-size:27px;color:var(--cyan);line-height:1;display:block;margin-bottom:12px}
+.social-guestbook{min-width:0;padding:0;overflow:hidden}
+.social-guestbook-head{padding:23px 25px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.social-guestbook-head h4{margin:0}
+.social-live-tag{font:700 10px Inter,sans-serif;border:1px solid var(--line);border-radius:99px;padding:6px 10px;color:var(--muted);letter-spacing:.06em}
+.social-comments{padding:8px 25px 19px;display:grid;gap:12px;max-height:390px;overflow-y:auto;scrollbar-width:thin}
+.social-comment{border:1px solid var(--line);border-radius:14px;padding:15px 17px;background:var(--panel2);overflow-wrap:anywhere}
+.social-comment-header{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px}
+.social-comment-author{font-weight:800;color:var(--text);font-size:13px}
+.social-comment-time{font-size:11px;color:var(--muted);white-space:nowrap}
+.social-comment-text{font-size:13px;color:var(--muted);line-height:1.65;white-space:pre-wrap;margin:0}
+.social-placeholder{color:var(--muted);font-size:13px;padding:14px 0}
+.social-form{padding:23px 25px 25px;border-top:1px solid var(--line)}
+.social-form-heading{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:17px}
+.social-form-heading strong{font-size:15px;color:var(--text)}
+.social-form-heading span{font-size:11px;color:var(--muted)}
+.social-field{display:grid;gap:7px;margin-bottom:13px}
+.social-field label{font-size:12px;font-weight:700;color:var(--text)}
+.social-field input,.social-field textarea{width:100%;padding:11px 13px;border-radius:11px;border:1px solid var(--line);background:var(--panel2);color:var(--text);font:500 13px/1.5 Inter,system-ui,sans-serif;resize:vertical;min-width:0;transition:border-color .18s}
+.social-field textarea{min-height:88px;max-height:180px}
+.social-field input::placeholder,.social-field textarea::placeholder{color:var(--muted);opacity:.83}
+.social-field input:focus-visible,.social-field textarea:focus-visible{outline:2px solid var(--cyan);outline-offset:1px}
+.social-field :disabled{opacity:.65;cursor:not-allowed}
+.social-form-bottom{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-top:15px}
+.social-form-bottom span{max-width:270px;color:var(--muted);font-size:11px;line-height:1.5}
+.social-submit{min-height:41px;padding:0 17px;font-size:12px;white-space:nowrap}
+.social-submit:disabled{opacity:.55;cursor:not-allowed}
+.social-status{padding:12px 25px 16px!important;border-top:1px solid var(--line);color:var(--muted);min-height:46px;line-height:1.6!important}
+.social-status[data-kind="success"]{color:#278f75}
+.social-status[data-kind="error"]{color:#e57a79}
+.social-honey{position:absolute!important;left:-10000px!important;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none}
+html[data-theme="light"] .social-card{background:#fff;border-color:rgba(43,94,132,.16);box-shadow:0 14px 42px rgba(36,80,118,.05)}
+html[data-theme="light"] .social-comment,html[data-theme="light"] .social-field input,html[data-theme="light"] .social-field textarea{background:#f4f8fc}
+html[data-theme="light"] .social-reaction-btn{background:#f2f8fc;color:#193d59}
+html[data-theme="light"] .social-reaction-btn[aria-pressed="true"]{background:#e0f3f4}
+html[data-theme="light"] .social-reaction-btn.social-heart[aria-pressed="true"]{background:#faeaf0}
+html[data-theme="light"] .social-status[data-kind="error"]{color:#a6314e}
+html[data-theme="light"] .social-status[data-kind="success"]{color:#14745e}
+/* The background should be understated at all times; the circuit remains a hint. */
+html[data-theme="light"] #pcb-cursor-reveal.is-visible{opacity:.43}
+html[data-theme="light"] #pcb-cursor-reveal.is-reading{opacity:.035}
+html[data-theme="light"] #pcb-cursor-reveal::before{opacity:.72;filter:contrast(1.08) saturate(1.12) brightness(.88)}
+html[data-theme="light"] #pcb-cursor-reveal::after{opacity:.1}
+html[data-theme="dark"] #pcb-cursor-reveal.is-visible{opacity:.54}
+html[data-theme="dark"] #pcb-cursor-reveal.is-reading{opacity:.05}
+html[data-theme="dark"] #pcb-cursor-reveal::before{opacity:.77;filter:brightness(1.15) saturate(1.0)}
+@media(max-width:900px){.social-layout{grid-template-columns:1fr}.social-side{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:650px){.social-section{padding-top:65px;padding-bottom:75px}.social-side{grid-template-columns:1fr}.social-card{padding:20px}.social-guestbook{padding:0}.social-guestbook-head{padding:21px 19px 15px}.social-comments{padding:8px 19px 18px}.social-form{padding:20px 19px}.social-status{padding:12px 19px 15px!important}.social-form-bottom{flex-wrap:wrap}.social-reaction-actions{margin-top:17px}}
+@media(prefers-reduced-motion:reduce){.social-reaction-btn,.social-field input,.social-field textarea{transition:none}}
