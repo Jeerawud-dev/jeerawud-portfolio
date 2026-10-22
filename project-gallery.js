@@ -1,8 +1,9 @@
-/* Snapshot of Google Sheets → ProjectGallery!A2:F26 (2026-10-22).
- * Actual gallery images are used only when supplied by the owner.
- * Source sheet: https://docs.google.com/spreadsheets/d/1wM6Im1jnWEq8fujHW48mb-kTH_tvv5cQXkiNBGRSjKM/edit
- * Runtime prefers live data.projectGallery when the deployed Google Apps Script supports it.
- * Until then, edit the sheet and synchronize this snapshot when adding/changing gallery rows.
+/* Synchronized snapshot: Google Sheets ProjectGallery (2026-10-22).
+ * Array contains exactly the current ProjectGallery records.
+ * The deployed Apps Script does not yet expose ProjectGallery, so the site
+ * reads this snapshot until that endpoint is updated.
+ * Gallery item deletion is reflected here; never reinstate removed items.
+ * Source Sheet ID: 1wM6Im1jnWEq8fujHW48mb-kTH_tvv5cQXkiNBGRSjKM
  */
 window.PORTFOLIO_PROJECT_GALLERY = [
   {
@@ -179,30 +180,6 @@ window.PORTFOLIO_PROJECT_GALLERY = [
     "imageUrl": "",
     "detail": "Parameters · Settings",
     "order": 1,
-    "visible": true
-  },
-  {
-    "project": "Thermal Paste Dispensing Machine",
-    "title": "Dispensing motion",
-    "imageUrl": "",
-    "detail": "Motion sequence",
-    "order": 2,
-    "visible": true
-  },
-  {
-    "project": "Thermal Paste Dispensing Machine",
-    "title": "Operator UI",
-    "imageUrl": "",
-    "detail": "C# · WPF",
-    "order": 3,
-    "visible": true
-  },
-  {
-    "project": "Thermal Paste Dispensing Machine",
-    "title": "Run data",
-    "imageUrl": "",
-    "detail": "SQLite · MES",
-    "order": 4,
     "visible": true
   }
 ];
