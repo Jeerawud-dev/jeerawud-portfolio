@@ -6,7 +6,7 @@ window.FALLBACK_DATA = {
     "fullName": "Jeerawud Jongjit",
     "headline": "Senior Software Engineer",
     "specialization": "Machine Control • C#/.NET • PLC • Smart Manufacturing",
-    "summary": "I work on software for automation machines—from PLC and servo control to C#/.NET applications used on the production floor. I've worked on more than 100 machine projects across automotive, EV, electronics and data center manufacturing. I also connect equipment with systems such as MES, PQM and CFX+ for traceability and production data.",
+    "summary": "Senior Automation Software Engineer with 7+ years of experience delivering automation and semi-automation systems across Automotive, EV, Electronics, and Data Center manufacturing. Experienced in PLC- and PC-based machine control, C#/.NET industrial applications, production data systems, quality control, and manufacturing-system integration. Contributed to more than 100 machine projects, bridging machine control with MES, PQM, CFX+, IoT platforms, APIs, and factory databases.",
     "location": "Samut Prakan, Thailand",
     "email": "jeerawud@gmail.com",
     "phone": "064-1273597",
