@@ -23,7 +23,7 @@
     } catch { return ""; }
   };
 
-  const state = {projects: [], category: "all", query: "", visible: 9, activeProject: null, gallery: []};
+  const state = {projects: [], category: "all", query: "", visible: 9, activeProject: null, gallery: null};
   const grid = el("showcase-grid");
   if (!grid) return;
 
@@ -159,12 +159,31 @@
   // not a machine's electrical wiring diagram.
   function diagramMarkup(p, detail) {
     const galleryNodes=galleryForProject(p.title);
-    const nodes = galleryNodes.length ? galleryNodes :
+    // Once ProjectGallery is configured, its row count is authoritative.
+    // Never replace deleted gallery rows with the four old system-diagram nodes.
+    const nodes = Array.isArray(state.gallery) ? galleryNodes :
       (Array.isArray(detail.diagram) ? detail.diagram : []).filter(n => n && (n.title || n.detail)).slice(0,6);
     if (!nodes.length) {
-      const stack = tags(p.technologies).slice(0,4);
-      if (!stack.length) return "";
-      nodes.push(...stack.map(tech => ({title:tech,detail:"Listed technology"})));
+      return `<div class="cs-gallery-empty" role="status">
+        <span class="cs-gallery-empty-icon" aria-hidden="true">▧</span>
+        <strong>No gallery items</strong>
+        <p>Add a ProjectGallery row for this project to display it here.</p>
+      </div>`;
+    }
+    if (nodes.length === 1) {
+      const item = nodes[0];
+      const photo = validUrl(item.imageUrl);
+      return `<div class="cs-single-gallery">
+        <div class="cs-single-gallery-circle ${photo ? "has-gallery-image" : ""}">
+          ${photo ? `<img class="cs-single-gallery-photo" src="${escape(photo)}" alt="${escape(item.title)}" decoding="async">` : ""}
+          <span class="cs-single-gallery-symbol" aria-hidden="true">▤</span>
+        </div>
+        <div class="cs-single-gallery-caption">
+          <span class="cs-eyebrow">PROJECT GALLERY · 01 / 01</span>
+          <h5>${escape(item.title)}</h5>
+          ${item.detail ? `<p>${escape(item.detail)}</p>` : ""}
+        </div>
+      </div>`;
     }
     const count = nodes.length;
     const angleStep = 360/count;
@@ -355,11 +374,13 @@
       }
     });
     // Image loading errors do not leave broken picture icons.
-    layer.querySelectorAll(".cs-orbit-gallery-image, .cs-orbit-core-gallery-photo").forEach(img => {
+    layer.querySelectorAll(".cs-orbit-gallery-image, .cs-orbit-core-gallery-photo, .cs-single-gallery-photo").forEach(img => {
       img.addEventListener("error", () => {
         img.hidden=true;
         if(img.classList.contains("cs-orbit-core-gallery-photo"))
           img.closest(".cs-orbit-core")?.classList.remove("has-gallery-image");
+        if(img.classList.contains("cs-single-gallery-photo"))
+          img.closest(".cs-single-gallery-circle")?.classList.remove("has-gallery-image");
       });
     });
     // The floating layer sits above the current page and never changes grid rows.
@@ -404,9 +425,10 @@
       const data = typeof window.loadData === "function" ? await window.loadData() : window.FALLBACK_DATA;
       state.projects = (Array.isArray(data?.portfolio) ? data.portfolio : window.FALLBACK_DATA?.portfolio || [])
         .filter(p => p && typeof p === "object");
-      state.gallery = Array.isArray(data?.projectGallery) && data.projectGallery.length
-        ? data.projectGallery
-        : (Array.isArray(window.PORTFOLIO_PROJECT_GALLERY) ? window.PORTFOLIO_PROJECT_GALLERY : []);
+      // An empty live array means the user deleted every gallery item.
+      // Do not substitute stale snapshot records if the backend returned [].
+      state.gallery = Array.isArray(data?.projectGallery) ? data.projectGallery :
+        (Array.isArray(window.PORTFOLIO_PROJECT_GALLERY) ? window.PORTFOLIO_PROJECT_GALLERY : null);
       // Optional future compatibility if the existing Google Sheets feed returns projectDetails.
       if(data?.projectDetails && !Array.isArray(data.projectDetails) && typeof data.projectDetails === "object"){
         state.caseStudies = data.projectDetails;
@@ -414,7 +436,7 @@
     }catch(err){
       console.warn("Could not load live projects; using local list.",err);
       state.projects = window.FALLBACK_DATA?.portfolio || [];
-      state.gallery = window.PORTFOLIO_PROJECT_GALLERY || [];
+      state.gallery = Array.isArray(window.PORTFOLIO_PROJECT_GALLERY) ? window.PORTFOLIO_PROJECT_GALLERY : null;
     }
     // Search and category filters become useful only when the gallery grows.
     el("showcase-toolbar").hidden = state.projects.length <= 9;
