@@ -219,3 +219,194 @@ html[data-theme="light"] .project-float-visual .cs-orbit-selected-index {color:#
 @media(prefers-reduced-motion:reduce) {
   .project-float-frame {animation:none}
 }
+
+
+/* Gallery-driven circular visualization V2:
+   Larger presentation, recognisable photo thumbnails, frosted but translucent backing. */
+.project-float-layer {
+  padding:clamp(12px,1.8vh,22px) clamp(12px,2.4vw,27px);
+  align-items:center;
+}
+.project-float-veil {
+  background:rgba(7,25,40,.22);
+  backdrop-filter:blur(2px);
+  -webkit-backdrop-filter:blur(2px);
+}
+.project-float-frame {
+  width:min(1260px,96vw);
+  max-width:1260px;
+  max-height:calc(100dvh - 30px);
+  overflow-y:auto;
+  overflow-x:hidden;
+  padding:clamp(20px,3.1vw,39px) clamp(20px,3.1vw,42px) clamp(12px,1.8vw,21px);
+  border-radius:27px;
+  background:rgba(7,25,42,.78);
+  border:1px solid rgba(124,201,220,.23);
+  box-shadow:0 28px 95px rgba(3,17,30,.28);
+  backdrop-filter:blur(19px) saturate(1.13);
+  -webkit-backdrop-filter:blur(19px) saturate(1.13);
+  scrollbar-width:thin;
+}
+.project-float-frame::before {
+  inset:6% 0;
+  background:radial-gradient(ellipse at 43% 53%,rgba(38,97,123,.17),transparent 72%);
+  filter:blur(20px);
+}
+.project-float-header {
+  padding:0 8px 0 9px;
+}
+.project-float-heading h4 {font-size:clamp(26px,3vw,38px)}
+.project-float-heading p {font-size:13px;line-height:1.6}
+.project-float-visual .cs-orbit-layout {
+  grid-template-columns:minmax(0,1.9fr) minmax(250px,.83fr);
+  gap:clamp(20px,2.3vw,38px);
+}
+.project-float-visual .cs-orbit-stage {
+  width:min(100%,680px);
+  max-width:680px;
+}
+.project-float-visual .cs-orbit-node {
+  width:23%;
+  max-width:160px;
+  min-width:0;
+  padding:10px 6px;
+  gap:3px;
+  box-shadow:0 13px 32px rgba(5,29,47,.16);
+}
+.project-float-visual .cs-orbit-node-icon {
+  position:relative;
+  display:grid;
+  place-items:center;
+  width:clamp(39px,4.35vw,61px);
+  height:clamp(39px,4.35vw,61px);
+  flex:none;
+  overflow:hidden;
+  border-radius:50%;
+  border:1px solid rgba(136,206,215,.32);
+  background:rgba(79,168,185,.08);
+}
+.project-float-visual .cs-orbit-node-icon svg {
+  width:clamp(24px,2.65vw,34px);
+  height:clamp(24px,2.65vw,34px);
+}
+.project-float-visual .cs-orbit-gallery-image {
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  border-radius:50%;
+  display:block;
+  object-fit:cover;
+  object-position:center;
+  z-index:1;
+  filter:saturate(.96);
+}
+.project-float-visual .cs-orbit-gallery-image[hidden] {display:none}
+.project-float-visual .cs-orbit-node-label {
+  font-size:clamp(10px,1.05vw,13px);
+  line-height:1.18;
+  max-width:100%;
+  overflow-wrap:anywhere;
+  padding:0 2px;
+}
+.project-float-visual .cs-orbit-node-number {font-size:10px}
+.project-float-visual .cs-orbit-core {
+  width:36%;
+  min-width:0;
+  padding:14px;
+  gap:6px;
+  overflow:hidden;
+  isolation:isolate;
+}
+.project-float-visual .cs-orbit-core-gallery-photo {
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  border-radius:50%;
+  opacity:.94;
+  z-index:0;
+}
+.project-float-visual .cs-orbit-core-gallery-photo[hidden] {display:none}
+.project-float-visual .cs-orbit-core.has-gallery-image::before {
+  content:"";
+  position:absolute;
+  z-index:1;
+  inset:0;
+  background:linear-gradient(180deg,rgba(4,23,39,.36),rgba(5,28,45,.69));
+  border-radius:50%;
+  pointer-events:none;
+}
+.project-float-visual .cs-orbit-core.has-gallery-image > :not(.cs-orbit-core-gallery-photo) {
+  position:relative;
+  z-index:2;
+  color:#f0fcff;
+  text-shadow:0 2px 10px rgba(0,12,25,.7);
+}
+.project-float-visual .cs-orbit-core-title {font-size:clamp(16px,1.45vw,23px)}
+.project-float-visual .cs-orbit-core-detail {font-size:clamp(9px,.76vw,12px)}
+.project-float-visual .cs-orbit-info {
+  padding:clamp(22px,2.1vw,30px);
+  background:rgba(25,62,79,.64);
+  border-color:rgba(121,206,217,.28);
+}
+.project-float-visual .cs-orbit-selected-title {
+  font-size:clamp(22px,1.8vw,27px);
+}
+.project-float-visual .cs-orbit-selected-detail {font-size:14px}
+html[data-theme="light"] .project-float-veil {
+  background:rgba(40,79,106,.20);
+}
+html[data-theme="light"] .project-float-frame {
+  background:rgba(251,253,255,.79);
+  border-color:rgba(72,146,181,.27);
+  box-shadow:0 26px 90px rgba(24,62,92,.20);
+}
+html[data-theme="light"] .project-float-frame::before {
+  background:radial-gradient(ellipse at 43% 53%,rgba(80,164,197,.075),transparent 75%);
+}
+html[data-theme="light"] .project-float-visual .cs-orbit-node-icon {
+  border-color:rgba(57,129,157,.25);
+  background:rgba(245,252,255,.82);
+}
+html[data-theme="light"] .project-float-visual .cs-orbit-info {
+  background:rgba(255,255,255,.79);
+}
+html[data-theme="light"] .project-float-visual .cs-orbit-core.has-gallery-image > :not(.cs-orbit-core-gallery-photo) {
+  color:#fff;
+  text-shadow:0 2px 10px rgba(0,14,23,.68);
+}
+@media(max-height:920px) and (min-width:761px) {
+  .project-float-visual .cs-orbit-stage {width:min(100%,585px)}
+  .project-float-visual .cs-orbit-node {max-width:145px}
+  .project-float-frame {padding-top:20px;padding-bottom:8px}
+}
+@media(max-width:900px) {
+  .project-float-visual .cs-orbit-layout {
+    grid-template-columns:minmax(0,1.55fr) minmax(185px,.85fr);
+    gap:14px;
+  }
+  .project-float-visual .cs-orbit-stage {width:min(100%,560px)}
+  .project-float-visual .cs-orbit-node {max-width:132px}
+  .project-float-visual .cs-orbit-node-icon {width:44px;height:44px}
+}
+@media(max-width:760px) {
+  .project-float-layer {padding:13px 9px;align-items:flex-start}
+  .project-float-frame {width:100%;max-height:calc(100dvh - 26px);padding:15px 10px;border-radius:19px}
+  .project-float-visual .cs-orbit-layout {grid-template-columns:1fr;gap:0}
+  .project-float-visual .cs-orbit-stage {width:min(100%,500px)}
+  .project-float-visual .cs-orbit-node {max-width:110px;gap:2px;padding:5px}
+  .project-float-visual .cs-orbit-node-icon {width:clamp(32px,7vw,49px);height:clamp(32px,7vw,49px)}
+  .project-float-visual .cs-orbit-node-label {font-size:clamp(8px,2vw,11px)}
+  .project-float-visual .cs-orbit-info {width:min(100%,500px);margin:-7px auto 7px;padding:15px 18px}
+  .project-float-visual .cs-orbit-core-title {font-size:clamp(12px,3vw,19px)}
+  .project-float-visual .cs-orbit-core-detail {font-size:clamp(9px,2vw,12px)}
+}
+@media(max-width:420px) {
+  .project-float-visual .cs-orbit-stage {width:min(100%,350px)}
+  .project-float-visual .cs-orbit-node {max-width:80px}
+  .project-float-visual .cs-orbit-node-icon {width:33px;height:33px}
+  .project-float-visual .cs-orbit-node-label {font-size:clamp(7px,1.8vw,9px)}
+  .project-float-visual .cs-orbit-core-detail {display:none}
+}
