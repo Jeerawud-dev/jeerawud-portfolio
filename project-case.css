@@ -1,0 +1,126 @@
+/* Project Case Study — interactive system overview, screenshots and per-project content.
+   All sections are data-driven; illustrations are never presented as actual machine UI. */
+.case-visual-trigger{appearance:none;-webkit-appearance:none;display:block;width:100%;padding:0;border:0;cursor:pointer;text-align:left;border-radius:0;color:inherit}
+.case-visual-trigger:focus-visible{outline:3px solid var(--cyan);outline-offset:-4px}
+.case-visual-trigger .visual-art{pointer-events:none}
+.case-visual-trigger:hover img{transform:scale(1.05)}
+.project-dialog{width:min(1160px,calc(100vw - 32px));max-height:min(94dvh,1040px);border-radius:23px;scrollbar-width:thin;overscroll-behavior:contain}
+.dialog-shell{isolation:isolate}
+.project-dialog .dialog-close{
+  position:sticky;float:right;top:17px;margin:17px 18px -55px 0;
+  z-index:20;width:43px;height:43px;
+  background:rgba(7,25,40,.83);border:1px solid rgba(173,221,239,.25);
+  color:#e6f6ff;box-shadow:0 8px 28px rgba(0,0,0,.18);
+  cursor:pointer;border-radius:50%;backdrop-filter:blur(14px);
+}
+.project-dialog .dialog-close:focus-visible{outline:3px solid #57bedb;outline-offset:3px}
+.cs-case-study{font-family:Inter,system-ui,sans-serif;color:var(--text);font-size:14px}
+.cs-hero{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(270px,.88fr);min-height:330px;overflow:hidden;background:linear-gradient(123deg,#0a2439,#102e45);border-radius:22px 22px 0 0}
+.cs-hero-copy{padding:clamp(35px,5.8vw,68px);padding-right:22px;display:flex;flex-direction:column;justify-content:center;min-width:0}
+.cs-eyebrow{font:700 10px/1.45 "Space Grotesk",Inter,system-ui,sans-serif;letter-spacing:.18em;color:#147f97;text-transform:uppercase}
+.cs-hero .cs-eyebrow{color:#85e9de}
+.cs-hero-copy h3{font:700 clamp(30px,4.4vw,51px)/1.08 "Space Grotesk",sans-serif;letter-spacing:-.055em;color:#f1faff;margin:15px 0 17px;overflow-wrap:anywhere}
+.cs-intro{color:#b7d1e2!important;line-height:1.78;font-size:14px;max-width:570px;margin:0 0 23px}
+.cs-summary-strip{display:grid;grid-template-columns:1fr 1.25fr;gap:22px;margin-top:5px;padding-top:18px;border-top:1px solid rgba(182,225,235,.19)}
+.cs-summary-strip>div{min-width:0;display:grid;gap:5px}
+.cs-summary-strip span{font:700 9px/1.4 Inter,sans-serif;letter-spacing:.12em;color:#78bdc9}
+.cs-summary-strip strong{font:600 12px/1.55 Inter,sans-serif;color:#e2f5fc;overflow-wrap:anywhere}
+.cs-hero-graphic{position:relative;min-height:320px;background:#112e44;overflow:hidden}
+.cs-hero-graphic::before{content:"";position:absolute;inset:0;z-index:0;background:radial-gradient(circle at 50% 45%,rgba(96,201,206,.1),transparent 67%)}
+.cs-hero-graphic .dialog-visual{height:100%;min-height:320px}
+.cs-hero-graphic .visual-code{top:24px;left:23px}
+.cs-hero-graphic .case-number{bottom:20px;right:22px}
+.cs-body{padding:0 clamp(24px,4.6vw,55px) 43px}
+.cs-overview{display:grid;grid-template-columns:1.25fr .9fr;gap:22px;border-bottom:1px solid var(--line);padding:27px 0}
+.cs-overview>div+div{border-left:1px solid var(--line);padding-left:21px}
+.cs-overview p{font-size:13px;line-height:1.7;color:var(--muted);margin:8px 0 0}
+.cs-section{padding:34px 0}
+.cs-section-top{display:flex;align-items:end;justify-content:space-between;gap:22px;margin-bottom:24px}
+.cs-section h4{font:700 clamp(22px,2.5vw,30px)/1.16 "Space Grotesk",sans-serif;letter-spacing:-.038em;color:var(--text);margin:9px 0 0}
+.cs-section-top h4{margin:9px 0 0}
+.cs-context-note{font-size:11px;line-height:1.5;color:var(--muted);text-align:right}
+.cs-diagram{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.cs-diagram-node{position:relative;display:flex;flex-direction:column;align-items:flex-start;min-height:170px;padding:19px;border:1px solid rgba(63,143,168,.25);border-radius:15px;background:linear-gradient(152deg,rgba(73,156,173,.08),rgba(73,156,173,.015));min-width:0}
+.cs-diagram-node:not(:last-child)::after{content:"→";position:absolute;z-index:3;right:-20px;top:50%;transform:translateY(-50%);font:700 19px Inter,sans-serif;color:#5fbec5;text-shadow:0 0 8px rgba(83,198,196,.17)}
+.cs-step{font:800 11px "Space Grotesk",sans-serif;color:var(--cyan);letter-spacing:.08em}
+.cs-node-icon{font:700 29px/1 "Space Grotesk",sans-serif;color:#4caabc;margin:9px 0 13px;min-height:28px}
+.cs-diagram-node strong{font-size:13px;line-height:1.43;color:var(--text);margin-top:auto;overflow-wrap:anywhere}
+.cs-diagram-node small{display:block;color:var(--muted);font-size:11px;line-height:1.55;margin-top:5px;overflow-wrap:anywhere}
+.cs-diagram-footnote{color:var(--muted);font-size:11px;margin:14px 0 0;line-height:1.55}
+.cs-specs{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:33px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.cs-specs>.cs-section{min-width:0}
+.cs-specs>.cs-section + .cs-section{border-left:1px solid var(--line);padding-left:32px}
+.cs-technologies .tech{display:flex;flex-wrap:wrap;gap:7px;margin:21px 0 0}
+.cs-technologies .tech span{background:rgba(66,151,178,.1);color:var(--text);border:1px solid rgba(77,151,185,.16);border-radius:8px;padding:7px 9px;font-size:11px;line-height:1.3}
+.cs-highlights{list-style:none;padding:0;margin:18px 0 0;display:grid;gap:12px}
+.cs-highlights li{position:relative;padding-left:19px;color:var(--muted);font-size:12px;line-height:1.65}
+.cs-highlights li::before{content:"";width:6px;height:6px;border-radius:50%;background:#2a9fa4;position:absolute;top:7px;left:0}
+.cs-gallery{padding-bottom:23px}
+.cs-media-layout{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px}
+.cs-media-panel{border:1px solid var(--line);border-radius:16px;overflow:hidden;min-width:0;background:rgba(66,142,166,.035)}
+.cs-media-panel--empty{display:flex;flex-direction:column}
+.cs-media-placeholder{height:190px;position:relative;display:grid;place-items:center;overflow:hidden;background:linear-gradient(135deg,rgba(68,142,169,.05),rgba(68,142,169,.09))}
+.cs-media-placeholder:before{content:"";position:absolute;inset:0;background:linear-gradient(rgba(89,168,191,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(89,168,191,.06) 1px,transparent 1px);background-size:22px 22px}
+.cs-media-placeholder span{position:relative;color:rgba(92,170,191,.4);font-size:70px;line-height:1}
+.cs-media-placeholder i{position:absolute;left:20%;right:20%;height:1px;bottom:19%;background:rgba(64,148,179,.22)}
+.cs-media-placeholder i:nth-of-type(2){bottom:24%;left:33%;right:33%}
+.cs-media-placeholder i:nth-of-type(3){bottom:29%;left:40%;right:40%}
+.cs-media-info,.cs-media-label{padding:19px 20px}
+.cs-media-info h5,.cs-media-label h5{margin:7px 0 5px;font-size:16px;color:var(--text);font-family:"Space Grotesk",sans-serif}
+.cs-media-info p{font-size:12px;line-height:1.6;color:var(--muted);margin:0}
+.cs-media-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:12px;padding:0 15px 15px}
+.cs-media-item{margin:0;min-width:0;border-radius:11px;overflow:hidden;background:rgba(77,155,176,.08)}
+.cs-media-item>a{display:block;position:relative;aspect-ratio:16/10;overflow:hidden;outline-offset:3px}
+.cs-media-item img{height:100%;width:100%;object-fit:cover;display:block;transition:transform .26s ease}
+.cs-media-item>a:hover img{transform:scale(1.05)}
+.cs-image-expand{position:absolute;top:10px;right:10px;color:#fff;background:rgba(11,30,44,.7);border-radius:8px;width:27px;height:27px;display:grid;place-items:center}
+.cs-media-item figcaption{padding:9px 10px;font-size:11px;line-height:1.5;color:var(--muted)}
+.cs-end{border-top:1px solid var(--line);padding-top:24px;display:flex;align-items:center;justify-content:space-between;gap:15px}
+.cs-back{appearance:none;background:transparent;border:0;color:var(--cyan);font-weight:700;cursor:pointer;font-size:12px;padding:9px 0}
+.cs-back:hover{text-decoration:underline}
+html[data-theme="light"] .project-dialog{background:#fff;border:1px solid rgba(58,107,142,.24);box-shadow:0 35px 130px rgba(17,44,67,.3)}
+html[data-theme="light"] .cs-hero{background:linear-gradient(125deg,#0b3855,#174661)}
+html[data-theme="light"] .cs-hero-copy h3{color:#fff}
+html[data-theme="light"] .cs-diagram-node{background:linear-gradient(140deg,#f1f8fa,#f9fcfd);border-color:#cadfe9}
+html[data-theme="light"] .cs-diagram-node strong{color:#183a50}
+html[data-theme="light"] .cs-node-icon{color:#1b8199}
+html[data-theme="light"] .cs-step{color:#1b8498}
+html[data-theme="light"] .cs-diagram-node:not(:last-child)::after{color:#23899e}
+html[data-theme="light"] .cs-media-panel{background:#fbfdff;border-color:rgba(43,106,150,.17)}
+html[data-theme="light"] .cs-media-placeholder{background:linear-gradient(135deg,#eef6fa,#e8f1f6)}
+html[data-theme="light"] .cs-technologies .tech span{color:#24506a;background:#eef7fa;border-color:#d4e8eb}
+html[data-theme="light"] .cs-back{color:#14788f}
+html[data-theme="light"] .cs-highlights li::before{background:#268c93}
+@media(max-width:1010px){.cs-diagram{grid-template-columns:repeat(2,minmax(0,1fr))}
+.cs-diagram-node:nth-child(even)::after{display:none}
+.cs-diagram-node{min-height:140px}
+.cs-specs{gap:19px}.cs-specs>.cs-section + .cs-section{padding-left:20px}
+}
+@media(max-width:710px){.project-dialog{width:calc(100vw - 16px);max-height:94dvh;border-radius:16px}
+.cs-hero{grid-template-columns:1fr;border-radius:15px 15px 0 0}
+.cs-hero-copy{padding:39px 26px 25px}
+.cs-hero-graphic{min-height:180px}
+.cs-hero-graphic .dialog-visual{min-height:180px;height:200px}
+.cs-summary-strip{grid-template-columns:1fr 1fr}
+.cs-body{padding:0 23px 26px}
+.cs-overview{grid-template-columns:1fr;gap:15px;padding:22px 0}
+.cs-overview>div+div{border-left:0;padding-left:0;border-top:1px solid var(--line);padding-top:13px}
+.cs-diagram{gap:10px}.cs-diagram-node{padding:14px;min-height:147px}
+.cs-diagram-node:not(:last-child)::after{right:-15px;font-size:14px}
+.cs-diagram-node small{font-size:10px}
+.cs-specs{grid-template-columns:1fr;gap:0}
+.cs-specs>.cs-section + .cs-section{border-left:0;border-top:1px solid var(--line);padding-left:0}
+.cs-section{padding:26px 0}.cs-section-top{align-items:start;flex-direction:column;gap:7px;margin-bottom:19px}
+.cs-context-note{text-align:left}
+.cs-media-layout{grid-template-columns:1fr}.cs-media-placeholder{height:155px}
+.cs-end{align-items:start;flex-direction:column}
+}
+@media(prefers-reduced-motion:reduce){.cs-media-item img{transition:none}.cs-media-item>a:hover img{transform:none}}
+/* Last-loaded stylesheet: enforce the soft PCB circuit over previous site-polish rules. */
+html[data-theme="light"] #pcb-cursor-reveal.is-visible{opacity:.20}
+html[data-theme="light"] #pcb-cursor-reveal.is-reading{opacity:.012}
+html[data-theme="light"] #pcb-cursor-reveal::before{opacity:.52;filter:none}
+html[data-theme="light"] #pcb-cursor-reveal::after{opacity:.08}
+html[data-theme="dark"] #pcb-cursor-reveal.is-visible{opacity:.36}
+html[data-theme="dark"] #pcb-cursor-reveal.is-reading{opacity:.026}
+html[data-theme="dark"] #pcb-cursor-reveal::before{opacity:.63;filter:brightness(1.0) saturate(.85)}
