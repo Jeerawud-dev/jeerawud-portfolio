@@ -211,3 +211,51 @@ button{font:inherit}
   .nav-mobile-resume{display:block!important;color:#a9f5df!important;border-top:1px solid var(--hairline);margin-top:5px}
   .nav .btn-small{margin-left:0}
 }
+
+/* Two luminous satellites orbit the profile photograph. Pure CSS, no JavaScript. */
+.portrait-orbit{
+  position:absolute;
+  inset:-19px;
+  border-radius:50%;
+  pointer-events:none;
+  z-index:3;
+  will-change:transform;
+}
+.portrait-orbit::after{
+  content:"";
+  position:absolute;
+  top:0;
+  left:50%;
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:#69dafa;
+  border:1px solid rgba(255,255,255,.8);
+  transform:translate(-50%,-50%);
+  box-shadow:0 0 0 4px rgba(105,218,250,.12),0 0 16px 3px rgba(105,218,250,.6);
+}
+.portrait-orbit--cyan{
+  animation:portrait-orbit-cw 14s linear infinite;
+}
+.portrait-orbit--mint{
+  inset:-24px;
+  animation:portrait-orbit-ccw 21s linear infinite;
+}
+.portrait-orbit--mint::after{
+  width:6px;
+  height:6px;
+  background:#8cf5cd;
+  box-shadow:0 0 0 4px rgba(140,245,205,.11),0 0 14px 3px rgba(140,245,205,.55);
+}
+@keyframes portrait-orbit-cw{
+  from{transform:rotate(0deg)}
+  to{transform:rotate(360deg)}
+}
+@keyframes portrait-orbit-ccw{
+  from{transform:rotate(155deg)}
+  to{transform:rotate(-205deg)}
+}
+@media(prefers-reduced-motion:reduce){
+  .portrait-orbit--cyan,.portrait-orbit--mint{animation:none}
+  .portrait-orbit--mint{transform:rotate(155deg)}
+}
