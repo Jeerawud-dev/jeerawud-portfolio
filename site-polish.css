@@ -1,0 +1,140 @@
+/* Design polish: realistic portrait framing, simpler project gallery,
+   and stronger but still legible PCB detail in the Light theme. */
+
+/* Integrate the original portrait with its circular backdrop; keep orbit rings outside. */
+.portrait-frame { isolation:isolate; }
+.portrait-photo {
+  position:absolute;
+  z-index:2;
+  inset:4%;
+  overflow:hidden;
+  border-radius:50%;
+  background:radial-gradient(circle at 50% 36%, #1d3a56 0%, #10243b 72%, #0c1b30 100%);
+  box-shadow:inset 0 0 0 1px rgba(136,203,227,.14);
+}
+.portrait-photo img {
+  position:absolute;
+  z-index:1;
+  top:-2%;
+  left:-2%;
+  width:104%;
+  height:110%;
+  max-width:none;
+  object-fit:contain;
+  object-position:center bottom;
+  filter:drop-shadow(0 14px 28px rgba(0,0,0,.15));
+  -webkit-mask-image:linear-gradient(to bottom, #000 0%,#000 73%,rgba(0,0,0,.85) 83%,transparent 100%);
+  mask-image:linear-gradient(to bottom, #000 0%,#000 73%,rgba(0,0,0,.85) 83%,transparent 100%);
+}
+html[data-theme="light"] .portrait-photo {
+  background:radial-gradient(circle at 50% 29%,#eaf5fc 0%,#d7e6f2 74%,#cfdfec 100%);
+  box-shadow:inset 0 0 0 1px rgba(85,138,175,.12);
+}
+/* Give the outer ring room, without exposing rectangular photo edges. */
+.portrait-orbit {z-index:4;}
+
+/* Six projects do not need an oversized carousel, separate archive or multiple headings. */
+#portfolio .portfolio-intro--simple {
+  display:block;
+  border-bottom:0;
+  padding-bottom:28px;
+  margin-bottom:3px;
+}
+#portfolio .portfolio-intro--simple h3 {
+  font-size:clamp(46px,6.3vw,78px);
+  margin:14px 0 14px;
+  letter-spacing:-.062em;
+}
+#portfolio .portfolio-intro--simple .portfolio-lede {
+  max-width:700px;
+  font-size:clamp(15px,1.3vw,17px);
+}
+#portfolio .project-result-line {
+  padding:15px 0 17px;
+  margin:20px 0 22px;
+  border-top:1px solid var(--hairline);
+  border-bottom:0;
+  align-items:center;
+}
+#portfolio .project-result-line #showcase-count {
+  color:var(--muted);
+  font-size:13px;
+  font-variant-numeric:tabular-nums;
+}
+#portfolio .showcase-grid {
+  gap:20px;
+}
+#portfolio .case-card {
+  box-shadow:none;
+}
+#portfolio .case-visual {
+  height:190px;
+  min-height:190px;
+}
+#portfolio .case-content {
+  padding:23px;
+}
+#portfolio .case-content h5 {
+  font-size:clamp(20px,1.8vw,23px);
+  letter-spacing:-.026em;
+}
+#portfolio .case-desc {
+  -webkit-line-clamp:4;
+  font-size:13.5px;
+  line-height:1.65;
+}
+#portfolio .case-number {
+  right:18px;
+  left:auto;
+  bottom:14px;
+  font-size:10px;
+  opacity:.8;
+}
+#portfolio .case-visual .visual-art:after {
+  transform:skewY(-11deg) rotate(-8deg) scale(.75);
+  opacity:.55;
+}
+#portfolio .case-visual .visual-ring {opacity:.48;}
+#portfolio .case-visual .visual-node {width:7px;height:7px;box-shadow:0 0 14px rgba(140,255,231,.45)}
+#portfolio .visual-code {
+  font-size:10px;
+  background:rgba(8,26,45,.6);
+  border-color:rgba(131,204,218,.23);
+  letter-spacing:.095em;
+}
+#portfolio .showcase-toolbar:not([hidden]) {margin-bottom:18px;}
+#portfolio .showcase-footer {margin-top:20px;}
+#portfolio .showcase-footer:has(> .show-more[hidden]) {display:none;}
+/* No modal marketing captions or fake project results. */
+#portfolio .feature-card, #portfolio .showcase-featured {display:none!important}
+
+/* This pattern is currently too light against white. Deepen the copper traces
+   only in Light mode; reading mode still nearly removes it near actual text. */
+html[data-theme="light"] #pcb-cursor-reveal.is-visible {opacity:.67}
+html[data-theme="light"] #pcb-cursor-reveal.is-reading {opacity:.09}
+html[data-theme="light"] #pcb-cursor-reveal::before {
+  opacity:.83;
+  filter:brightness(.69) contrast(1.4) saturate(1.75);
+}
+html[data-theme="light"] #pcb-cursor-reveal::after {opacity:.24}
+html[data-theme="light"] #pcb-cursor-reveal .pcb-reticle {border-color:rgba(15,111,145,.3)}
+html[data-theme="light"] #pcb-cursor-reveal .pcb-reticle::before {background:#147a96}
+
+/* Natural body copy contrast over both backgrounds. */
+html[data-theme="light"] .hero-copy>p {color:#354f68}
+html[data-theme="light"] .portfolio-lede {color:#47647e}
+html[data-theme="light"] #portfolio .case-desc {color:#476079}
+html[data-theme="dark"] #portfolio .case-desc {color:#afc3d7}
+
+@media(max-width:900px) {
+  #portfolio .portfolio-intro--simple h3 {font-size:clamp(41px,6vw,64px)}
+}
+@media(max-width:700px) {
+  #portfolio .project-result-line {margin:16px 0 20px}
+  #portfolio .case-visual {height:185px;min-height:185px}
+  #portfolio .portfolio-intro--simple {padding-bottom:16px}
+  .portrait-photo {inset:4.8%}
+}
+@media(prefers-reduced-motion:reduce) {
+  #portfolio .case-card {transition:none}
+}
