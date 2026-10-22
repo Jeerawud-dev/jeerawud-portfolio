@@ -410,3 +410,113 @@ html[data-theme="light"] .project-float-visual .cs-orbit-core.has-gallery-image 
   .project-float-visual .cs-orbit-node-label {font-size:clamp(7px,1.8vw,9px)}
   .project-float-visual .cs-orbit-core-detail {display:none}
 }
+
+
+/* Exactly one remaining ProjectGallery item: one focal circle, no fake orbit
+   segments or duplicated diagram stages. */
+.project-float-visual .cs-single-gallery {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  gap:clamp(15px,2vw,25px);
+  min-height:clamp(370px,63vh,640px);
+  width:100%;
+  padding:18px 20px 26px;
+  text-align:center;
+}
+.project-float-visual .cs-single-gallery-circle {
+  position:relative;
+  display:grid;
+  place-items:center;
+  isolation:isolate;
+  overflow:hidden;
+  flex:none;
+  width:min(54vw,clamp(290px,46vh,430px));
+  aspect-ratio:1;
+  border-radius:50%;
+  background:radial-gradient(circle at 45% 30%,#225872,#123247 75%);
+  border:10px solid rgba(101,201,215,.5);
+  box-shadow:0 0 0 15px rgba(68,174,195,.065),
+             0 0 0 1px rgba(72,166,192,.35) inset,
+             0 24px 60px rgba(4,21,35,.2);
+}
+.project-float-visual .cs-single-gallery-circle::after {
+  content:"";
+  position:absolute;
+  z-index:2;
+  inset:0;
+  border-radius:inherit;
+  background:linear-gradient(0deg,rgba(8,32,52,.12),transparent 42%);
+  pointer-events:none;
+}
+.project-float-visual .cs-single-gallery-photo {
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+  z-index:1;
+}
+.project-float-visual .cs-single-gallery-photo[hidden] {display:none}
+.project-float-visual .cs-single-gallery-symbol {
+  position:relative;
+  font-size:76px;
+  line-height:1;
+  color:#79d1d4;
+  z-index:0;
+}
+.project-float-visual .cs-single-gallery-caption {
+  max-width:min(620px,100%);
+  padding:0 12px;
+}
+.project-float-visual .cs-single-gallery-caption .cs-eyebrow {color:#85dfd7}
+.project-float-visual .cs-single-gallery-caption h5 {
+  font:700 clamp(24px,2.8vw,37px)/1.17 "Space Grotesk",Inter,sans-serif;
+  color:#f2fbff;
+  margin:10px 0 9px;
+  letter-spacing:-.043em;
+}
+.project-float-visual .cs-single-gallery-caption p {
+  font-size:14px;
+  line-height:1.65;
+  color:#b4d3e0;
+  margin:0;
+}
+.project-float-visual .cs-gallery-empty {
+  width:100%;
+  min-height:280px;
+  padding:45px 20px;
+  display:grid;
+  justify-items:center;
+  align-content:center;
+  text-align:center;
+  gap:12px;
+  color:#bbd5e1;
+}
+.project-float-visual .cs-gallery-empty-icon {font-size:60px;color:#7ad3d9}
+.project-float-visual .cs-gallery-empty strong {font:700 24px "Space Grotesk",sans-serif;color:#f3fbff}
+.project-float-visual .cs-gallery-empty p {font-size:13px;margin:0}
+html[data-theme="light"] .project-float-visual .cs-single-gallery-circle {
+  background:radial-gradient(circle at 45% 25%,#f9fdff,#cfe7f3 75%);
+  border-color:rgba(29,140,166,.45);
+  box-shadow:0 0 0 15px rgba(48,151,188,.065),
+             0 0 0 1px rgba(72,166,192,.35) inset,
+             0 24px 60px rgba(23,78,111,.12);
+}
+html[data-theme="light"] .project-float-visual .cs-single-gallery-symbol {color:#208c9d}
+html[data-theme="light"] .project-float-visual .cs-single-gallery-caption .cs-eyebrow {color:#168398}
+html[data-theme="light"] .project-float-visual .cs-single-gallery-caption h5 {color:#173d55}
+html[data-theme="light"] .project-float-visual .cs-single-gallery-caption p {color:#486d83}
+html[data-theme="light"] .project-float-visual .cs-gallery-empty {color:#4e7187}
+html[data-theme="light"] .project-float-visual .cs-gallery-empty strong {color:#173d55}
+html[data-theme="light"] .project-float-visual .cs-gallery-empty-icon {color:#238da0}
+@media(max-width:760px) {
+  .project-float-visual .cs-single-gallery {min-height:380px;padding:24px 8px}
+  .project-float-visual .cs-single-gallery-circle {width:min(70vw,320px);border-width:8px}
+}
+@media(max-width:420px) {
+  .project-float-visual .cs-single-gallery {min-height:340px}
+  .project-float-visual .cs-single-gallery-circle {width:min(70vw,260px);border-width:6px}
+}
