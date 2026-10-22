@@ -59,8 +59,8 @@
         <h2 id="hero-headline">Machine Control • C#/.NET • PLC • Smart Manufacturing</h2>
         <p id="hero-summary"></p>
         <div class="hero-actions">
-          <a id="primary-cta" class="btn btn-primary" href="#portfolio">Explore selected work <span aria-hidden="true">↗</span></a>
-          <a class="btn btn-ghost" href="#contact">Let's connect <span aria-hidden="true">↗</span></a>
+          <a id="primary-cta" class="btn btn-primary" href="#portfolio">View projects <span aria-hidden="true">↗</span></a>
+          <a class="btn btn-ghost" href="#contact">Contact me <span aria-hidden="true">↗</span></a>
         </div>
         <div class="hero-stats" aria-label="Engineering highlights">
           <div><strong>7+</strong><span>Years in engineering</span></div>
@@ -74,7 +74,7 @@
           <div class="ring ring-2"></div>
           <span class="portrait-orbit portrait-orbit--cyan" aria-hidden="true"></span>
           <span class="portrait-orbit portrait-orbit--mint" aria-hidden="true"></span>
-          <img src="profile.png" alt="Portrait of Jeerawud Jongjit">
+          <div class="portrait-photo"><img src="profile.png" alt="Portrait of Jeerawud Jongjit"></div>
         </div>
       </div>
       <a class="scroll-hint" href="#about" aria-label="Scroll to About section">
@@ -86,7 +86,7 @@
     <section id="about" data-title="ABOUT" class="section container">
       <div class="section-label">01 / ABOUT</div>
       <div class="about-grid">
-        <div><h3>Engineering software for real machines.</h3></div>
+        <div><h3>Software for machines that run every day.</h3></div>
         <div>
           <p id="about-summary"></p>
           <div class="contact-inline"><span id="about-location"></span><a id="about-email" href="#"></a></div>
@@ -96,50 +96,38 @@
 
     <section id="experience" data-title="EXPERIENCE" class="section section-panel">
       <div class="container">
-        <div class="section-heading"><div class="section-label">02 / EXPERIENCE</div><h3>Professional journey</h3></div>
+        <div class="section-heading"><div class="section-label">02 / EXPERIENCE</div><h3>Work experience</h3></div>
         <div id="experience-list" class="timeline"></div>
       </div>
     </section>
 
     <section id="portfolio" data-title="PORTFOLIO" class="section container portfolio-section">
-      <div class="portfolio-intro">
+      <div class="portfolio-intro portfolio-intro--simple">
         <div>
-          <div class="section-label">03 / SELECTED WORK</div>
-          <h3>Engineering solutions.<br><em>Built for the real world.</em></h3>
-          <p class="portfolio-lede">From intelligent machine control to factory connectivity — a closer look at the engineering behind the systems.</p>
-        </div>
-        <div class="portfolio-intro-aside"><span class="micro-label">THE WORK</span><strong>CODE × CONTROL × INNOVATION</strong><span>Explore the systems, tools and thinking behind each project.</span><span class="intro-arrow" aria-hidden="true">↘</span></div>
-      </div>
-
-      <div class="showcase-kicker">
-        <div><span class="micro-label">01 / SPOTLIGHT</span><h4>Featured projects <span class="kicker-mark" aria-hidden="true">✳</span></h4></div>
-        <div class="rail-actions">
-          <span class="rail-index" id="showcase-rail-index" aria-live="polite">01 / 01</span>
-          <button class="circle-action" id="showcase-prev" type="button" aria-label="Previous featured project">←</button>
-          <button class="circle-action" id="showcase-next" type="button" aria-label="Next featured project">→</button>
+          <div class="section-label">03 / PROJECTS</div>
+          <h3>Selected projects.</h3>
+          <p class="portfolio-lede">Machine control software, automation equipment and factory systems I've worked on.</p>
         </div>
       </div>
-      <div id="showcase-featured" class="showcase-featured" aria-label="Featured projects"></div>
 
-      <div class="showcase-browse-heading">
-        <div><span class="micro-label">02 / THE ARCHIVE</span><h4>Explore all projects <span id="showcase-total" class="total-count">00</span></h4></div>
-        <p>Filter by discipline, discover the stack, and open any project for a closer look.</p>
+      <div class="result-line project-result-line">
+        <span class="micro-label">PROJECTS</span>
+        <span id="showcase-count" role="status" aria-live="polite">Loading projects…</span>
       </div>
-      <div class="showcase-toolbar">
-        <div class="filter-scroll" id="showcase-filters" role="group" aria-label="Filter projects by discipline"></div>
-        <label class="showcase-search"><span aria-hidden="true">⌕</span><span class="sr-only">Search projects</span><input id="showcase-query" type="search" placeholder="Search projects or tech…" autocomplete="off" spellcheck="false"></label>
+      <div class="showcase-toolbar" id="showcase-toolbar" hidden>
+        <div class="filter-scroll" id="showcase-filters" role="group" aria-label="Filter projects by category"></div>
+        <label class="showcase-search"><span aria-hidden="true">⌕</span><span class="sr-only">Search projects</span><input id="showcase-query" type="search" placeholder="Search projects…" autocomplete="off" spellcheck="false"></label>
       </div>
-      <div class="result-line"><span id="showcase-count" role="status" aria-live="polite">Loading projects…</span><span class="result-line-end">PORTFOLIO / INDEX</span></div>
       <div id="showcase-grid" class="showcase-grid"></div>
-      <div id="showcase-empty" class="showcase-empty" hidden><span aria-hidden="true">⌕</span><h5>No matching projects</h5><p>Try a different keyword or select another category.</p><button class="btn btn-ghost" id="showcase-reset" type="button">Clear filters</button></div>
-      <div class="showcase-footer"><button id="showcase-more" class="btn btn-ghost show-more" type="button" hidden>Show more projects <span aria-hidden="true">↓</span></button><span class="showcase-footer-note">DESIGNED TO BUILD WHAT'S NEXT <span aria-hidden="true">↗</span></span></div>
+      <div id="showcase-empty" class="showcase-empty" hidden><span aria-hidden="true">⌕</span><h5>No projects found</h5><p>Try another search or category.</p><button class="btn btn-ghost" id="showcase-reset" type="button">Clear filters</button></div>
+      <div class="showcase-footer"><button id="showcase-more" class="btn btn-ghost show-more" type="button" hidden>Show more projects <span aria-hidden="true">↓</span></button></div>
       <!-- Retained for compatibility with the existing Google Sheets renderer. -->
       <div id="portfolio-grid" class="portfolio-grid" hidden aria-hidden="true"></div>
     </section>
 
     <section id="skills" data-title="SKILLS" class="section section-panel">
       <div class="container">
-        <div class="section-heading"><div class="section-label">04 / SKILLS</div><h3>Technology stack</h3></div>
+        <div class="section-heading"><div class="section-label">04 / SKILLS</div><h3>Skills &amp; tools</h3></div>
         <div id="skills-grid" class="skills-grid"></div>
         <div class="cert-wrap"><div class="section-label">CERTIFICATES &amp; TRAINING</div><div id="cert-grid" class="cert-grid"></div></div>
       </div>
@@ -152,7 +140,7 @@
 
     <section id="contact" data-title="CONTACT" class="section contact-section">
       <div class="container contact-card">
-        <div><div class="section-label">06 / CONTACT</div><h3>Let’s build better automation.</h3><p>Available for software engineering, automation and machine-development conversations.</p></div>
+        <div><div class="section-label">06 / CONTACT</div><h3>Get in touch.</h3><p>Have a machine-control or automation project to discuss? Feel free to contact me.</p></div>
         <div class="contact-actions"><a id="contact-email" class="btn btn-primary" href="#">Email Me</a><a id="contact-phone" class="btn btn-ghost" href="#"></a></div>
       </div>
     </section>
