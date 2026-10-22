@@ -55,6 +55,8 @@ function render(data){
   const settings = data.settings || {};
   document.title = settings.SiteTitle || `${p.fullName || "Portfolio"} | Software Engineer`;
   $("#hero-name").textContent = p.fullName || "";
+  const ageEl = $("#hero-age");
+  if (ageEl) ageEl.textContent = p.age != null ? String(p.age) : "30";
   $("#hero-headline").textContent = settings.HeroTagline || p.specialization || p.headline || "";
   $("#hero-summary").textContent = p.heroIntro || p.summary || "";
   $("#about-summary").textContent = p.summary || "";
