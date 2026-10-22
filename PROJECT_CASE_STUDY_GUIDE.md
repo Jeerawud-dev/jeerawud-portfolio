@@ -102,3 +102,25 @@ proprietary data before publishing.
 - Up to six items to keep the circular layout readable.
 - Light is still the default; Dark remains available.
 - The floating layer respects reduced-motion preferences and keyboard use.
+
+
+## Deleting Gallery entries
+
+The number of Gallery circles is determined by the actual visible rows with
+that project title in **ProjectGallery**, not by a fixed four-stage diagram.
+
+- **1 row** → 1 large circular gallery item and its caption.
+- **2–6 rows** → exactly that many clickable orbit nodes.
+- **0 rows** → an empty-gallery notice, never four old workflow nodes.
+- Rows marked **Visible = No** are excluded.
+
+The deployed Google Apps Script currently has no confirmed live gallery feed.
+The site uses `project-gallery.js`, a snapshot of the existing Sheet.
+When you edit/delete Gallery rows, synchronize that file to the Sheet or
+extend the Apps Script's JSON response with live `projectGallery` to make
+changes update automatically.
+
+For this fix, the snapshot was refreshed from the live Sheet (22 remaining
+Gallery rows across six projects). Thermal Paste Dispensing Machine now has
+one row instead of its former four. JavaScript and CSS asset links have
+version query strings to bypass a stale browser cache.
