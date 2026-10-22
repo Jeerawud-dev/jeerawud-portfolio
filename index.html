@@ -3,15 +3,27 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#07111f">
+  <meta name="theme-color" content="#f5f8fc">
   <meta name="description" content="Jeerawud Jongjit — Senior Software Engineer specializing in industrial machine control, C#/.NET, PLC and smart manufacturing.">
   <title>Jeerawud Jongjit | Senior Software Engineer</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <script>
+    // Apply theme before styles render; default Light, saved Dark is opt-in.
+    (() => {
+      let theme = "light";
+      try {
+        if (localStorage.getItem("jeerawud-theme") === "dark") theme = "dark";
+      } catch (_) { /* storage disabled */ }
+      document.documentElement.dataset.theme = theme;
+      document.documentElement.style.colorScheme = theme;
+    })();
+  </script>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="showcase.css">
   <link rel="stylesheet" href="circuit-hover.css">
+  <link rel="stylesheet" href="theme.css">
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to content</a>
@@ -28,6 +40,7 @@
         <a href="Resume_Jeerawud.pdf" class="nav-mobile-resume" target="_blank" rel="noopener noreferrer">Download resume ↗</a>
       </div>
       <button class="nav-menu-toggle" id="nav-menu-toggle" type="button" aria-controls="primary-links" aria-expanded="false" aria-label="Open navigation menu"><span></span><span></span><span></span></button>
+      <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch to dark theme" aria-pressed="false" title="Switch to dark theme"><span class="theme-toggle__icon" aria-hidden="true">☾</span><span class="theme-toggle__text" aria-hidden="true">Dark</span></button>
       <a class="btn btn-small btn-ghost" href="Resume_Jeerawud.pdf" target="_blank" rel="noopener noreferrer">Resume PDF <span aria-hidden="true">↗</span></a>
     </nav>
   </header>
@@ -159,5 +172,6 @@
   <script src="app.js"></script>
   <script src="showcase.js"></script>
   <script src="circuit-hover.js"></script>
+  <script src="theme.js"></script>
 </body>
 </html>

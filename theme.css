@@ -1,0 +1,285 @@
+/* Portfolio theme system — explicit light default, dark opt-in.
+   Load LAST so source styles remain untouched and theme changes are reversible. */
+
+/* Compact, accessible theme switch in both desktop and mobile navigation. */
+.theme-toggle {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+  flex:none;
+  min-width:94px;
+  min-height:40px;
+  padding:8px 13px;
+  border:1px solid rgba(164,202,233,.30);
+  border-radius:999px;
+  background:rgba(255,255,255,.045);
+  color:#e8f5ff;
+  font:700 12px/1.2 Inter,system-ui,sans-serif;
+  letter-spacing:.01em;
+  cursor:pointer;
+  white-space:nowrap;
+  transition:background .2s,border-color .2s,transform .2s;
+}
+.theme-toggle:hover {border-color:rgba(140,245,205,.64);background:rgba(140,245,205,.09);transform:translateY(-1px)}
+.theme-toggle:focus-visible {outline:3px solid #4ea1ff;outline-offset:3px}
+.theme-toggle__icon {font-size:17px;line-height:1}
+.theme-toggle__text {min-width:28px;text-align:left}
+@media(max-width:900px) {
+  .theme-toggle {min-width:44px;min-height:44px;padding:9px 11px}
+}
+@media(max-width:620px) {
+  .theme-toggle {width:44px;min-width:44px;padding:9px}
+  .theme-toggle__text {display:none}
+  .nav {gap:12px}
+}
+@media (prefers-reduced-motion:reduce) {
+  .theme-toggle {transition:none}
+}
+
+/* Dark remains the existing design; the Light palette is the default in theme.js. */
+html[data-theme="dark"] {color-scheme:dark}
+html[data-theme="light"] {
+  color-scheme:light;
+  --bg:#f5f8fc;
+  --panel:#ffffff;
+  --panel2:#eef4fa;
+  --text:#18283b;
+  --muted:#51647b;
+  --line:rgba(39,73,109,.17);
+  --blue:#176cb9;
+  --cyan:#147d91;
+  --navy:#e8f0f8;
+  --accent:#187f75;
+  --electric:#287dae;
+  --ice:#172a3f;
+  --hairline:rgba(34,74,111,.16);
+  --shadow:0 24px 64px rgba(28,62,102,.09);
+}
+html[data-theme="light"] body {background:#f5f8fc;color:var(--text)}
+html[data-theme="light"] .grid-glow {
+  background:
+    radial-gradient(circle at 82% 12%,rgba(78,139,205,.12),transparent 32%),
+    radial-gradient(circle at 18% 72%,rgba(56,167,160,.065),transparent 28%),
+    linear-gradient(rgba(49,93,138,.032) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(49,93,138,.032) 1px,transparent 1px);
+  background-size:auto,auto,46px 46px,46px 46px;
+}
+html[data-theme="light"] ::selection {background:#c7eaf2;color:#17304a}
+
+/* Header and navigation */
+html[data-theme="light"] .nav-shell {
+  background:rgba(255,255,255,.86);
+  border-bottom-color:rgba(45,81,116,.14);
+  box-shadow:0 7px 24px rgba(43,78,113,.055);
+}
+html[data-theme="light"] .brand {color:#132b43}
+html[data-theme="light"] .brand span {color:#187b91}
+html[data-theme="light"] .nav-links a {color:#485c74}
+html[data-theme="light"] .nav-links a:hover,
+html[data-theme="light"] .nav-links a.active {color:#155d9d}
+html[data-theme="light"] .nav-links a:after {background:linear-gradient(90deg,#167bc0,#18a29a)}
+html[data-theme="light"] .theme-toggle {
+  background:#eaf3fa;
+  border-color:rgba(47,92,132,.22);
+  color:#1a4d72;
+}
+html[data-theme="light"] .theme-toggle:hover {background:#deedf9;border-color:#69a8c7}
+html[data-theme="light"] .nav-menu-toggle {background:#edf4fa;border-color:#c9dbe9}
+html[data-theme="light"] .nav-menu-toggle span {background:#214969}
+html[data-theme="light"] .nav-mobile-resume {color:#176b81!important}
+html[data-theme="light"] .btn-primary {
+  background:linear-gradient(120deg,#1673ba,#149eaa);
+  color:white;
+  box-shadow:0 14px 28px rgba(32,113,167,.16);
+}
+html[data-theme="light"] .btn-ghost {
+  color:#19415e;
+  border-color:rgba(52,103,140,.28);
+  background:rgba(255,255,255,.78);
+}
+html[data-theme="light"] .btn-ghost:hover {background:#edf6fb}
+
+/* Hero and orbiting portrait: preserve both animations and dots. */
+html[data-theme="light"] .hero h1,
+html[data-theme="light"] .hero h1::first-line {color:#122941}
+html[data-theme="light"] .hero h2 {color:#3d5875}
+html[data-theme="light"] .hero-copy>p {color:#506880}
+html[data-theme="light"] .hero-eyebrow {color:#147a86}
+html[data-theme="light"] .live-mark {
+  background:#159f96;
+  box-shadow:0 0 0 6px rgba(21,159,150,.09),0 0 18px rgba(21,159,150,.24);
+}
+html[data-theme="light"] .hero-stats {border-top-color:rgba(48,94,130,.19)}
+html[data-theme="light"] .hero-stats strong {color:#152e49}
+html[data-theme="light"] .portrait-frame {
+  background:radial-gradient(circle at 50% 39%,#e2f1fa 0%,#f0f6fc 59%,#f6f9fd 68%);
+  border-color:rgba(44,125,170,.23);
+  box-shadow:0 36px 85px rgba(41,97,142,.12);
+}
+html[data-theme="light"] .portrait-frame::before {background:linear-gradient(135deg,rgba(72,161,207,.2),rgba(117,215,199,.035))}
+html[data-theme="light"] .ring {border-color:rgba(37,129,164,.25)}
+html[data-theme="light"] .portrait-orbit--cyan::before {background:#2389c0}
+html[data-theme="light"] .portrait-orbit--mint::before {background:#1cab92}
+html[data-theme="light"] .scroll-hint {color:#53708a}
+html[data-theme="light"] .mouse-icon {border-color:rgba(52,96,128,.32)}
+
+/* About, experience, skills, certifications, education, contact */
+html[data-theme="light"] .section-label,
+html[data-theme="light"] .eyebrow,
+html[data-theme="light"] .timeline-period,
+html[data-theme="light"] .cert-year,
+html[data-theme="light"] .education .gpa,
+html[data-theme="light"] .skill-level {color:#147e91}
+html[data-theme="light"] .section-panel {background:rgba(233,242,250,.6);border-color:var(--line)}
+html[data-theme="light"] .about-grid p {color:#3f566f}
+html[data-theme="light"] .contact-inline a {color:#106a9c}
+html[data-theme="light"] .timeline-item,
+html[data-theme="light"] .skill-card,
+html[data-theme="light"] .education {
+  background:rgba(255,255,255,.9);
+  border-color:rgba(49,92,125,.16);
+  box-shadow:0 12px 30px rgba(32,65,108,.035);
+}
+html[data-theme="light"] .timeline-item .role,
+html[data-theme="light"] #experience .timeline-item .role {color:#28577a}
+html[data-theme="light"] .timeline-item p,
+html[data-theme="light"] .experience-highlights li,
+html[data-theme="light"] .skill-card p,
+html[data-theme="light"] .education p {color:#536981}
+html[data-theme="light"] .experience-highlights li::before {background:#168b8f;box-shadow:0 0 0 3px rgba(22,139,143,.09)}
+html[data-theme="light"] .cert {border-color:rgba(42,83,113,.17)}
+html[data-theme="light"] .cert span {color:#536981}
+html[data-theme="light"] .contact-card {
+  background:linear-gradient(125deg,rgba(220,237,250,.86),rgba(234,248,247,.76));
+  border-color:rgba(49,117,153,.24);
+}
+html[data-theme="light"] .footer {color:#536981;border-top-color:var(--line)}
+html[data-theme="light"] .smart-scroll-nav {
+  background:rgba(255,255,255,.83);
+  border-color:rgba(53,97,128,.17);
+  box-shadow:0 10px 34px rgba(29,78,111,.09);
+}
+html[data-theme="light"] .scroll-progress-track {background:rgba(45,82,117,.13)}
+html[data-theme="light"] .scroll-dot {color:#496b8b}
+html[data-theme="light"] .scroll-dot::before {background:#7ea0b7}
+html[data-theme="light"] .scroll-dot:hover::before,
+html[data-theme="light"] .scroll-dot.active::before {background:#167d9a}
+html[data-theme="light"] .scroll-section-name {color:#126e86}
+
+/* Editorial portfolio and gallery controls */
+html[data-theme="light"] .portfolio-intro {border-bottom-color:var(--hairline)}
+html[data-theme="light"] .portfolio-intro h3 {color:#162e45}
+html[data-theme="light"] .portfolio-intro h3 em {
+  background:linear-gradient(95deg,#1c65a0,#128b96 65%,#187f68);
+  -webkit-background-clip:text;
+  background-clip:text;
+}
+html[data-theme="light"] .portfolio-lede,
+html[data-theme="light"] .showcase-browse-heading p {color:#536981}
+html[data-theme="light"] .portfolio-intro-aside {border-left-color:#46a8ab;color:#47617c}
+html[data-theme="light"] .portfolio-intro-aside strong {color:#163550}
+html[data-theme="light"] .portfolio-intro-aside>span:not(.micro-label):not(.intro-arrow) {color:#61748a}
+html[data-theme="light"] .micro-label,
+html[data-theme="light"] .portfolio-intro-aside .micro-label {color:#107b82}
+html[data-theme="light"] .kicker-mark,
+html[data-theme="light"] .intro-arrow,
+html[data-theme="light"] .total-count {color:#177f91}
+html[data-theme="light"] .rail-index {color:#536b81}
+html[data-theme="light"] .circle-action {
+  background:#fff;
+  border-color:rgba(54,97,137,.24);
+  color:#184c70;
+}
+html[data-theme="light"] .circle-action:hover:not(:disabled) {background:#e8f4f9;border-color:#42a7b2}
+html[data-theme="light"] .filter-button {
+  background:white;
+  border-color:#c7d9e7;
+  color:#426079;
+}
+html[data-theme="light"] .filter-button:hover {border-color:#188b9e;color:#124e62}
+html[data-theme="light"] .filter-button[aria-pressed="true"] {background:#176b94;border-color:#176b94;color:#fff;box-shadow:0 5px 20px rgba(25,106,148,.14)}
+html[data-theme="light"] .showcase-search {background:#fff;border-color:#c7d9e7}
+html[data-theme="light"] .showcase-search>span:not(.sr-only) {color:#45778f}
+html[data-theme="light"] .showcase-search input {color:#183a52}
+html[data-theme="light"] .showcase-search input::placeholder {color:#687f94}
+html[data-theme="light"] .showcase-search input::-webkit-search-cancel-button {filter:none}
+html[data-theme="light"] .result-line {color:#587086}
+html[data-theme="light"] .result-line-end {color:#667f94}
+html[data-theme="light"] .showcase-footer-note {color:#58758b}
+html[data-theme="light"] .showcase-footer-note span {color:#177d82}
+html[data-theme="light"] .showcase-empty {background:#fff;border-color:#bcceda}
+html[data-theme="light"] .showcase-empty h5 {color:#1c344b}
+html[data-theme="light"] .showcase-empty p {color:#526981}
+html[data-theme="light"] .showcase-empty>span {color:#188c93}
+
+/* Project cards: white editorial surfaces, dark readable typography.
+   Project imagery intentionally retains rich navy/teal visual contrast. */
+html[data-theme="light"] .feature-card,
+html[data-theme="light"] .case-card {
+  background:#fff;
+  border-color:rgba(44,87,126,.17);
+  box-shadow:0 14px 38px rgba(40,76,116,.09);
+}
+html[data-theme="light"] .feature-card::before {background:linear-gradient(130deg,rgba(221,238,249,.25),transparent 55%)}
+html[data-theme="light"] .feature-card:hover,
+html[data-theme="light"] .case-card:hover {border-color:rgba(40,134,150,.4);box-shadow:0 19px 42px rgba(39,90,122,.12)}
+html[data-theme="light"] .feature-eyebrow,
+html[data-theme="light"] .case-overline {color:#137b83}
+html[data-theme="light"] .feature-eyebrow::before {background:#137b83}
+html[data-theme="light"] .feature-copy h5,
+html[data-theme="light"] .case-content h5 {color:#18314a}
+html[data-theme="light"] .feature-copy>p,
+html[data-theme="light"] .case-desc {color:#526981}
+html[data-theme="light"] .feature-bottom,
+html[data-theme="light"] .case-bottom {border-top-color:var(--hairline)}
+html[data-theme="light"] .feature-bottom .tech span,
+html[data-theme="light"] .case-card .tech span,
+html[data-theme="light"] .dialog-content .tech span {
+  background:#eff6fb;
+  color:#325b75;
+  border-color:#d3e2ed;
+}
+html[data-theme="light"] .feature-open,
+html[data-theme="light"] .case-open {color:#126f84}
+html[data-theme="light"] .case-overline .case-period,
+html[data-theme="light"] .case-context {color:#627a91}
+html[data-theme="light"] .feature-visual,
+html[data-theme="light"] .case-visual,
+html[data-theme="light"] .dialog-visual {background:#143750}
+/* Artwork captions remain light because image surfaces remain dark. */
+html[data-theme="light"] .visual-code {color:#c3f6ea}
+html[data-theme="light"] .visual-coordinate {color:#e1f7fc}
+
+/* Project detail modal — include borders, controls, metadata and descriptions. */
+html[data-theme="light"] .project-dialog {
+  background:#fff;
+  color:#18314a;
+  border-color:rgba(52,102,131,.24);
+  box-shadow:0 32px 100px rgba(17,53,86,.23);
+}
+html[data-theme="light"] .project-dialog::backdrop {background:rgba(12,30,48,.42)}
+html[data-theme="light"] .dialog-close {background:#fff;color:#184c70}
+html[data-theme="light"] .dialog-content>p {color:#4c637b}
+html[data-theme="light"] .dialog-information {border-color:var(--hairline)}
+html[data-theme="light"] .dialog-information strong {color:#16344e}
+html[data-theme="light"] .dialog-no-link {color:#5b768d}
+html[data-theme="light"] .dialog-link {color:#fff}
+
+/* Light surfaces should never obscure the copy when the cursor glows nearby. */
+html[data-theme="light"] #pcb-cursor-reveal.is-visible {opacity:.26}
+html[data-theme="light"] #pcb-cursor-reveal.is-reading {opacity:.025}
+html[data-theme="light"] #pcb-cursor-reveal::after {opacity:.32}
+html[data-theme="light"] #pcb-cursor-reveal .pcb-reticle {border-color:rgba(22,130,152,.25)}
+html[data-theme="light"] #pcb-cursor-reveal .pcb-reticle::before {background:#137f87;box-shadow:none}
+
+@media(max-width:900px) {
+  html[data-theme="light"] .nav-links.menu-open {
+    background:#fff;
+    border-color:#d1e1ed;
+    box-shadow:0 24px 60px rgba(38,78,112,.14);
+  }
+  html[data-theme="light"] .nav-links a:hover,
+  html[data-theme="light"] .nav-links a.active {background:rgba(31,122,170,.09)}
+  html[data-theme="light"] .nav-mobile-resume {border-color:#d8e4ed}
+}
