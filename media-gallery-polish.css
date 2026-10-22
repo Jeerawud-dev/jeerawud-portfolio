@@ -1,0 +1,131 @@
+
+/* Media first: readability and large original-aspect project gallery previews.
+   Loaded after project-float.css to override earlier circular cropping. */
+.project-float-visual .cs-orbit-info {
+  padding:clamp(17px,1.9vw,26px);
+  align-self:center;
+}
+.project-float-visual .cs-gallery-preview {
+  width:100%;
+  min-height:clamp(170px,18vw,285px);
+  height:clamp(170px,18vw,285px);
+  background:rgba(9,30,44,.32);
+  border:1px solid rgba(140,194,212,.24);
+  border-radius:14px;
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+  margin-bottom:20px;
+}
+.project-float-visual .cs-gallery-preview-img {
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  object-position:center;
+  background:rgba(5,22,37,.28);
+}
+.project-float-visual .cs-gallery-preview-img[hidden],
+.project-float-visual .cs-gallery-preview-empty[hidden] {display:none!important}
+.project-float-visual .cs-gallery-preview-empty {
+  font-size:52px;
+  color:rgba(140,203,219,.55);
+}
+.project-float-visual .cs-orbit-core.has-gallery-image .cs-orbit-core-glyph,
+.project-float-visual .cs-orbit-core.has-gallery-image .cs-orbit-core-kicker,
+.project-float-visual .cs-orbit-core.has-gallery-image .cs-orbit-core-title,
+.project-float-visual .cs-orbit-core.has-gallery-image .cs-orbit-core-detail {
+  display:none;
+}
+.project-float-visual .cs-orbit-core-gallery-photo {
+  object-fit:cover;
+  opacity:1;
+}
+.project-float-visual .cs-orbit-core.has-gallery-image::before {background:transparent}
+.project-float-visual .cs-single-gallery-circle.has-gallery-image {
+  width:min(100%,780px);
+  aspect-ratio:16 / 10;
+  border-radius:20px;
+  border-width:4px;
+  background:rgba(5,23,39,.12);
+  box-shadow:0 15px 45px rgba(0,21,37,.14);
+}
+.project-float-visual .cs-single-gallery-circle.has-gallery-image .cs-single-gallery-photo {
+  object-fit:contain;
+  border-radius:16px;
+  background:rgba(10,25,38,.2);
+}
+.project-float-visual .cs-single-gallery-circle.has-gallery-image::after {border-radius:16px;background:transparent}
+html[data-theme="light"] .project-float-visual .cs-gallery-preview {
+  background:rgba(246,250,253,.9);
+  border-color:rgba(78,149,174,.25);
+}
+html[data-theme="light"] .project-float-visual .cs-gallery-preview-img {
+  background:rgba(235,244,249,.84);
+}
+html[data-theme="light"] .project-float-visual .cs-single-gallery-circle.has-gallery-image {
+  border-color:rgba(75,162,186,.32);
+  background:rgba(241,248,251,.78);
+  box-shadow:0 18px 50px rgba(28,80,119,.11);
+}
+html[data-theme="light"] .project-float-visual .cs-single-gallery-circle.has-gallery-image .cs-single-gallery-photo {
+  background:rgba(249,252,254,.94);
+}
+@media(max-width:760px) {
+  .project-float-visual .cs-gallery-preview {
+    height:clamp(180px,53vw,320px);
+    margin-bottom:15px;
+  }
+  .project-float-visual .cs-single-gallery-circle.has-gallery-image {
+    width:min(100%,680px);
+    border-width:3px;
+  }
+}
+
+/* Certificates: actual evidence images and readable training details. */
+#cert-grid.cert-grid {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+#cert-grid .cert {
+  display:grid;
+  grid-template-columns:110px minmax(0,1fr) auto;
+  gap:17px;
+  align-items:center;
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:15px;
+  background:var(--panel);
+  min-width:0;
+  text-align:left;
+}
+#cert-grid .cert-picture {
+  display:grid;
+  place-items:center;
+  width:110px;
+  height:88px;
+  border-radius:10px;
+  overflow:hidden;
+  border:1px solid rgba(116,173,194,.27);
+  background:rgba(72,139,161,.075);
+  text-decoration:none;
+  color:var(--muted);
+  font-size:32px;
+}
+#cert-grid .cert-picture img {height:100%;width:100%;object-fit:contain}
+#cert-grid .cert-picture:focus-visible {outline:3px solid var(--cyan);outline-offset:3px}
+#cert-grid .cert-content {min-width:0}
+#cert-grid .cert-content strong {font-size:14px;line-height:1.45;color:var(--text);overflow-wrap:anywhere}
+#cert-grid .cert-content span {display:block;margin-top:5px;font-size:12px;line-height:1.6;color:var(--muted)}
+#cert-grid .cert-notes {display:block;margin-top:6px;color:var(--muted);font-size:11px;line-height:1.5}
+#cert-grid .cert-credential {display:inline-block;margin-top:8px;font-size:11px;color:var(--cyan);text-decoration:none}
+#cert-grid .cert-credential:hover {text-decoration:underline}
+#cert-grid .cert-year {font-size:12px;align-self:start;color:var(--cyan);white-space:nowrap}
+html[data-theme="light"] #cert-grid .cert {background:rgba(255,255,255,.75);border-color:rgba(58,114,149,.17)}
+html[data-theme="light"] #cert-grid .cert-picture {background:#edf4f9;border-color:#d2e2eb}
+html[data-theme="light"] #cert-grid .cert-credential {color:#126f88}
+@media(max-width:1000px) {
+  #cert-grid.cert-grid {grid-template-columns:1fr}
+}
+@media(max-width:530px) {
+  #cert-grid .cert {grid-template-columns:83px minmax(0,1fr);gap:12px;padding:12px}
+  #cert-grid .cert-picture {width:83px;height:78px}
+  #cert-grid .cert-year {grid-column:2;align-self:auto;justify-self:start}
+}
