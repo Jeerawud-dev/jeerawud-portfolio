@@ -25,7 +25,6 @@
   <link rel="stylesheet" href="circuit-hover.css">
   <link rel="stylesheet" href="theme.css">
   <link rel="stylesheet" href="site-polish.css">
-  <link rel="stylesheet" href="social.css">
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to content</a>
@@ -39,7 +38,6 @@
         <a href="#portfolio">Portfolio</a>
         <a href="#skills">Skills</a>
         <a href="#contact">Contact</a>
-        <a href="#guestbook">Guestbook</a>
         <a href="Resume_Jeerawud.pdf" class="nav-mobile-resume" target="_blank" rel="noopener noreferrer">Download resume ↗</a>
       </div>
       <button class="nav-menu-toggle" id="nav-menu-toggle" type="button" aria-controls="primary-links" aria-expanded="false" aria-label="Open navigation menu"><span></span><span></span><span></span></button>
@@ -146,54 +144,6 @@
         <div class="contact-actions"><a id="contact-email" class="btn btn-primary" href="#">Email Me</a><a id="contact-phone" class="btn btn-ghost" href="#"></a></div>
       </div>
     </section>
-    <section id="guestbook" data-title="GUESTBOOK" class="section social-section container">
-      <div class="social-header">
-        <div>
-          <div class="section-label">06 / GUESTBOOK</div>
-          <h3>Leave a note.</h3>
-          <p>Found something useful here? Leave a reaction or a short message. No account needed.</p>
-        </div>
-      </div>
-      <div class="social-layout">
-        <div class="social-side">
-          <div class="social-card social-reactions">
-            <h4>Your reaction</h4>
-            <p>Tap one to react. You can change your choice later.</p>
-            <div class="social-reaction-actions">
-              <button type="button" id="social-like" class="social-reaction-btn" data-reaction="like" aria-pressed="false" disabled><span class="reaction-icon" aria-hidden="true">👍</span><span>Like</span><strong id="social-like-count">—</strong></button>
-              <button type="button" id="social-heart" class="social-reaction-btn social-heart" data-reaction="heart" aria-pressed="false" disabled><span class="reaction-icon" aria-hidden="true">♥</span><span>Love</span><strong id="social-heart-count">—</strong></button>
-            </div>
-            <p class="social-side-note">One reaction per browser, no sign-in.</p>
-          </div>
-          <div class="social-card social-privacy">
-            <span aria-hidden="true" class="social-speech-icon">◌</span>
-            <h4>Pick any nickname</h4>
-            <p>You don't need to share your real name, email address or phone number. Messages appear publicly only after review.</p>
-          </div>
-        </div>
-        <div class="social-card social-guestbook">
-          <div class="social-guestbook-head"><h4>Visitor messages</h4><span class="social-live-tag">Guestbook</span></div>
-          <div id="social-comments" class="social-comments" role="log" aria-live="polite" aria-relevant="additions text">
-            <p class="social-placeholder">Checking for messages…</p>
-          </div>
-          <form id="social-form" class="social-form" autocomplete="off">
-            <div class="social-form-heading"><strong>Write a message</strong><span>Nickname only · No login</span></div>
-            <div class="social-field">
-              <label for="social-nickname">Nickname</label>
-              <input id="social-nickname" name="nickname" type="text" maxlength="24" minlength="2" autocomplete="nickname" placeholder="What should we call you?" required disabled>
-            </div>
-            <div class="social-field">
-              <label for="social-message">Message</label>
-              <textarea id="social-message" name="message" maxlength="350" minlength="3" rows="3" placeholder="Leave a comment or say hello…" required disabled></textarea>
-            </div>
-            <div class="social-honey" aria-hidden="true"><label for="social-website">Leave empty</label><input type="text" id="social-website" name="website" tabindex="-1" autocomplete="off"></div>
-            <div class="social-form-bottom"><span>Comments are reviewed before appearing.</span><button class="btn btn-primary social-submit" id="social-submit" type="submit" disabled>Send message ↗</button></div>
-          </form>
-          <p id="social-status" class="social-status" role="status" aria-live="polite">Guestbook is not connected yet.</p>
-        </div>
-      </div>
-    </section>
-
   </main>
 
   <dialog id="project-dialog" class="project-dialog" aria-labelledby="project-dialog-title">
@@ -211,6 +161,5 @@
   <script src="showcase.js"></script>
   <script src="circuit-hover.js"></script>
   <script src="theme.js"></script>
-  <script src="social.js" defer></script>
 </body>
 </html>
