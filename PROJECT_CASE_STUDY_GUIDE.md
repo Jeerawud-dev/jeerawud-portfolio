@@ -1,44 +1,36 @@
-# Inline Project Diagram — editing guide
+# Floating System Diagram — Portfolio project interaction
 
-## Current user experience
+## Visitor experience
 
-On **03 / PROJECTS**, click anywhere on a project card (or its **View diagram**
-button). The selected project's **interactive circular system diagram** expands
-directly **below that project's row**, without a modal, new tab or page.
+Under **03 / PROJECTS**, select a project card or its **View diagram** action.
+A **compact circular system diagram floats over the current Portfolio page**.
+The original project cards stay in the same positions — selecting a project
+does not insert a new row, expand the grid, navigate to a new page, or open a
+large case-study panel.
 
-The compact panel contains:
-- Project title and one short description/scope.
-- Circular 4–6-stage system / technology diagram with direction arrows.
-- One small area showing the title and details of the selected diagram stage.
-- **Close** button. Clicking the same project card again also closes the panel.
-- Opening another project switches to its diagram. Filtering/searching closes it.
+The floating chart has:
+- Project title and one brief, existing project description/scope.
+- Circular 4–6-stage system / technology flow with clickable icon buttons.
+- Small selected-stage label and description beside the wheel (below on mobile).
+- A transparent surrounding surface so the Portfolio remains visible beneath.
 
-This presentation is conceptual — it is NOT an exact electrical or motion
-control wiring diagram.
+Close with the **X**, by clicking the surrounding backdrop, or by pressing
+**Escape**. Keyboard focus returns to the original project control.
 
-The site has removed the earlier **full Project Case Study dialog**: no large
-hero, extra technology table, lengthy work-area list or image gallery is shown.
+## Data sources and editing
 
-## Where the data comes from
-
-| Field | Source |
+| Content | Source |
 | --- | --- |
-| Project cards, title, description, dates, context, technologies, image | Google Sheets → Portfolio |
-| Diagram steps, brief scope | GitHub → `project-cases.js` |
-| Interactive chart | `showcase.js` |
-| Responsive inline layout | `project-inline.css` and `project-case.css` |
+| Card images, project title, category, description, dates, technologies | Google Sheets → `Portfolio` |
+| Simplified conceptual diagram stages, short scope | GitHub → `project-cases.js` |
+| Diagram HTML and interaction | GitHub → `showcase.js` |
+| Floating transparent UI | GitHub → `project-float.css` |
+| Base circle styles | GitHub → `project-case.css` |
 
-Case study details are matched to a project by **exact project title**, ignoring
-capitalization and extra surrounding spaces. Keep the local keys in
-`project-cases.js` consistent with Google Sheets project titles.
+The reference-inspired circular diagram is a conceptual overview, not a
+verified electrical, EtherCAT, mechanical, or software design schematic.
 
-The existing Google Apps Script feed currently serves the Portfolio card data.
-If it later provides a `projectDetails` object, the website can use those
-fields as optional overrides for the local case-study definitions.
-
-## Edit a diagram
-
-Find the project entry in `project-cases.js`, then update its diagram array:
+Example edit in `project-cases.js`:
 
 ```js
 diagram: [
@@ -49,20 +41,24 @@ diagram: [
 ]
 ```
 
-There should be **up to 6** stages. Clicking a circle updates the selected
-component name and its brief description without leaving the page.
+Use up to **six stages**. Only show components truly used in the project.
+A different entry with the same title in Google Sheets receives that entry's
+diagram automatically (project matching ignores casing and extra spaces).
 
-## Image data
+## What is intentionally hidden
 
-The existing `machineImages` and `uiImages` arrays are retained for future
-use, but **are not currently shown** in the simplified inline UI.
-The primary project image can still be shown on the main project card via the
-Google Sheets Portfolio tab.
+The former full case study modal (hero panel, long bullet list, technology
+table and screenshot gallery) is no longer shown. The floating system wheel
+is designed for quickly seeing the workflow without reading a long report.
 
-## Accessibility
+`machineImages` and `uiImages` remain stored in `project-cases.js` for
+potential future use; they are not rendered in this floating view.
 
-- All chart stages are real buttons (keyboard Tab, Enter, Space).
-- The expanded card controls expose `aria-expanded`.
-- The inline diagram is a labeled region; the selected step details announce changes.
-- Responsive: on smaller screens the diagram stacks above the detail summary.
-- Reduced-motion preferences are honored.
+## Accessibility and responsive design
+
+- Uses labeled floating overlay, keyboard-friendly icon buttons and close.
+- `Escape`, backdrop click and Close all return to the Portfolio.
+- Light Theme: transparent pale overlay with subtle frosted stage details.
+- Dark Theme: translucent dark overlay with the same chart.
+- On smaller screens the detail panel moves below the wheel.
+- Motion respects the user's reduced-animation preference.
