@@ -1,0 +1,41 @@
+/* Cursor-controlled PCB reveal. A static, tiled SVG becomes visible only near the pointer.
+   It stays behind all content and never captures pointer/keyboard interactions. */
+#pcb-cursor-reveal {
+  --pcb-x: -600px;
+  --pcb-y: -600px;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 260ms ease;
+}
+#pcb-cursor-reveal.is-visible { opacity: 1; }
+#pcb-cursor-reveal::before,
+#pcb-cursor-reveal::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+#pcb-cursor-reveal::before {
+  background: url("./circuit-board.svg") repeat 0 0 / 320px 320px;
+  opacity: .88;
+  -webkit-mask-image: radial-gradient(circle 310px at var(--pcb-x) var(--pcb-y),
+    #000 0%, rgba(0,0,0,.96) 19%, rgba(0,0,0,.68) 47%, transparent 100%);
+  mask-image: radial-gradient(circle 310px at var(--pcb-x) var(--pcb-y),
+    #000 0%, rgba(0,0,0,.96) 19%, rgba(0,0,0,.68) 47%, transparent 100%);
+}
+#pcb-cursor-reveal::after {
+  background: radial-gradient(circle 310px at var(--pcb-x) var(--pcb-y),
+    rgba(30,183,203,.11), rgba(40,133,193,.045) 48%, transparent 78%);
+}
+/* Content sits above the reveal; existing semi-transparent panels let circuitry shine through. */
+main, .footer { position: relative; z-index: 1; }
+@media (hover: none), (pointer: coarse) {
+  #pcb-cursor-reveal { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #pcb-cursor-reveal { transition: none; }
+}
