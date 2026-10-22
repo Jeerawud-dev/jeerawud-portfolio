@@ -23,7 +23,7 @@
     } catch { return ""; }
   };
 
-  const state = {projects: [], category: "all", query: "", visible: 9, activeProject: null};
+  const state = {projects: [], category: "all", query: "", visible: 9, activeProject: null, gallery: []};
   const grid = el("showcase-grid");
   if (!grid) return;
 
@@ -132,11 +132,35 @@
   };
 
 
+  // ProjectGallery is the primary source for chart image, title and details.
+  // Live API data overrides the synced GitHub snapshot when provided.
+  function galleryForProject(projectTitle) {
+    const key=clean(projectTitle).toLowerCase();
+    return (state.gallery || []).map(item => ({
+      project:clean(item.project || item.projectTitle || item.ProjectTitle),
+      title:clean(item.title || item.heading || item.galleryHeading || item.GalleryHeading),
+      detail:clean(item.detail || item.description || item.shortDetail || item.ShortDetail),
+      imageUrl:clean(item.imageUrl || item.image || item.url || item.ImageURL),
+      order:Number(item.order ?? item.displayOrder ?? item.DisplayOrder ?? 0),
+      visible:item.visible
+    })).filter(item => item.project.toLowerCase()===key && item.title &&
+      item.visible !== false && clean(item.visible).toLowerCase() !== "no")
+    .sort((a,b)=>a.order-b.order).slice(0,6);
+  }
+  function setGalleryImage(image, src, container) {
+    if(!image || !container) return;
+    const url=validUrl(src);
+    image.hidden=!url;
+    container.classList.toggle("has-gallery-image",!!url);
+    if(url) image.src=url; else image.removeAttribute("src");
+  }
   // Radial Engineering System Overview: interactive, data-driven and keyboard accessible.
   // Ring arrows are a visual presentation of the published conceptual workflow,
   // not a machine's electrical wiring diagram.
   function diagramMarkup(p, detail) {
-    const nodes = (Array.isArray(detail.diagram) ? detail.diagram : []).filter(n => n && (n.title || n.detail)).slice(0,6);
+    const galleryNodes=galleryForProject(p.title);
+    const nodes = galleryNodes.length ? galleryNodes :
+      (Array.isArray(detail.diagram) ? detail.diagram : []).filter(n => n && (n.title || n.detail)).slice(0,6);
     if (!nodes.length) {
       const stack = tags(p.technologies).slice(0,4);
       if (!stack.length) return "";
@@ -176,11 +200,13 @@
       const title=String(n.title||"Component");
       const sub=String(n.detail||"");
       return `<button class="cs-orbit-node cs-tone-${i%6} ${i===0?"is-active":""}" type="button"
-        data-orbit-step="${i}" aria-pressed="${i===0?"true":"false"}"
+        data-orbit-step="${i}" data-orbit-image="${escape(validUrl(n.imageUrl) || "")}" aria-pressed="${i===0?"true":"false"}"
         aria-label="Stage ${String(i+1).padStart(2,"0")}: ${escape(title)}. ${escape(sub)}"
         style="left:${x}%;top:${y}%">
         <span class="cs-orbit-node-number">${String(i+1).padStart(2,"0")}</span>
-        <span class="cs-orbit-node-icon">${icon(i)}</span>
+        <span class="cs-orbit-node-icon">${icon(i)}
+          ${validUrl(n.imageUrl) ? `<img class="cs-orbit-gallery-image" src="${escape(validUrl(n.imageUrl))}" alt="" loading="lazy" decoding="async">` : ""}
+        </span>
         <strong class="cs-orbit-node-label">${escape(title)}</strong>
         <span class="cs-orbit-node-description" hidden>${escape(sub)}</span>
       </button>`;
@@ -195,20 +221,21 @@
           ${arrows}
           <circle class="cs-orbit-inner-detail" cx="320" cy="320" r="140"/>
         </svg>
-        <div class="cs-orbit-core" aria-hidden="true">
+        <div class="cs-orbit-core ${validUrl(active.imageUrl) ? "has-gallery-image" : ""}" aria-hidden="true">
+          <img class="cs-orbit-core-gallery-photo" ${validUrl(active.imageUrl) ? `src="${escape(validUrl(active.imageUrl))}"` : "hidden"} alt="" decoding="async">
           <span class="cs-orbit-core-glyph">⌘</span>
-          <span class="cs-orbit-core-kicker">SYSTEM MAP</span>
+          <span class="cs-orbit-core-kicker">PROJECT GALLERY</span>
           <strong class="cs-orbit-core-title">${escape(active.title || "Component")}</strong>
           <span class="cs-orbit-core-detail">${escape(active.detail || "")}</span>
         </div>
         ${radialButtons}
       </div>
       <div class="cs-orbit-info" aria-label="Selected diagram component">
-        <span class="cs-orbit-info-label">SELECTED STAGE</span>
+        <span class="cs-orbit-info-label">GALLERY ITEM</span>
         <span class="cs-orbit-selected-index">01 / ${String(count).padStart(2,"0")}</span>
         <h5 class="cs-orbit-selected-title" aria-live="polite">${escape(active.title || "Component")}</h5>
         <p class="cs-orbit-selected-detail" aria-live="polite">${escape(active.detail || "")}</p>
-        <p class="cs-orbit-instruction">Click a circle to see another step.</p>
+        <p class="cs-orbit-instruction">Select a photo or title around the circle.</p>
       </div>
     </div>`;
   }
@@ -268,6 +295,8 @@
     if(description) description.textContent=detail;
     if(centreTitle) centreTitle.textContent=title;
     if(centreDetail) centreDetail.textContent=detail;
+    const core=panel.querySelector(".cs-orbit-core");
+    setGalleryImage(core?.querySelector(".cs-orbit-core-gallery-photo"),node.dataset.orbitImage,core);
   }
 
   function toggleFloating(index) {
@@ -325,6 +354,14 @@
         }
       }
     });
+    // Image loading errors do not leave broken picture icons.
+    layer.querySelectorAll(".cs-orbit-gallery-image, .cs-orbit-core-gallery-photo").forEach(img => {
+      img.addEventListener("error", () => {
+        img.hidden=true;
+        if(img.classList.contains("cs-orbit-core-gallery-photo"))
+          img.closest(".cs-orbit-core")?.classList.remove("has-gallery-image");
+      });
+    });
     // The floating layer sits above the current page and never changes grid rows.
     document.body.appendChild(layer);
     state.activeProject=index;
@@ -367,6 +404,9 @@
       const data = typeof window.loadData === "function" ? await window.loadData() : window.FALLBACK_DATA;
       state.projects = (Array.isArray(data?.portfolio) ? data.portfolio : window.FALLBACK_DATA?.portfolio || [])
         .filter(p => p && typeof p === "object");
+      state.gallery = Array.isArray(data?.projectGallery) && data.projectGallery.length
+        ? data.projectGallery
+        : (Array.isArray(window.PORTFOLIO_PROJECT_GALLERY) ? window.PORTFOLIO_PROJECT_GALLERY : []);
       // Optional future compatibility if the existing Google Sheets feed returns projectDetails.
       if(data?.projectDetails && !Array.isArray(data.projectDetails) && typeof data.projectDetails === "object"){
         state.caseStudies = data.projectDetails;
@@ -374,6 +414,7 @@
     }catch(err){
       console.warn("Could not load live projects; using local list.",err);
       state.projects = window.FALLBACK_DATA?.portfolio || [];
+      state.gallery = window.PORTFOLIO_PROJECT_GALLERY || [];
     }
     // Search and category filters become useful only when the gallery grows.
     el("showcase-toolbar").hidden = state.projects.length <= 9;
