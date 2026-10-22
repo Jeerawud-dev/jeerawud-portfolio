@@ -1,3 +1,8 @@
+> **Live auto-sync setup:** See [PROJECT_GALLERY_LIVE_SETUP.md](PROJECT_GALLERY_LIVE_SETUP.md).
+  When a read-only Apps Script `/exec` URL is configured, the circle reads
+  ProjectGallery on each page load, including deletion to 1 or 0 entries.
+  Until the endpoint is deployed, the project-gallery.js snapshot remains.
+
 # Project Gallery → Large Circular Visualization
 
 When someone clicks **View diagram** in **03 / PROJECTS**, a **larger,
