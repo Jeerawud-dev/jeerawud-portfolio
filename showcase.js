@@ -321,7 +321,7 @@
       <div class="project-float-frame">
         <header class="project-float-header">
           <div class="project-float-heading">
-            <span class="cs-eyebrow">SYSTEM DIAGRAM</span>
+            <span class="cs-eyebrow">PROJECT GALLERY · INTERACTIVE</span>
             <h4 id="project-floating-title">${escape(p.title || "Project")}</h4>
             ${brief ? `<p>${escape(brief)}</p>` : ""}
           </div>
