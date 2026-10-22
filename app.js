@@ -98,7 +98,15 @@ function renderSkillsCertificates(data){
   }).join("");
   // Images may be blank, invalid, removed or unreachable. Don't show broken icons.
   certGrid?.querySelectorAll(".cert-picture img").forEach(img=>{
-    img.addEventListener("error",()=>{const parent=img.closest(".cert-picture");if(parent){parent.replaceWith(document.createTextNode(""));}});
+    img.addEventListener("error",()=>{
+      const parent=img.closest(".cert-picture");
+      if(!parent)return;
+      const placeholder=document.createElement("span");
+      placeholder.className="cert-picture cert-picture-placeholder";
+      placeholder.setAttribute("aria-hidden","true");
+      placeholder.textContent="▧";
+      parent.replaceWith(placeholder);
+    });
   });
 }
 window.applyLivePortfolioExtras=function(payload){
