@@ -6,12 +6,13 @@ window.FALLBACK_DATA = {
     "fullName": "Jeerawud Jongjit",
     "headline": "Senior Software Engineer",
     "specialization": "Machine Control • C#/.NET • PLC • Smart Manufacturing",
-    "summary": "Senior Automation Software Engineer with 7+ years of experience delivering automation and semi-automation systems across Automotive, EV, Electronics, and Data Center manufacturing. Experienced in PLC- and PC-based machine control, C#/.NET industrial applications, production data systems, quality control, and manufacturing-system integration. Contributed to more than 100 machine projects, bridging machine control with MES, PQM, CFX+, IoT platforms, APIs, and factory databases.",
+    "summary": "I work on software for automation machines—from PLC and servo control to C#/.NET applications used on the production floor. I've worked on more than 100 machine projects across automotive, EV, electronics and data center manufacturing. I also connect equipment with systems such as MES, PQM and CFX+ for traceability and production data.",
     "location": "Samut Prakan, Thailand",
     "email": "jeerawud@gmail.com",
     "phone": "064-1273597",
     "linkedin": "",
-    "github": ""
+    "github": "",
+    "heroIntro": "I build control software for industrial machines using C#/.NET, WPF and PLCs. My work covers motion control, machine integration and production data."
   },
   "experience": [
     {
@@ -116,34 +117,34 @@ window.FALLBACK_DATA = {
   ],
   "portfolio": [
     {
-      "title": "PC- & PLC-Based Machine Control",
-      "category": "Machine Control",
-      "description": "Design and development of automation machines for advanced manufacturing, combining C#/.NET WPF applications, PLCs, servo motion, machine vision, and industrial communication.",
-      "technologies": "C#, .NET, WPF, PLC, Servo, Ethernet, Machine Vision",
-      "period": "2023–Present",
-      "context": "Delta Electronics (Thailand) PCL · Work area",
-      "imageUrl": "",
-      "projectLink": "",
-      "featured": "Yes"
-    },
-    {
-      "title": "Factory Traceability & Manufacturing Integration",
-      "category": "Factory IT",
-      "description": "Integration of production monitoring, traceability, quality control, and operator management with MES, CFX+, IoT, REST APIs, and manufacturing databases.",
-      "technologies": "MES, PQM, CFX+, IoT, REST API, SQL",
-      "period": "2023–Present",
-      "context": "Delta Electronics (Thailand) PCL · Work area",
-      "imageUrl": "",
-      "projectLink": "",
-      "featured": "Yes"
-    },
-    {
       "title": "Automation & Semi-Automation Equipment",
       "category": "Automation",
-      "description": "PLC/HMI and PC-based control for automotive automation equipment, including robot and servo integration, scanners, sensors, and production data applications.",
+      "description": "PLC, HMI and PC-based control systems for automotive production equipment, including robots, servos, sensors and scanners.",
       "technologies": "PLC, HMI, PC-Based Control, Robots, Servo, Sensors",
       "period": "2018–2023",
-      "context": "Ampas Industries Co., Ltd. · Work area",
+      "context": "AMPAS INDUSTRIES CO., LTD.",
+      "imageUrl": "",
+      "projectLink": "",
+      "featured": "Yes"
+    },
+    {
+      "title": "R&D Automation / Innovation Design",
+      "category": "R&D Automation",
+      "description": "PC- and PLC-based machine development using C#/.NET, WPF, servo motion, machine vision and factory-system integration.",
+      "technologies": "C#, .NET, WPF, PLC, Servo, Machine Vision, MES, PQM, CFX+",
+      "period": "2023–Present",
+      "context": "DELTA ELECTRONICS (THAILAND) PCL",
+      "imageUrl": "",
+      "projectLink": "",
+      "featured": "Yes"
+    },
+    {
+      "title": "PC-Based Machine Software",
+      "category": "Software",
+      "description": "Windows-based control applications for machine setup, motion sequences and production data, built with C#/.NET and WPF.",
+      "technologies": "C#, WPF, SQL, SQLite, CFX+, PQM, MES",
+      "period": "",
+      "context": "Machine control software",
       "imageUrl": "",
       "projectLink": "",
       "featured": "Yes"
@@ -152,7 +153,7 @@ window.FALLBACK_DATA = {
   "settings": {
     "SiteTitle": "Jeerawud Jongjit | Senior Software Engineer",
     "HeroTagline": "Machine Control • C#/.NET • PLC • Smart Manufacturing",
-    "PrimaryCTA": "View Portfolio",
+    "PrimaryCTA": "View projects",
     "ShowPhone": "Yes",
     "ShowFullAddress": "No",
     "Theme": "Dark Navy / Electric Blue"
