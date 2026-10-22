@@ -131,27 +131,99 @@
     return {...find(local), ...find(override)};
   };
 
+
+  // Radial Engineering System Overview: interactive, data-driven and keyboard accessible.
+  // Ring arrows are a visual presentation of the published conceptual workflow,
+  // not a machine's electrical wiring diagram.
   function diagramMarkup(p, detail) {
-    const nodes = (Array.isArray(detail.diagram) ? detail.diagram : []).slice(0, 6);
+    const nodes = (Array.isArray(detail.diagram) ? detail.diagram : []).filter(n => n && (n.title || n.detail)).slice(0,6);
     if (!nodes.length) {
-      const stack = tags(p.technologies).slice(0, 4);
+      const stack = tags(p.technologies).slice(0,4);
       if (!stack.length) return "";
-      nodes.push(...stack.map(tech => ({title:tech, detail:"Listed technology"})));
+      nodes.push(...stack.map(tech => ({title:tech,detail:"Listed technology"})));
     }
-    return `<section class="cs-section cs-diagram-section">
+    const count = nodes.length;
+    const colors = ["cyan","amber","blue","mint","violet","coral"];
+    const angleStep = 360/count;
+    const polar = (radius,deg) => {
+      const radians=deg*Math.PI/180;
+      return [320+Math.cos(radians)*radius,320+Math.sin(radians)*radius];
+    };
+    const coord = p => p.map(n=>n.toFixed(2)).join(" ");
+    const arrows = nodes.map((n,i) => {
+      const begin=-90 + angleStep*i + Math.min(17,angleStep*.24);
+      const finish=-90+angleStep*(i+1)-Math.min(17,angleStep*.24);
+      const headAt=finish-Math.min(13,(finish-begin)*.42);
+      const r1=203,r2=161;
+      const tip=polar(182,finish);
+      const path=`M ${coord(polar(r1,begin))} A ${r1} ${r1} 0 0 1 ${coord(polar(r1,headAt))}
+        L ${coord(tip)}
+        L ${coord(polar(r2,headAt))} A ${r2} ${r2} 0 0 0 ${coord(polar(r2,begin))} Z`;
+      return `<path class="cs-wheel-arrow cs-tone-${i%6} ${i===0?"is-active":""}" data-orbit-segment="${i}" d="${path.replace(/\s+/g," ")}"/>`;
+    }).join("");
+    const symbol = [
+      '<rect x="5" y="5" width="14" height="14" rx="3"/><path d="M9 9h6v6H9z"/><path d="M8 2v3m8-3v3M8 19v3m8-3v3M2 8h3m-3 8h3m14-8h3m-3 8h3"/>',
+      '<path d="M4 8h16v11H4zM9 8V5h6v3"/><path d="M7 13h10M7 16h6"/>',
+      '<rect x="3.5" y="4.5" width="17" height="13" rx="2"/><path d="M8 21h8M12 17.5V21M7 8l3 3 4-4 3 2"/>',
+      '<circle cx="5" cy="12" r="2"/><circle cx="19" cy="5" r="2"/><circle cx="19" cy="19" r="2"/><path d="M7 11l10-5M7 13l10 5"/>',
+      '<path d="M4 7h16M4 12h16M4 17h16M8 4v16M16 4v16"/>',
+      '<circle cx="12" cy="12" r="9"/><path d="M12 6v6l4 3"/>'
+    ];
+    const icon = i => `<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round">${symbol[i%symbol.length]}</svg>`;
+    const radialButtons = nodes.map((n,i) => {
+      const centre=polar(251,-90+angleStep*i);
+      const x=(centre[0]/640*100).toFixed(3);
+      const y=(centre[1]/640*100).toFixed(3);
+      const title=String(n.title||"Component");
+      const sub=String(n.detail||"");
+      return `<button class="cs-orbit-node cs-tone-${i%6} ${i===0?"is-active":""}" type="button"
+        data-orbit-step="${i}" aria-pressed="${i===0?"true":"false"}"
+        aria-label="Stage ${String(i+1).padStart(2,"0")}: ${escape(title)}. ${escape(sub)}"
+        style="left:${x}%;top:${y}%">
+        <span class="cs-orbit-node-number">${String(i+1).padStart(2,"0")}</span>
+        <span class="cs-orbit-node-icon">${icon(i)}</span>
+        <strong class="cs-orbit-node-label">${escape(title)}</strong>
+        <span class="cs-orbit-node-description" hidden>${escape(sub)}</span>
+      </button>`;
+    }).join("");
+    const active=nodes[0];
+    return `<section class="cs-section cs-diagram-section cs-radial-section">
       <div class="cs-section-top"><div><span class="cs-eyebrow">SYSTEM OVERVIEW</span>
-        <h4>How the pieces connect</h4></div><span class="cs-context-note">Simplified technology map</span></div>
-      <div class="cs-diagram" role="list" aria-label="Conceptual system component map">
-        ${nodes.map((n,i) => `<div class="cs-diagram-node" role="listitem">
-          <span class="cs-step">${String(i+1).padStart(2,"0")}</span>
-          <span class="cs-node-icon" aria-hidden="true">${["◇","▤","⌘","⇆","⟲","◈"][i] || "◈"}</span>
-          <strong>${escape(n.title || "Component")}</strong>
-          <small>${escape(n.detail || "")}</small>
-        </div>`).join("")}
+        <h4>System workflow</h4></div><span class="cs-context-note">Select a stage to view its details</span></div>
+      <div class="cs-orbit-layout">
+        <div class="cs-orbit-stage" role="group" aria-label="Interactive circular system component map">
+          <svg class="cs-orbit-graphic" viewBox="0 0 640 640" focusable="false" aria-hidden="true">
+            <circle class="cs-orbit-background-ring" cx="320" cy="320" r="218"/>
+            <circle class="cs-orbit-guide-ring" cx="320" cy="320" r="148"/>
+            <circle class="cs-orbit-dashed-ring" cx="320" cy="320" r="225"/>
+            ${arrows}
+            <circle class="cs-orbit-inner-detail" cx="320" cy="320" r="140"/>
+          </svg>
+          <div class="cs-orbit-core" aria-hidden="true">
+            <span class="cs-orbit-core-glyph">⌘</span>
+            <span class="cs-orbit-core-kicker">SYSTEM MAP</span>
+            <strong class="cs-orbit-core-title">${escape(active.title || "Component")}</strong>
+            <span class="cs-orbit-core-detail">${escape(active.detail || "")}</span>
+          </div>
+          ${radialButtons}
+        </div>
+        <aside class="cs-orbit-info">
+          <div class="cs-orbit-info-top"><span class="cs-orbit-info-kicker">SYSTEM / ${String(count).padStart(2,"0")} STAGES</span>
+          <span class="cs-orbit-info-mark" aria-hidden="true">↻</span></div>
+          <span class="cs-orbit-selected-index">01 <span>/ ${String(count).padStart(2,"0")}</span></span>
+          <span class="cs-orbit-info-label">SELECTED STAGE</span>
+          <h5 class="cs-orbit-selected-title" aria-live="polite">${escape(active.title || "Component")}</h5>
+          <p class="cs-orbit-selected-detail" aria-live="polite">${escape(active.detail || "Select any stage in the circle to see its role.")}</p>
+          <div class="cs-orbit-info-divider"></div>
+          <span class="cs-orbit-info-label">SEQUENCE</span>
+          <div class="cs-orbit-mini-steps" aria-hidden="true">${nodes.map((n,i)=>`<span class="cs-orbit-mini-step cs-tone-${i%6} ${i===0?"is-active":""}" data-orbit-mini="${i}">${String(i+1).padStart(2,"0")}</span>`).join("")}</div>
+          <p class="cs-orbit-instruction">The arrows show a simplified system flow. Select any component for details.</p>
+        </aside>
       </div>
-      <p class="cs-diagram-footnote">Overview based on the published project description and technology stack. It is not an electrical schematic.</p>
+      <p class="cs-diagram-footnote">Conceptual overview based on the published project description and technologies; not an electrical schematic.</p>
     </section>`;
   }
+
   function caseHighlights(detail) {
     const highlights = Array.isArray(detail.highlights) ? detail.highlights.map(clean).filter(Boolean).slice(0,8) : [];
     if (!highlights.length) return "";
@@ -241,6 +313,38 @@
     if(button) openProject(Number(button.dataset.project));
   });
   el("project-dialog-content").addEventListener("click", e => {
+    const node=e.target.closest("[data-orbit-step]");
+    if(node) {
+      const panel=node.closest(".cs-orbit-layout");
+      if(!panel) return;
+      const index=Number(node.dataset.orbitStep);
+      if(!Number.isInteger(index)) return;
+      for(const item of panel.querySelectorAll(".cs-orbit-node")) {
+        const active=item===node;
+        item.classList.toggle("is-active",active);
+        item.setAttribute("aria-pressed", String(active));
+      }
+      for(const arc of panel.querySelectorAll("[data-orbit-segment]")) {
+        arc.classList.toggle("is-active",Number(arc.dataset.orbitSegment)===index);
+      }
+      for(const chip of panel.querySelectorAll("[data-orbit-mini]")) {
+        chip.classList.toggle("is-active",Number(chip.dataset.orbitMini)===index);
+      }
+      const title=node.querySelector(".cs-orbit-node-label")?.textContent || "Component";
+      const detail=node.querySelector(".cs-orbit-node-description")?.textContent || "";
+      const total=panel.querySelectorAll(".cs-orbit-node").length;
+      const selected=panel.querySelector(".cs-orbit-selected-index");
+      const h=panel.querySelector(".cs-orbit-selected-title");
+      const p=panel.querySelector(".cs-orbit-selected-detail");
+      const coreTitle=panel.querySelector(".cs-orbit-core-title");
+      const coreDetail=panel.querySelector(".cs-orbit-core-detail");
+      if(selected) selected.textContent=String(index+1).padStart(2,"0") + " / " + String(total).padStart(2,"0");
+      if(h) h.textContent=title;
+      if(p) p.textContent=detail || "Component in this project's system flow.";
+      if(coreTitle) coreTitle.textContent=title;
+      if(coreDetail) coreDetail.textContent=detail;
+      return;
+    }
     if(e.target.closest("[data-close-project]") && modal.open) modal.close();
   });
   el("showcase-filters").addEventListener("click", e => {

@@ -6,7 +6,7 @@ a full-width case-study panel that supports both Light/Dark themes.
 The panel includes:
 - Title, category, short project summary, period and company (the existing Google Sheets feed).
 - Scope and role fields (editable in `project-cases.js`).
-- Four-stage simplified system/technology diagram.
+- Interactive circular infographic with flowing arrows, icons, selectable components, and a details panel (system/technology concept; not actual wiring).
 - Technology tags from the main Portfolio sheet.
 - Work areas and project highlights.
 - **Machine / process photos** and **software UI screenshots** (image galleries).
@@ -87,7 +87,7 @@ not a control wiring diagram.
 - Clicking either the project image or **View details** opens the panel.
 - **Close (X)**, **Escape**, outside dialog click and **Back to projects** close it.
 - The panel is scrollable on desktop and mobile.
-- The system map shows 4–6 responsive blocks with directional arrows.
+- The system map shows up to 6 components around a circular arrow flow. Click or keyboard-activate each component to highlight its flow segment and read details. Nodes automatically resize for mobile viewing; the information panel appears below the circle on smaller screens.
 - No invented performance figures, throughput, costs or ROI are displayed.
 - PCB light-theme cursor opacity is intentionally **0.20** (reading: **0.012**)
   in the final-loaded `project-case.css`, overriding older more intense rules.
@@ -95,3 +95,19 @@ not a control wiring diagram.
 If you later change the existing Google Apps Script to provide
 `data.projectDetails` as a title-keyed object, the frontend can merge it over
 local `project-cases.js` data without changing the detail panel.
+
+## Radial infographic interaction (reference-inspired)
+
+The System Overview panel now follows a circular infographic layout:
+- Color-coded directional flow arrows form a ring.
+- Engineering icons label each connected stage.
+- A central status disc shows the selected system component.
+- A neighboring details card reveals the stage's description and sequence.
+- Clicking/tapping or using keyboard Tab/Enter/Space on a stage updates both displays.
+- On mobile the circle remains visible and the details panel moves below it.
+
+The visualization is generated from each project entry's `diagram` list
+in `project-cases.js`. Add or reorder up to **6** entries to change the circular
+sequence. The diagram is conceptual and should only include components used
+in the actual project. No performance values or unverified control architecture
+are inferred.
