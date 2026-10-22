@@ -56,7 +56,7 @@ function render(data){
   document.title = settings.SiteTitle || `${p.fullName || "Portfolio"} | Software Engineer`;
   $("#hero-name").textContent = p.fullName || "";
   $("#hero-headline").textContent = settings.HeroTagline || p.specialization || p.headline || "";
-  $("#hero-summary").textContent = p.summary || "";
+  $("#hero-summary").textContent = p.heroIntro || p.summary || "";
   $("#about-summary").textContent = p.summary || "";
   $("#about-location").textContent = p.location || "";
   $("#about-email").textContent = p.email || "";
