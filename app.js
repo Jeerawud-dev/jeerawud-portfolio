@@ -2,21 +2,48 @@
 const $ = (s) => document.querySelector(s);
 const esc = (v = "") => String(v ?? "").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 
-async function loadData(){
+// Treat the attached resume as the source of truth for professional facts.
+// Google Sheets still controls project showcase entries and non-resume display preferences.
+let dataLoadPromise;
+function loadData(){
+  if(!dataLoadPromise) dataLoadPromise = loadPortfolioData();
+  return dataLoadPromise;
+}
+
+async function loadPortfolioData(){
+  const resume = window.FALLBACK_DATA || {};
   const url = window.PORTFOLIO_CONFIG?.GOOGLE_APPS_SCRIPT_URL?.trim();
+  const status = $("#data-status");
   if(url){
     try{
       const r = await fetch(url, {cache:"no-store"});
       if(!r.ok) throw new Error(`HTTP ${r.status}`);
-      const data = await r.json();
-      $("#data-status").textContent = "Live data from Google Sheets";
-      return data;
+      const live = await r.json();
+      if(!live || typeof live !== "object" || Array.isArray(live))
+        throw new Error("Google Sheets response is not a data object");
+      if(status) status.textContent = "Resume-based profile · Live Google Sheets projects";
+      return {
+        ...live,
+        profile: resume.profile,
+        experience: resume.experience,
+        education: resume.education,
+        skills: resume.skills,
+        certificates: resume.certificates,
+        // Keep project rows maintained through Google Sheets; use local examples if empty.
+        portfolio: Array.isArray(live.portfolio) && live.portfolio.length
+          ? live.portfolio : (resume.portfolio || []),
+        settings: {
+          ...(live.settings || {}),
+          SiteTitle: resume.settings?.SiteTitle,
+          HeroTagline: resume.settings?.HeroTagline
+        }
+      };
     }catch(err){
-      console.warn("Google Sheets data unavailable; using local fallback.", err);
-      $("#data-status").textContent = "Local resume data (Google Sheet unavailable)";
+      console.warn("Google Sheets projects unavailable; using resume-based local portfolio.", err);
     }
   }
-  return window.FALLBACK_DATA;
+  if(status) status.textContent = "Resume-based profile · Local portfolio";
+  return resume;
 }
 
 function splitTech(s){
@@ -42,7 +69,10 @@ function render(data){
       <div>
         <h4>${esc(x.company)}</h4>
         <div class="role">${esc(x.role)} · ${esc(x.area)}</div>
-        <p>${esc(x.description)}</p>
+        ${x.description ? `<p>${esc(x.description)}</p>` : ""}
+        ${Array.isArray(x.highlights) && x.highlights.length
+          ? `<ul class="experience-highlights">${x.highlights.map(item => `<li>${esc(item)}</li>`).join("")}</ul>`
+          : ""}
       </div>
     </article>`).join("");
 

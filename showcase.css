@@ -211,3 +211,38 @@ button{font:inherit}
   .nav-mobile-resume{display:block!important;color:#a9f5df!important;border-top:1px solid var(--hairline);margin-top:5px}
   .nav .btn-small{margin-left:0}
 }
+
+/* Resume-backed experience details and six-layer engineering skills. */
+#experience .timeline-item { align-items: start; }
+#experience .timeline-item .role { color: #c9e8ed; }
+.experience-highlights {
+  list-style: none;
+  display: grid;
+  gap: 10px;
+  margin: 20px 0 0;
+  padding: 0;
+}
+.experience-highlights li {
+  position: relative;
+  padding-left: 21px;
+  color: #a9c0d3;
+  font-size: 14px;
+  line-height: 1.7;
+}
+.experience-highlights li::before {
+  content: "";
+  position: absolute;
+  top: .75em;
+  left: 2px;
+  width: 6px;
+  height: 6px;
+  background: var(--accent, #8cf5cd);
+  border-radius: 50%;
+  box-shadow: 0 0 0 3px rgba(140,245,205,.09);
+}
+@media (min-width: 901px) {
+  #skills-grid.skills-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 620px) {
+  .experience-highlights li { font-size: 13px; }
+}
