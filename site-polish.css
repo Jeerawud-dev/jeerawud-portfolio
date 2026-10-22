@@ -252,3 +252,21 @@ html[data-theme="light"] .smart-scroll-nav .scroll-section-name {
   .hero-education .education h4 {font-size:13px}
   .hero-education .education .gpa {align-self:flex-start}
 }
+
+
+/* PCB etching V3: visible, well-defined copper traces on the pale canvas.
+   Keep the spotlight local and automatically reduce it near reading surfaces. */
+html[data-theme="light"] #pcb-cursor-reveal.is-visible { opacity:.94; }
+html[data-theme="light"] #pcb-cursor-reveal.is-reading { opacity:.075; }
+html[data-theme="light"] #pcb-cursor-reveal::before {
+  opacity:1;
+  filter:contrast(1.20) saturate(1.25) brightness(.82);
+}
+html[data-theme="light"] #pcb-cursor-reveal::after { opacity:.16; }
+html[data-theme="dark"] #pcb-cursor-reveal::before {
+  opacity:.83;
+  filter:brightness(1.4) saturate(1.15);
+}
+@media (prefers-reduced-motion:reduce) {
+  .hero-education .education.smart-reveal { transition:none; }
+}
