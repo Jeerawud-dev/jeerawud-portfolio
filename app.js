@@ -10,8 +10,24 @@ function loadData(){
   return dataLoadPromise;
 }
 
+// Current public Google Sheets content is cached locally for resiliency.
+// The Apps Script feed remains authoritative whenever it is available.
+function withProjectImages(rows){
+  const saved = Array.isArray(window.PORTFOLIO_SHEET_CONTENT?.portfolio)
+    ? window.PORTFOLIO_SHEET_CONTENT.portfolio : [];
+  const byTitle = new Map(saved.map(x => [String(x.title||"").trim().toLowerCase(), x]));
+  return (Array.isArray(rows) ? rows : []).map(row => {
+    const s=byTitle.get(String(row.title||"").trim().toLowerCase());
+    return {...row, imageUrl:row.imageUrl || row.image || row.imageURL ||
+      row.projectImageUrl || s?.imageUrl || ""};
+  });
+}
+
 async function loadPortfolioData(){
   const resume = window.FALLBACK_DATA || {};
+  const sheetPortfolio=window.PORTFOLIO_SHEET_CONTENT?.portfolio;
+  const portfolioBackup=Array.isArray(sheetPortfolio)&&sheetPortfolio.length
+    ? sheetPortfolio : (resume.portfolio || []);
   const url = window.PORTFOLIO_CONFIG?.GOOGLE_APPS_SCRIPT_URL?.trim();
   const status = $("#data-status");
   if(url){
@@ -42,8 +58,8 @@ async function loadPortfolioData(){
         certificates: Array.isArray(live.certificates) ? live.certificates :
           (Array.isArray(window.PORTFOLIO_SHEET_CONTENT?.certificates) ? window.PORTFOLIO_SHEET_CONTENT.certificates : resume.certificates),
         // Keep project rows maintained through Google Sheets; use local examples if empty.
-        portfolio: Array.isArray(live.portfolio) && live.portfolio.length
-          ? live.portfolio : (resume.portfolio || []),
+        portfolio: withProjectImages(Array.isArray(live.portfolio) && live.portfolio.length
+          ? live.portfolio : portfolioBackup),
         settings: {
           ...(live.settings || {}),
           SiteTitle: resume.settings?.SiteTitle,
@@ -57,6 +73,7 @@ async function loadPortfolioData(){
   if(status) status.textContent = "Resume-based profile · Local portfolio";
   return {
     ...resume,
+    portfolio:withProjectImages(portfolioBackup),
     skills: Array.isArray(window.PORTFOLIO_SHEET_CONTENT?.skills) ? window.PORTFOLIO_SHEET_CONTENT.skills : resume.skills,
     certificates: Array.isArray(window.PORTFOLIO_SHEET_CONTENT?.certificates) ? window.PORTFOLIO_SHEET_CONTENT.certificates : resume.certificates
   };
@@ -409,6 +426,7 @@ loadData().then(data => {
   console.error("Portfolio render failed; restoring bundled content.", err);
   render({
     ...window.FALLBACK_DATA,
+    portfolio: withProjectImages(window.PORTFOLIO_SHEET_CONTENT?.portfolio || window.FALLBACK_DATA?.portfolio || []),
     skills: window.PORTFOLIO_SHEET_CONTENT?.skills || window.FALLBACK_DATA?.skills || [],
     certificates: window.PORTFOLIO_SHEET_CONTENT?.certificates || window.FALLBACK_DATA?.certificates || []
   });
