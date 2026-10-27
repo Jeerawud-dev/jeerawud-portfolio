@@ -1,75 +1,8 @@
-/* Synchronized snapshot: Google Sheets ProjectGallery (2026-10-22).
- * Array contains exactly the current ProjectGallery records.
- * The deployed Apps Script does not yet expose ProjectGallery, so the site
- * reads this snapshot until that endpoint is updated.
- * Gallery item deletion is reflected here; never reinstate removed items.
- * Source Sheet ID: 1wM6Im1jnWEq8fujHW48mb-kTH_tvv5cQXkiNBGRSjKM
+/* Verified fallback snapshot of Google Sheets ProjectGallery, 2026-10-27.
+ * Current rows only: no deleted/hidden gallery items.
+ * Replaced only when live Google Apps Script responds successfully.
  */
 window.PORTFOLIO_PROJECT_GALLERY = [
-  {
-    "project": "Automation & Semi-Automation Equipment",
-    "title": "Field devices",
-    "imageUrl": "",
-    "detail": "Sensors · Scanners",
-    "order": 1,
-    "visible": true
-  },
-  {
-    "project": "Automation & Semi-Automation Equipment",
-    "title": "Machine control",
-    "imageUrl": "",
-    "detail": "PLC · HMI · PC",
-    "order": 2,
-    "visible": true
-  },
-  {
-    "project": "Automation & Semi-Automation Equipment",
-    "title": "Motion & automation",
-    "imageUrl": "",
-    "detail": "Servo · Robots",
-    "order": 3,
-    "visible": true
-  },
-  {
-    "project": "Automation & Semi-Automation Equipment",
-    "title": "Production",
-    "imageUrl": "",
-    "detail": "Manufacturing equipment",
-    "order": 4,
-    "visible": true
-  },
-  {
-    "project": "R&D Automation / Innovation Design",
-    "title": "Machine devices",
-    "imageUrl": "",
-    "detail": "Vision · Servo motion",
-    "order": 1,
-    "visible": true
-  },
-  {
-    "project": "R&D Automation / Innovation Design",
-    "title": "Control layer",
-    "imageUrl": "",
-    "detail": "PC · PLC",
-    "order": 2,
-    "visible": true
-  },
-  {
-    "project": "R&D Automation / Innovation Design",
-    "title": "Application",
-    "imageUrl": "",
-    "detail": "C# · WPF",
-    "order": 3,
-    "visible": true
-  },
-  {
-    "project": "R&D Automation / Innovation Design",
-    "title": "Factory systems",
-    "imageUrl": "",
-    "detail": "MES · PQM · CFX+",
-    "order": 4,
-    "visible": true
-  },
   {
     "project": "Smart Screw System",
     "title": "Station tools",
