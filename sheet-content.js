@@ -61,7 +61,7 @@ window.PORTFOLIO_SHEET_CONTENT = {
       "year": "2019",
       "credentialUrl": "",
       "notes": "",
-      "imageUrl": ""
+      "imageUrl": "image/ABB Robot Studio training course.jpg"
     },
     {
       "name": "Advanced PLC Automation",

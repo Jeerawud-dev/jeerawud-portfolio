@@ -158,12 +158,6 @@
   // Ring arrows are a visual presentation of the published conceptual workflow,
   // not a machine's electrical wiring diagram.
   function diagramMarkup(p, detail) {
-    if(state.galleryError) {
-      return `<div class="cs-gallery-empty" role="status">
-        <strong>Gallery temporarily unavailable</strong>
-        <p>Unable to refresh project photos and headings. Try reloading the page.</p>
-      </div>`;
-    }
     const galleryNodes=galleryForProject(p.title);
     // Once ProjectGallery is configured, its row count is authoritative.
     // Never replace deleted gallery rows with the four old system-diagram nodes.
@@ -365,6 +359,7 @@
           </button>
         </header>
         <div class="project-float-visual">${diagramMarkup(p,detail)}</div>
+        ${state.galleryOffline ? '<p class="cs-gallery-cached-note">Showing last synced Google Sheets gallery · Live sync unavailable</p>' : ''}
       </div>`;
 
     layer.addEventListener("click", event => {
@@ -493,6 +488,11 @@
   }
 
   async function start(){
+    // Request both Google Sheets feeds in parallel to minimize initial loading.
+    const galleryUrl=String(window.PORTFOLIO_CONFIG?.PROJECT_GALLERY_API_URL || "").trim();
+    const liveGalleryResultPromise=galleryUrl
+      ? fetchLiveGallery(galleryUrl).then(data=>({data}),error=>({error}))
+      : null;
     let mainFeedHasGallery=false;
     try{
       const data = typeof window.loadData === "function" ? await window.loadData() : window.FALLBACK_DATA;
@@ -510,26 +510,34 @@
       state.projects = window.FALLBACK_DATA?.portfolio || [];
       state.gallery = Array.isArray(window.PORTFOLIO_PROJECT_GALLERY) ? window.PORTFOLIO_PROJECT_GALLERY : null;
     }
-    const galleryUrl=String(window.PORTFOLIO_CONFIG?.PROJECT_GALLERY_API_URL || "").trim();
-    if(galleryUrl){
-      try{
-        const liveGallery=await fetchLiveGallery(galleryUrl);
-        state.gallery=liveGallery.projectGallery;
+    if(liveGalleryResultPromise){
+      const result=await liveGalleryResultPromise;
+      if(result.data){
+        state.gallery=result.data.projectGallery;
         if(typeof window.applyLivePortfolioExtras==="function")
-          window.applyLivePortfolioExtras(liveGallery);
-        state.galleryError=false;
+          window.applyLivePortfolioExtras(result.data);
+        state.galleryOffline=false;
         console.info("ProjectGallery: live rows",state.gallery.length);
-      }catch(err){
-        console.warn("Live ProjectGallery could not be read.",err);
-        // Never resurrect removed items from an old snapshot after live
-        // service failure. The main feed is usable only if it has live rows.
-        state.gallery=mainFeedHasGallery ? state.gallery : [];
-        state.galleryError=!mainFeedHasGallery;
+      }else{
+        console.warn("Live ProjectGallery could not be read; using synchronized Google Sheets rows.",result.error);
+        // A successful live [] means intentional deletion. Only use the
+        // last *verified* Sheets snapshot when the live request itself fails.
+        state.galleryOffline=true;
+        if(!mainFeedHasGallery)
+          state.gallery=Array.isArray(window.PORTFOLIO_PROJECT_GALLERY)
+            ? window.PORTFOLIO_PROJECT_GALLERY : [];
       }
     }
     el("showcase-toolbar").hidden = state.projects.length <= 9;
     renderFilters();
     render();
   }
-  start();
+  start().catch(err => {
+    console.error("Project Gallery initialization failed.", err);
+    state.projects = Array.isArray(window.FALLBACK_DATA?.portfolio) ? window.FALLBACK_DATA.portfolio : [];
+    state.gallery = Array.isArray(window.PORTFOLIO_PROJECT_GALLERY) ? window.PORTFOLIO_PROJECT_GALLERY : [];
+    try { renderFilters(); render(); } catch (renderError) { console.error(renderError); }
+  }).finally(() => {
+    window.PORTFOLIO_BOOT?.ready("gallery");
+  });
 })();
