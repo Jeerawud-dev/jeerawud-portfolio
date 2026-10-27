@@ -16,9 +16,17 @@ async function loadPortfolioData(){
   const status = $("#data-status");
   if(url){
     try{
-      const r = await fetch(url, {cache:"no-store"});
-      if(!r.ok) throw new Error(`HTTP ${r.status}`);
-      const live = await r.json();
+      // Never keep the initial page behind an unresponsive Apps Script endpoint.
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 6500);
+      let live;
+      try {
+        const r = await fetch(url, {cache:"no-store", signal: controller.signal});
+        if(!r.ok) throw new Error(`HTTP ${r.status}`);
+        live = await r.json();
+      } finally {
+        clearTimeout(timeout);
+      }
       if(!live || typeof live !== "object" || Array.isArray(live))
         throw new Error("Google Sheets response is not a data object");
       if(status) status.textContent = "Resume-based profile · Live Google Sheets projects";
@@ -68,11 +76,23 @@ function safePortfolioAssetUrl(value){
   }catch{return ""}
 }
 
+// Keep existing Google Sheets certificate records while restoring image paths
+// from the synchronized Sheet when the older main API omits column F.
+function withCertificateImages(records) {
+  const saved = Array.isArray(window.PORTFOLIO_SHEET_CONTENT?.certificates)
+    ? window.PORTFOLIO_SHEET_CONTENT.certificates : [];
+  const photoByName = new Map(saved.map(x => [String(x.name || "").trim().toLowerCase(), x.imageUrl || ""]));
+  return records.map(x => ({
+    ...x,
+    imageUrl: x.imageUrl || x.image || photoByName.get(String(x.name || "").trim().toLowerCase()) || ""
+  }));
+}
+
 // Skills and certificates can update independently after the live Gallery API
 // returns data, without replacing project cards or restarting scroll navigation.
 function renderSkillsCertificates(data){
   const skills=Array.isArray(data.skills) ? data.skills : [];
-  const certificates=Array.isArray(data.certificates) ? data.certificates : [];
+  const certificates=withCertificateImages(Array.isArray(data.certificates) ? data.certificates : []);
   const grid=$("#skills-grid"),certGrid=$("#cert-grid");
   if(grid) grid.innerHTML=skills.map(x=>`
     <article class="skill-card">
@@ -385,6 +405,16 @@ function initSmartScroll(){
 loadData().then(data => {
   render(data);
   initSmartScroll();
+}).catch(err => {
+  console.error("Portfolio render failed; restoring bundled content.", err);
+  render({
+    ...window.FALLBACK_DATA,
+    skills: window.PORTFOLIO_SHEET_CONTENT?.skills || window.FALLBACK_DATA?.skills || [],
+    certificates: window.PORTFOLIO_SHEET_CONTENT?.certificates || window.FALLBACK_DATA?.certificates || []
+  });
+  initSmartScroll();
+}).finally(() => {
+  window.PORTFOLIO_BOOT?.ready("profile");
 });
 
 // The original loadData().then(render) call is intentionally bypassed below by this guard.
