@@ -10,6 +10,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <script>
+    // Show a full-screen loading state before any page content becomes visible.
+    document.documentElement.classList.add("site-loading");
     // Apply theme before styles render; default Light, saved Dark is opt-in.
     (() => {
       let theme = "light";
@@ -28,9 +30,23 @@
   <link rel="stylesheet" href="project-case.css">
   <link rel="stylesheet" href="project-float.css?v=20261022-single">
   <link rel="stylesheet" href="media-gallery-polish.css?v=20261022">
+  <link rel="stylesheet" href="loading-screen.css?v=20261027">
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to content</a>
+  <div id="site-loader" class="site-loader" role="status" aria-live="polite" aria-busy="true">
+    <div class="site-loader-panel">
+      <div class="site-loader-mark" aria-hidden="true"><span class="site-loader-logo">JJ<span>.</span></span></div>
+      <span class="site-loader-kicker">Engineering Portfolio / Initializing</span>
+      <h2 class="site-loader-heading">Building your experience.</h2>
+      <p class="site-loader-description" id="site-loading-description">Connecting to portfolio data…</p>
+      <div class="site-loader-progress" aria-hidden="true"><span id="site-loading-progress"></span></div>
+      <div class="site-loader-steps" aria-label="Loading progress">
+        <span id="site-loading-profile">Profile &amp; certificates</span>
+        <span id="site-loading-gallery">Project gallery</span>
+      </div>
+    </div>
+  </div>
   <div class="grid-glow" aria-hidden="true"></div>
   <header class="nav-shell">
     <nav class="nav container" aria-label="Primary navigation">
@@ -152,13 +168,14 @@
 
   <footer class="footer container"><span>© <span id="year"></span> Jeerawud Jongjit</span><span id="data-status">Resume data</span></footer>
 
+  <script src="loading-screen.js?v=20261027"></script>
   <script src="config.js?v=20261022-gallery-active"></script>
   <script src="data.js"></script>
-  <script src="sheet-content.js?v=20261022"></script>
-  <script src="app.js?v=20261022-skills-cert"></script>
+  <script src="sheet-content.js?v=20261027"></script>
+  <script src="app.js?v=20261027-loading"></script>
   <script src="project-cases.js"></script>
-  <script src="project-gallery.js?v=20261022-single"></script>
-  <script src="showcase.js?v=20261022-gallery-media"></script>
+  <script src="project-gallery.js?v=20261027-sync"></script>
+  <script src="showcase.js?v=20261027-fallback"></script>
   <script src="circuit-hover.js"></script>
   <script src="theme.js"></script>
 </body>
