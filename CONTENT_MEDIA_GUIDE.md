@@ -113,3 +113,44 @@ of this snapshot, only the Automated Coating Machine's `Machine overview`
 row had a nonempty photo URL. A filename must match the case, spaces and
 extension of a real public image file. In the browser, use Ctrl + Shift + R
 after deployment to refresh the new versioned scripts.
+
+## Latest image update (2026-10-27)
+
+The live Google Sheets database remains in place. The current verified data is
+synchronized to GitHub as **recovery-only snapshots** to handle old, unavailable,
+or CORS-blocked Apps Script deployments:
+
+- **Portfolio**: 10 Google Sheets project rows, all 10 with existing
+  `image/...` file paths in this GitHub repository.
+- **ProjectGallery**: 14 visible Google Sheets rows, 5 with currently populated
+  image URLs. The 4 Smart Screw photos and the Coating Machine photo exist.
+- **Certificates**: 5 records; all 5 have nonempty image URLs matching existing
+  GitHub media files.
+
+The website now supplements missing project-card and certificate photo fields
+from the verified sheet snapshot. For older gallery deployments missing image
+fields, it supplements only **matching live gallery rows**, not rows deleted
+from Google Sheets. Updated JS script URLs use new version queries to bypass
+browser-cached copies.
+
+### To get future Google Sheets changes live automatically
+
+You need to deploy the latest `google_apps_script/ProjectGalleryLive.gs` source
+in the **same Apps Script project** serving `PROJECT_GALLERY_API_URL`:
+
+1. Open the linked Apps Script project in the Google Apps Script editor.
+2. Replace its source with the current `ProjectGalleryLive.gs`, save it.
+3. Click **Deploy → Manage deployments → Edit → New version → Deploy**.
+4. Open your existing `/exec?action=gallery` endpoint in a browser.
+   A healthy response contains `ok:true`, `schemaVersion:2`,
+   `projectGallery`, `skills`, and `certificates`. It should include
+   `projectGallery` rows with nonempty `imageUrl`, as well as
+   `certificates` rows with nonempty `imageUrl`.
+5. Reload the Portfolio. Subsequent Sheet changes should now be reflected
+   without new GitHub snapshot updates.
+
+**Note:** GitHub file edits do **not** deploy Google Apps Script. We cannot
+confirm the actual currently deployed Apps Script response from the GitHub
+source alone. If `/exec` still emits the previous schema, perform the steps
+above. Keep the original Apps Script deployment URL to avoid changing the
+frontend configuration.
