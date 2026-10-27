@@ -1,9 +1,9 @@
 /**
  * Jeerawud Portfolio — READ-ONLY ProjectGallery feed.
  *
- * Standalone Apps Script Web App. Does not modify the existing portfolio
- * Google Apps Script or expose other spreadsheet tabs. Only columns A:F of
- * ProjectGallery are returned.
+ * Standalone READ-ONLY Apps Script Web App for the existing Sheets data.
+ * Returns ProjectGallery (A:F), Skills (A:D) and Certificates (A:F), including
+ * media URL fields. Does not modify spreadsheet cells.
  *
  * Deploy as: Execute as Me / Who has access Anyone.
  * Test /exec?action=gallery in a browser first.
@@ -23,6 +23,7 @@ function doGet(e) {
     } else {
       response = {
         ok:true,
+        schemaVersion:2,
         projectGallery:readProjectGallery_(),
         skills:readPortfolioSkills_(),
         certificates:readPortfolioCertificates_()

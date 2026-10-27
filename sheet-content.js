@@ -1,6 +1,7 @@
-// Snapshot taken from the existing Google Sheet (2026-10-22).
-// Live content from ProjectGalleryLive.gs (after redeploy) takes priority.
-// Until then, Skills and Certificates display these exact sheet values.
+/* Verified Google Sheets content snapshot, 2026-10-27. Live APIs take priority.
+ * Used only when Apps Script is unavailable or has not exposed image fields yet.
+ * Source: Skills, Certificates and Portfolio tabs. Do not edit independently.
+ */
 window.PORTFOLIO_SHEET_CONTENT = {
   "skills": [
     {
@@ -53,7 +54,7 @@ window.PORTFOLIO_SHEET_CONTENT = {
       "year": "2018",
       "credentialUrl": "",
       "notes": "",
-      "imageUrl": ""
+      "imageUrl": "image/SolidWorks Fundamental.jpg"
     },
     {
       "name": "Industrial Robot Training",
@@ -69,7 +70,7 @@ window.PORTFOLIO_SHEET_CONTENT = {
       "year": "2020",
       "credentialUrl": "",
       "notes": "",
-      "imageUrl": ""
+      "imageUrl": "image/Advance PLC.png"
     },
     {
       "name": "Automation / Machine Training",
@@ -77,7 +78,7 @@ window.PORTFOLIO_SHEET_CONTENT = {
       "year": "2022",
       "credentialUrl": "",
       "notes": "",
-      "imageUrl": ""
+      "imageUrl": "image/KOH YOUNG SPI TRAINING COURSE.jpg"
     },
     {
       "name": "DGS Programming Training",
@@ -85,7 +86,119 @@ window.PORTFOLIO_SHEET_CONTENT = {
       "year": "2022",
       "credentialUrl": "",
       "notes": "",
-      "imageUrl": ""
+      "imageUrl": "image/KOH YOUNG AOI TRAINING COURSE.jpg"
+    }
+  ],
+  "portfolio": [
+    {
+      "title": "Smart Screw System",
+      "category": "Software",
+      "description": "PC-based control software for a screw fastening station, including tool integration and production records.",
+      "technologies": "C#, WPF, SQLite, CFX+, PQM, MES",
+      "period": "2024-2025",
+      "context": "Delta Electronics (Thailand)",
+      "imageUrl": "image/screw software.png",
+      "projectLink": "",
+      "featured": "Yes"
+    },
+    {
+      "title": "Automated Coating Machine",
+      "category": "Software",
+      "description": "Machine-control software for automated coating, including taught motion paths, machine I/O and production-system connections.",
+      "technologies": "C#, WPF, SQL Express, SQLite, CFX+, PQM, MES",
+      "period": "2025-2026",
+      "context": "Delta Electronics (Thailand)",
+      "imageUrl": "image/Coatingmachine.jpg",
+      "projectLink": "",
+      "featured": "Yes"
+    },
+    {
+      "title": "High-Speed Glue Dispensing Machine",
+      "category": "Software",
+      "description": "C#/.NET control software for high-speed glue dispensing, including motion paths, equipment I/O and process settings.",
+      "technologies": "C#, WPF, SQL Express, SQLite, CFX+, PQM, MES",
+      "period": "2025-2026",
+      "context": "Delta Electronics (Thailand)",
+      "imageUrl": "image/1.png",
+      "projectLink": "",
+      "featured": "Yes"
+    },
+    {
+      "title": "Thermal Paste Dispensing Machine",
+      "category": "Software",
+      "description": "WPF control software for automated thermal paste dispensing, including machine motion, setup and run monitoring.",
+      "technologies": "C#, WPF, SQL Express, SQLite, CFX+, PQM, MES",
+      "period": "2025-2026",
+      "context": "Delta Electronics (Thailand)",
+      "imageUrl": "image/2.png",
+      "projectLink": "",
+      "featured": "Yes"
+    },
+    {
+      "title": "Auto packing",
+      "category": "Software",
+      "description": "Omron PLC and KUKA robot picking parts from Plastic injection then place packaging",
+      "technologies": "PLC, ROBOT, HMI",
+      "period": "2020-2020",
+      "context": "AMPAS INDUSTRIES CO., LTD.",
+      "imageUrl": "image/Assembly side turn lamp-3.png",
+      "projectLink": "",
+      "featured": ""
+    },
+    {
+      "title": "Side turn lamp",
+      "category": "Software",
+      "description": "Omron PLC and KUKA robot picking parts from oven then place to function testing",
+      "technologies": "PLC, ROBOT, HMI",
+      "period": "2021-2021",
+      "context": "AMPAS INDUSTRIES CO., LTD.",
+      "imageUrl": "image/Assembly side turn lamp-2.png",
+      "projectLink": "",
+      "featured": ""
+    },
+    {
+      "title": "SMT Line",
+      "category": "Build up",
+      "description": "Build up first SMT for AMPAS contract window and follow-up project with trial run",
+      "technologies": "Follow up",
+      "period": "2022-2023",
+      "context": "AMPAS INDUSTRIES CO., LTD.",
+      "imageUrl": "image/SMT-1.png",
+      "projectLink": "",
+      "featured": ""
+    },
+    {
+      "title": "Door mirror function test",
+      "category": "Software",
+      "description": "Omron PLC Funtion test for inspection assy door mirror Iszusu car",
+      "technologies": "PLC, HMI",
+      "period": "2023-2023",
+      "context": "AMPAS INDUSTRIES CO., LTD.",
+      "imageUrl": "image/door mirror line-3.png",
+      "projectLink": "",
+      "featured": ""
+    },
+    {
+      "title": "Door mirror Assy",
+      "category": "Software",
+      "description": "Omron PLC machine assy door mirror Iszusu car",
+      "technologies": "PLC, HMI",
+      "period": "2023-2023",
+      "context": "AMPAS INDUSTRIES CO., LTD.",
+      "imageUrl": "image/door mirror line-1.png",
+      "projectLink": "",
+      "featured": ""
+    },
+    {
+      "title": "Door mirror press",
+      "category": "Software",
+      "description": "Omron PLC machine press mirror for door mirror Iszusu car",
+      "technologies": "PLC, HMI",
+      "period": "2023-2023",
+      "context": "AMPAS INDUSTRIES CO., LTD.",
+      "imageUrl": "image/door mirror line-2.png",
+      "projectLink": "",
+      "featured": ""
     }
   ]
 };

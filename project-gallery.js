@@ -1,12 +1,11 @@
-/* Verified fallback snapshot of Google Sheets ProjectGallery, 2026-10-27.
- * Current rows only: no deleted/hidden gallery items.
- * Replaced only when live Google Apps Script responds successfully.
+/* Verified Google Sheets ProjectGallery snapshot, 2026-10-27. Live feed wins.
+ * Never add removed gallery rows back into a successful live response.
  */
 window.PORTFOLIO_PROJECT_GALLERY = [
   {
     "project": "Smart Screw System",
     "title": "Station tools",
-    "imageUrl": "",
+    "imageUrl": "image/smart screw.jpg",
     "detail": "Screw fastening equipment",
     "order": 1,
     "visible": true
@@ -14,7 +13,7 @@ window.PORTFOLIO_PROJECT_GALLERY = [
   {
     "project": "Smart Screw System",
     "title": "Control application",
-    "imageUrl": "",
+    "imageUrl": "image/smart screw1.png",
     "detail": "C# · WPF",
     "order": 2,
     "visible": true
@@ -22,7 +21,7 @@ window.PORTFOLIO_PROJECT_GALLERY = [
   {
     "project": "Smart Screw System",
     "title": "Local records",
-    "imageUrl": "",
+    "imageUrl": "image/smart screw2.png",
     "detail": "SQLite",
     "order": 3,
     "visible": true
@@ -30,7 +29,7 @@ window.PORTFOLIO_PROJECT_GALLERY = [
   {
     "project": "Smart Screw System",
     "title": "Factory data",
-    "imageUrl": "",
+    "imageUrl": "image/screw software.png",
     "detail": "MES · PQM · CFX+",
     "order": 4,
     "visible": true

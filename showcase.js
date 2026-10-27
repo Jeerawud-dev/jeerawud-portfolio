@@ -136,14 +136,27 @@
   // Live API data overrides the synced GitHub snapshot when provided.
   function galleryForProject(projectTitle) {
     const key=clean(projectTitle).toLowerCase();
-    return (state.gallery || []).map(item => ({
+    const currentRows=(state.gallery || []).map(item => ({
       project:clean(item.project || item.projectTitle || item.ProjectTitle),
       title:clean(item.title || item.heading || item.galleryHeading || item.GalleryHeading),
       detail:clean(item.detail || item.description || item.shortDetail || item.ShortDetail),
       imageUrl:clean(item.imageUrl || item.image || item.url || item.ImageURL),
       order:Number(item.order ?? item.displayOrder ?? item.DisplayOrder ?? 0),
       visible:item.visible
-    })).filter(item => item.project.toLowerCase()===key && item.title &&
+    }));
+    // Legacy deployed Apps Script may return gallery headings without the new
+    // Image URL field. Recover images for *matching* currently visible rows.
+    // Never restore removed rows: a successful live [] remains authoritative.
+    const saved=new Map((window.PORTFOLIO_PROJECT_GALLERY || []).map(item =>
+      [clean(item.project).toLowerCase()+"|"+clean(item.title).toLowerCase(),clean(item.imageUrl)]));
+    if(state.galleryLegacy){
+      currentRows.forEach(item=>{
+        if(!item.imageUrl){
+          item.imageUrl=saved.get(item.project.toLowerCase()+"|"+item.title.toLowerCase())||"";
+        }
+      });
+    }
+    return currentRows.filter(item => item.project.toLowerCase()===key && item.title &&
       item.visible !== false && clean(item.visible).toLowerCase() !== "no")
     .sort((a,b)=>a.order-b.order).slice(0,6);
   }
@@ -476,6 +489,7 @@
         // [] is authoritative; never replace it with the stale snapshot.
         finish(null,{
           projectGallery:payload.projectGallery.slice(0,2000),
+          schemaVersion:Number(payload.schemaVersion)||0,
           skills:Array.isArray(payload.skills) ? payload.skills : undefined,
           certificates:Array.isArray(payload.certificates) ? payload.certificates : undefined
         });
@@ -489,6 +503,7 @@
 
   async function start(){
     // Request both Google Sheets feeds in parallel to minimize initial loading.
+    state.galleryLegacy=false;
     const galleryUrl=String(window.PORTFOLIO_CONFIG?.PROJECT_GALLERY_API_URL || "").trim();
     const liveGalleryResultPromise=galleryUrl
       ? fetchLiveGallery(galleryUrl).then(data=>({data}),error=>({error}))
@@ -514,6 +529,9 @@
       const result=await liveGalleryResultPromise;
       if(result.data){
         state.gallery=result.data.projectGallery;
+        // Current feed v2 explicitly returns current image URLs. Preserve
+        // empty values as intentional. Older deployments may omit those fields.
+        state.galleryLegacy=result.data.schemaVersion<2;
         if(typeof window.applyLivePortfolioExtras==="function")
           window.applyLivePortfolioExtras(result.data);
         state.galleryOffline=false;
