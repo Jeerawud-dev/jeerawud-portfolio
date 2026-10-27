@@ -82,3 +82,34 @@ circle. The small outer thumbnails remain circular for visual navigation.
 
 The **ProjectGallery** tab remains the image/title source. Changes go live
 after reloading through the existing Gallery Live Apps Script endpoint.
+
+
+## 2026-10-27: Fixed gallery, certificate photo and first-paint loading
+
+- Corrected `Certificates!F5` to `image/ABB Robot Studio training course.jpg`
+  (the old text ended with `,jpg`, which was not an existing filename).
+- `Certificates!F6` references an existing file at `image/Advance PLC.png`.
+- When the older portfolio feed omits certificate image URLs, the page
+  supplements them from `sheet-content.js` by certificate name.
+- `project-gallery.js` is synchronized with the **14 current visible rows**
+  in `ProjectGallery`. It is only a recovery snapshot, not a replacement
+  for the Google Sheets database. The site's live feed takes priority,
+  including a successful empty gallery if all rows are deliberately removed.
+- If the Live Gallery endpoint fails or times out, the current snapshot is
+  shown instead of an error-only empty dialog (unless the primary feed itself
+  returned an authoritative gallery).
+- The first-paint loading screen waits for the primary portfolio render
+  and the Gallery render, with a safety timeout so visitors cannot become
+  trapped behind the loading overlay.
+
+**Important:** GitHub updates do not deploy Google Apps Script automatically.
+To have every new row/photo edit appear live (without updating a snapshot),
+redeploy `google_apps_script/ProjectGalleryLive.gs` in the *existing* Apps
+Script project, using **Deploy → Manage deployments → Edit → New version**.
+
+To add ProjectGallery photos, use the **Image URL** column C. A blank cell
+shows an illustrative system icon/heading, not a machine photo. At the time
+of this snapshot, only the Automated Coating Machine's `Machine overview`
+row had a nonempty photo URL. A filename must match the case, spaces and
+extension of a real public image file. In the browser, use Ctrl + Shift + R
+after deployment to refresh the new versioned scripts.
